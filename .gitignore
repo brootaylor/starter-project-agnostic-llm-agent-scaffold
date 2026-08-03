@@ -15,6 +15,9 @@ pnpm-lock.yaml
 .env.local
 .env.*.local
 
+# ── AI tool config ───────────────────────────────────────────────
+.claude/
+
 # ── Stack-specific ───────────────────────────────────────────────
 # Add entries here based on your active stack selection in docs/project-brief.md.
 # The agent will update this section automatically.
