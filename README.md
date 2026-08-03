@@ -1,6 +1,6 @@
 # Tech-Agnostic Spec-First Development Scaffold
 
-A starter template for building web projects — tech-agnostic, spec-first, and works whether you build by hand, use an Ai coding agent, or both.
+A starter template for building web projects — tech-agnostic, spec-first, and works whether you build by hand, use an "Ai" coding agent, or both.
 
 > **Status:** this is an active, evolving experiment, not a finished product. It'll keep changing as the idea gets tested against real projects — issues and discussion are welcome.
 
@@ -31,7 +31,7 @@ It also means the tool choice comes last, not first — React, Astro, an "Ai" ag
 
 | | Handcrafted | Ai-assisted |
 |---|---|---|
-| **How** | Use the specs and workflow as directions for building yourself | Use an Ai coding agent to read specs and generate implementation |
+| **How** | Use the specs and workflow as directions for building yourself | Use an "Ai" coding agent to read specs and generate implementation |
 | **Setup** | No extra config needed | See [AGENTS.md](./AGENTS.md) for agent setup |
 
 Both paths follow the same workflow and use the same specs.
@@ -59,7 +59,7 @@ Both paths follow the same workflow and use the same specs.
 | [`docs/modern-platform-guide.md`](./docs/modern-platform-guide.md) | Which web platform APIs and features to use |
 | [`docs/design-tokens.md`](./docs/design-tokens.md) | Colour, spacing, and typography definitions |
 | [`WORKFLOW.md`](./WORKFLOW.md) | Step-by-step guide from setup through to deployment |
-| [`AGENTS.md`](./AGENTS.md) | How Ai agents are configured in this project |
+| [`AGENTS.md`](./AGENTS.md) | How "Ai" agents are configured in this project |
 
 Optional configuration docs:
 
