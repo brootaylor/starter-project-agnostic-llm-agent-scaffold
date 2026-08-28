@@ -2,7 +2,8 @@
 
 A starter template for building web projects — tech-agnostic, spec-first, and works whether you build by hand, use an "Ai" coding agent, or both.
 
-> **Status:** this is an active, evolving experiment, not a finished product. It'll keep changing as the idea gets tested against real projects — issues and discussion are welcome.
+> [!IMPORTANT]
+> **Status:** This is an active, evolving experiment, not a finished product. It'll keep changing as the idea gets tested against real projects — issues and discussion are welcome.
 
 ---
 

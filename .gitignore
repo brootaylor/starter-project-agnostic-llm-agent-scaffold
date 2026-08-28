@@ -17,6 +17,9 @@ pnpm-lock.yaml
 
 # ── AI tool config ───────────────────────────────────────────────
 .claude/
+CLAUDE.md
+.cursor/
+.github/copilot-instructions.md
 
 # ── Stack-specific ───────────────────────────────────────────────
 # Add entries here based on your active stack selection in docs/project-brief.md.

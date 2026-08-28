@@ -75,3 +75,64 @@ Set baseline custom CSS property values in `docs/design-tokens.md` as a concrete
 ## 2026-06-30 — Context sessions log created
 
 Created this file (`context/sessions.md`) as a running log of session activity. No code changes this session.
+
+---
+
+## 2026-08-28 — AI Blueprint adopted as the build loop
+
+Overlaid the AI Blueprint onto the scaffold and ran `/adopt` on a fresh branch
+(`dev-ai-blueprint-adoption`). The adoption itself was straightforward; the
+interesting work was everything that followed from two realisations.
+
+**The scaffold is a template, not a project.** `/adopt` did what it is designed to
+do and filled `project-plan.md`, `build-plan.md`, `coding-standards.md`, and the
+`AGENTS.md` Commands section with accurate facts about this repository — "this
+project has no commands", a seventeen-item roadmap about the scaffold itself. All
+of it correct, and all of it wrong for anyone cloning the template. Reverted the
+four files to worksheet form, matching how `docs/project-brief.md` ships. The
+rule going forward: before writing to any tracked file here, ask who reads it
+after a clone.
+
+`coding-standards.md` was deliberately *not* restored to the shipped Blueprint
+default, which assumes Next.js, Prisma, and Tailwind. That default is actively
+misleading in a scaffold offering Eleventy, Astro, Svelte, and Vanilla. It is now
+a tech-agnostic worksheet that defers to `docs/project-brief.md` and has empty
+stack-specific headings to fill in.
+
+**The Blueprint could not see the spec system.** Sixteen of its twenty-two skills
+drove off `build-plan.md`, and not one referenced `docs/specs/`, `docs/features/`,
+or `docs/project-brief.md`. Since the `Status:` state machine is the scaffold's
+whole product, that meant two work queues that never spoke to each other — a
+`Ready` spec would sit untouched forever.
+
+Rewrote fifteen skills so the `**Status:**` line is the work queue. `/feature`
+sequences a `Ready` spec into a disposable work order at
+`blueprint/context/current-feature.md`, carrying a `Spec:` line that binds the
+chain together; `/implement` builds against the spec as contract; `/check`,
+`/audit`, and `/try` prove the work against the spec's own criteria rather than
+the work order's paraphrase; `/complete` writes `Complete` back. `/continuous` and
+`/autopilot` were selecting straight from the build plan, which would have let an
+automated mode build a `Draft` spec — closed, with an explicit rule that no mode
+may promote a spec to `Ready` to give itself more work. Running out of `Ready`
+specs is a successful end to a run, not something to route around.
+
+`build-plan.md` survives as an optional roadmap answering only "what should I
+write a spec for next?" Where a checkbox and a spec status disagree, the spec
+wins. The full authority order is now a table in `AGENTS.md`.
+
+**Restored the agent wiring documentation.** The overlay had overwritten
+`AGENTS.md`, taking with it the symlink walkthrough, the Windows caveats, and the
+add/remove/troubleshoot sections — which `WORKFLOW.md` Step 1 still pointed at.
+Folded that content back in under the new structure, updated for the shared
+`.agents/skills/` tree and stating the gitignored-pointer rule as fact rather
+than a suggestion. `.agents/claude/CLAUDE.md` had also drifted from the pattern
+its Cursor and Copilot siblings follow; brought it back in line.
+
+Added `CLAUDE.md`, `.cursor/`, and `.github/copilot-instructions.md` to
+`.gitignore` alongside the existing `.claude/`, so no agent pointer is ever
+committed. `.github/workflows/` stays committable for a future `/ci` run.
+
+Still open: `/discovery` has not been taught the spec system and will still
+present `build-plan.md` as the tracker. The Writing section of
+`coding-standards.md` bans em dashes as an AI tell, which contradicts the voice of
+every doc in this repo, including this log — unresolved.
