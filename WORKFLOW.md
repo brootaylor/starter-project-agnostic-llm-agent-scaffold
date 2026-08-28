@@ -71,6 +71,8 @@ Open `docs/project-brief.md` and complete two things before anything else:
 
 `project-brief.md` is the first thing the agent reads. Getting it right before writing any specs avoids problems later.
 
+> **Not sure yet?** `/discovery` runs a guided interview — one question at a time — and drafts this file and your first feature specs from the conversation, showing you everything before it writes. It's optional, and it never promotes a spec past `Draft`. Writing them by hand is equally valid.
+
 ---
 
 ## Step 3 — Set up your stack
@@ -236,6 +238,8 @@ Once a spec is marked `Complete` and committed, return to Step 4 and repeat the 
 Run `/status` at any point — after a break, or after clearing your agent's context — to see the spec queue, what's in progress, and the exact next action. Everything it reports comes from files on disk, so a fresh session knows exactly as much as the last one did.
 
 Found a bug that has no spec? `/fix "<description>"` writes a short fix spec and runs it through the same build loop, logged separately under `context/history/fixes/`.
+
+Built something you now want gone? `/rollback "<feature>"` finds the commit that introduced it, checks what has been built on top of it since, and writes a reversal plan for you to review before any code changes. The original spec goes back to `Ready` rather than disappearing — the contract stands, only the implementation is withdrawn.
 
 As the project grows, update `docs/project-brief.md` with any new conventions or constraints the agent needs to know about.
 

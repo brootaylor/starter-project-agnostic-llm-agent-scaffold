@@ -7,14 +7,14 @@ description: Interactively prototype the look of a project. Asks about the desir
 
 Where this sits in the workflow:
 
-    plan  ->  /overview  ->  [prototype]  ->  /feature  ->  build
-    (you      (project-      (lock the       (one spec    (real
-     write)    overview.md)   look)           at a time)   code)
+    WORKFLOW Step 4  ->  [prototype]  ->  /feature  ->  build
+    (feature spec        (lock the       (one spec    (real
+     written)             look)           at a time)   code)
 
 Prototyping is a pre-build step, not a feature. It's fast, visual, and throwaway.
-Its one durable output is the theme: a set of CSS theme variables that port into
-the real app's `globals.css` `@theme` when you build the first UI feature.
-Everything else here gets discarded.
+Its one durable output is the theme: a set of CSS custom properties that become
+`docs/design-tokens.md` and the project's real stylesheet when you build the
+first UI feature. Everything else here gets discarded.
 
 **This skill is plan-first.** Gather the look and the page list, agree on a plan,
 and only then write any files. Never generate mockups before the user approves.
@@ -81,9 +81,9 @@ caret; a dashboard with believable stats and history rows; and so on).
 Tell the user to open the files in a browser and iterate on the look. Point them
 at the concrete next step: run `/feature` on the first UI feature - it detects
 `prototypes/`, links these mockups as the spec's Design reference, and makes
-porting `theme.css` into the app's `@theme` its first build step. When the theme
-feels right the tokens carry into the real stylesheet; the HTML mockups are
-reference and get discarded at that feature's `/complete`.
+porting `theme.css` into `docs/design-tokens.md` and the project's stylesheet its
+first build step. When the theme feels right the tokens carry across; the HTML
+mockups are reference and get discarded at that feature's `/complete`.
 
 **Commit `prototypes/`, do not ignore it.** `theme.css` is the durable output and
 until it is ported it lives nowhere else, and the mockups are the build reference

@@ -2,8 +2,7 @@
 
 Instructions for AI coding agents working in this project. This is the cross-tool
 entry point: Codex, OpenCode, Cursor, GitHub Copilot, Gemini CLI, Aider, Zed,
-Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports
-this file, so there is a single source of truth.
+Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports this file, so there is a single source of truth.
 
 ## What this is
 
@@ -242,12 +241,22 @@ Outside the loop:
 
 | Skill | What it does |
 |-------|--------------|
+| `discovery` | Optional guided interview that fills in `docs/project-brief.md` and drafts the first feature specs - the conversational form of Steps 2 and 4 |
 | `fix` | Documents an ad-hoc bug or change with no spec of its own, then runs it through the same loop |
+| `rollback` | Plans a safe reversal of a completed feature from its archive and commit, then hands the work order to `implement` |
 | `debug` | Reproduces and isolates a failure without editing code, then hands the evidence to `fix` or `implement` |
 | `prototype` | Pre-build static mockups to lock the look before any spec is built |
 | `tests` | Adds or normalizes unit testing and turns on the test gate |
 | `ci` | Sets up one project-specific `Verify` command and matching automatic GitHub checks |
 | `release` | Render or Vercel deployment readiness: local config, env review, smoke-test planning |
+
+One more sits above the loop rather than inside it. `autopilot` runs a single
+bounded pass - work order, build steps, verification, gates, checkpoint commits -
+without pausing at each review point, then stops with a review packet for a
+human. It never runs `complete`. It exists for the times you want the agent to
+carry a settled spec the whole way, and it is opt-in only: the step-at-a-time
+path above is the default, and the review between each step is the point of a
+spec-first loop.
 
 In Claude Code, invoke these as slash commands (`/feature`, `/implement`, and so
 on). In Codex, invoke them as skills (`$feature`, `$implement`). In OpenCode or

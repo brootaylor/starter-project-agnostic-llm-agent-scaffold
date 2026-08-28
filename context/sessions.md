@@ -233,3 +233,80 @@ Tier B is considered work, not demonstrated work. `/status` is the only piece th
 could actually be exercised here, because `/feature` needs a buildable `Ready`
 spec and Button isn't one. The loop wants shaking out on a real project before
 it's trusted.
+
+---
+
+## 2026-08-28 (later still) — Tier C, and the end of `blueprint/`
+
+Closed out the eight remaining skills. `blueprint/` is gone.
+
+**Four were an installer for something already installed.** `adopt` overlays the
+workflow onto a brownfield repo; `onboard` does the same for a greenfield one.
+This scaffold is cloned, not overlaid, and `WORKFLOW.md` Steps 1–3 *are* the
+onboarding. `doctor` health-checked adapters, ignore rules, and manifest drift —
+nearly all of which had already stopped existing. `overview` generated an
+AI-facing `project-overview.md` from the two planning files, which is what
+`docs/project-brief.md` already is. All four deleted.
+
+**`continuous` deleted too.** It built every `Ready` spec serially, unattended,
+with a branch and a squash-merge per feature. Both of those contradict the
+no-branching decision from earlier today, and the premise contradicts the point:
+a spec-first loop where a human promotes `Draft` to `Ready` doesn't want a mode
+whose whole value is not stopping. Five skills, 1,969 lines.
+
+**Three were real features and were rewritten.**
+
+`/rollback` had to stay — `/implement` and `/complete` still handle
+`Type: Rollback` work orders, so without it that branch of the loop is
+unreachable code. Repointed at `context/history/features/` and
+`context/current-feature.md`, and its protected-path exclusions now match
+`/implement`'s reverse-patch pathspec exactly, which they hadn't. Dropped the
+"stop unless you're on the default branch" preflight, which no longer means
+anything.
+
+Its spec template turned out to be broken in a way nothing would have caught
+until a rollback was actually attempted: `**Status:** not started` where
+`/feature`'s template writes `**Work status:**`, and no `Spec:` or `Base commit:`
+lines at all. Three fields that `/implement`, `/audit`, and `/complete` all read.
+A rollback would have been the one work-order type the loop couldn't track.
+
+`/discovery` was the interesting one. Stripped of its Blueprint output files it's
+a guided planning interview, and deleting `adopt` and `onboard` had just left the
+template with no on-ramp at all — clone it, open an empty brief, and start
+typing. So it now drafts `docs/project-brief.md` and the first `docs/features/`
+specs: the conversational form of Steps 2 and 4, for anyone who'd rather talk
+through a product than write the brief cold. Hard-stopped at `Draft`. Promotion
+stays human, which is the rule the whole loop rests on.
+
+`/autopilot` kept, as the other end of the same spectrum — the agent carrying a
+settled spec the whole way instead of stopping at each gate. Lost its branch
+step, its `config.json` gate lookups, and its `run.json` publishing; gates are now
+the same fixed policy `/complete` uses. Checkpoint commits land on the current
+branch, and push, merge, and `/complete` stay hard stops. It sits above the loop
+rather than in it, and `AGENTS.md` says so explicitly, because the review between
+steps is the point of the default path.
+
+**Two dangling references, found by grepping for the wrong thing.** Tier A had
+been swept for `blueprint` but never for the *names* of skills that hadn't been
+deleted yet. `/ci` pointed at `/doctor` for drift detection; `/prototype` had
+`/overview` in its flow diagram. Fixing the second turned up a genuine
+tech-agnosticism leak sitting in the scaffold since the adoption: `/prototype`
+told agents to port the theme into `globals.css` `@theme`, which is Tailwind v4
+syntax, in a scaffold whose whole claim is that it doesn't assume a stack. Now
+points at `docs/design-tokens.md` and the project's stylesheet.
+
+Seventeen skills left. Verified every `/skill` token referenced anywhere resolves
+to one that exists, and every `SKILL.md` frontmatter `name` matches its own
+directory. `/status` gives the same reading it gave before Tier C started.
+
+**Still open.** The loop is still considered work rather than demonstrated work —
+nothing here changed that. `/feature` needs a buildable `Ready` spec and Button
+still isn't one, for the three reasons `/brief` found earlier today. The em-dash
+ban is settled by deletion: `coding-standards.md` went with `blueprint/`, and
+nothing reads it now.
+
+`/discovery` and `/rollback` are the two most likely to bite on first real use.
+Discovery writes into `project-brief.md`, a file with a lot of shipped reference
+material below its checklist that it's told to leave alone; rollback has never
+been run at all, and its git surgery is the least forgiving thing in the repo.
+Both want exercising on a clone before they're trusted.

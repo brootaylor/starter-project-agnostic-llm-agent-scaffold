@@ -138,8 +138,8 @@ part of this skill.
   creates CI by itself.
 - `/implement`, `/complete`, and `/autopilot` run Verify when it is documented,
   with their existing fallback behavior when it is absent.
-- `/doctor` diagnoses drift between `AGENTS.md`, the project command, and the
-  workflow. Missing CI remains informational.
+- `/status` reports drift between what `AGENTS.md` documents and what the
+  project actually has. Missing CI remains informational.
 
 ## Rules
 

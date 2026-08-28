@@ -1,30 +1,38 @@
-# Rollback: Feature NN - Name
+# Rollback: <feature name>
 
 **Type:** Rollback
-**Status:** not started
-**Target feature:** NN - Name
-**Target archive:** `blueprint/history/features/NN-name.md`
+**Spec:** `docs/features/<name>.md`
+**Base commit:** <filled in by /implement before the first step>
+**Work status:** not started
+**Target archive:** `context/history/features/YYYY-MM-DD-NN-name.md`
 **Target commit:** `<full 40-character commit SHA>`
 **Target parent:** `<full 40-character parent SHA>`
 **Reason:** Why this completed feature must be removed
 
+> `Spec:` is the source spec being withdrawn. `/complete` resets its
+> `**Status:**` line from `Complete` back to `Ready`: the contract still stands,
+> only the implementation is going away.
+>
+> `Target commit` and `Target parent` must both be full 40-character SHAs.
+> `/implement` refuses abbreviated or malformed values.
+
 ## Goal
 
-Restore the product behavior that existed before the target feature while
-preserving Blueprint history and compatible work added afterward.
+Restore the product behaviour that existed before the target feature while
+preserving the project's history and compatible work added afterward.
 
 ## Scope
 
 ### Reverse
 
-- Product paths and behavior introduced or changed by the target commit
+- Product paths and behaviour introduced or changed by the target commit
 
 ### Preserve
 
 - The original completed feature archive
-- Later build-plan and project-plan changes
-- Blueprint context, adapter skills, rollback spec, and prototypes
-- Later product behavior confirmed compatible in the risk review
+- Every spec in `docs/features/` and `docs/specs/`
+- Context files, skills, this rollback work order, and prototypes
+- Later product behaviour confirmed compatible in the risk review
 
 ### Out of scope
 
@@ -49,21 +57,21 @@ preserving Blueprint history and compatible work added afterward.
 - [ ] Apply the target commit's product diff in reverse with the Type: Rollback
   guard in `/implement`.
   - Done when: the reverse patch applies only to product paths, protected
-    Blueprint paths are unchanged, and the staged diff matches the approved
+    workflow paths are unchanged, and the staged diff matches the approved
     rollback scope.
 - [ ] Make only the compatibility edits approved by the risk review.
-  - Done when: later features named above still compile and retain their stated
-    behavior. Remove this step when no compatibility work is required.
+  - Done when: later features named above still build and retain their stated
+    behaviour. Remove this step when no compatibility work is required.
 - [ ] Run the project checks and the observable removal path below.
   - Done when: every declared build, test, and acceptance command passes, the
-    removed behavior is no longer reachable, and unaffected core behavior still
+    removed behaviour is no longer reachable, and unaffected core behaviour still
     works.
 
 ## Verification
 
 - Build: `<command from AGENTS.md>`
 - Tests: `<declared test command, or not configured>`
-- Removed behavior: `<route, UI action, CLI output, API, or public call that must no longer exist>`
+- Removed behaviour: `<route, UI action, CLI output, API, or public call that must no longer exist>`
 - Regression path: `<small unaffected flow that must still work>`
 
 ## Notes for the AI
