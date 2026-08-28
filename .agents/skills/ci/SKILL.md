@@ -1,21 +1,17 @@
 ---
 name: ci
-description: Set up or normalize automatic GitHub checks for a Blueprint project around one documented Verify command. Detects the real stack, package manager, existing checks, default branch, and workflows; preserves existing CI; combines only configured typecheck, test, and build commands; runs the command locally; and stops before push or remote ruleset changes. Use when the user runs /ci, invokes $ci, asks to add CI, set up GitHub Actions, add pull-request checks, or create automatic GitHub checks.
+description: Set up or normalize automatic GitHub checks for a spec-first project around one documented Verify command. Detects the real stack, package manager, existing checks, default branch, and workflows; preserves existing CI; combines only configured typecheck, test, and build commands; runs the command locally; and stops before push or remote ruleset changes. Use when the user runs /ci, invokes $ci, asks to add CI, set up GitHub Actions, add pull-request checks, or create automatic GitHub checks.
 ---
 
 # ci - set up automatic GitHub checks
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
-    /onboard or /adopt  ->  [ci]  ->  Verify locally  ->  GitHub runs Verify
-    (project commands)     (setup)    (same recipe)      (pull requests)
+    WORKFLOW.md setup  ->  [ci]  ->  Verify locally  ->  GitHub runs Verify
+    (project commands)    (setup)    (same recipe)      (pull requests)
 
 This skill gives local work and GitHub one shared automated command. It is an
-optional setup task, not a requirement for using the Blueprint.
+optional setup task, not a requirement for using the scaffold.
 
 Keep the beginner explanation simple:
 
@@ -47,7 +43,7 @@ Read enough to identify the real project setup:
 - `.github/workflows/` and any documented external CI
 - git's current branch, configured default branch, and remotes when available
 
-Do not assume npm, Node.js, `main`, or GitHub from the Blueprint template. Do not
+Do not assume npm, Node.js, `main`, or GitHub from the scaffold template. Do not
 run installs or edit files during inspection.
 
 If an existing workflow already provides equivalent pull-request checks, explain
@@ -156,6 +152,6 @@ part of this skill.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

@@ -1,13 +1,16 @@
 # Feature: <name>
 
 **Spec:** `docs/specs/components/<name>.spec.md`
-**Roadmap:** build-plan item <n>, or `none`
+**Base commit:** <filled in by /implement before the first step>
 **Work status:** not started
 
 > `Spec:` is load-bearing. `/implement` reads that file as the contract, `/check`
 > proves the work against its acceptance criteria, and `/complete` writes
 > `**Status:** Complete` back to it. A `Type: Fix` work order has no source spec
 > and may set it to `none`.
+>
+> `Base commit:` is the commit this work started from. `/implement` records it
+> before the first product edit; `/audit` uses it to find what this work changed.
 >
 > `Work status:` tracks this work order only. It is not the spec's `**Status:**`
 > line and must never be confused with it.
@@ -19,7 +22,7 @@ What this feature delivers, in a sentence or two. Why it matters.
 ## Design reference
 
 For a visual or replication feature (recreating a design, matching a mockup),
-link the reference image(s) here, stored in `blueprint/reference/`. A screenshot
+link the reference image(s) here, stored in `docs/reference/`. A screenshot
 pins down what prose can't, so build against it, not a guess. Omit this section
 when the feature has no visual target.
 

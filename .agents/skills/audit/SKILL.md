@@ -1,34 +1,29 @@
 ---
 name: audit
-description: Read-only code audit for a Blueprint project, except for the findings ledger it maintains at blueprint/context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review.
+description: Read-only code audit for a spec-first project, except for the findings ledger it maintains at context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review.
 ---
 
 # audit - review code quality against the project standards
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
-    /implement or /autopilot  ->  [audit]  ->  fixes or /complete
-    (code exists)                 (review +    (repair quality issues
-                                   ledger)      or close the feature)
+    /implement  ->  [audit]  ->  fixes or /complete
+    (code exists)   (review +    (repair quality issues
+                     ledger)      or close the feature)
 
-`/check` proves behavior against the spec. `/doctor` checks Blueprint setup and
-workflow health. This skill checks the code itself through either a broad review
-or one focused lens: quality, security, performance, or tests.
+`/check` proves behavior against the spec. This skill checks the code itself,
+through either a broad review or one focused lens: quality, security,
+performance, or tests.
 
 It reviews code without changing it: it never edits source files, installs
 dependencies, commits, merges, pushes, or starts product work. Its one write is
-the findings ledger at `blueprint/context/findings.md` (Step 4), the durable
+the findings ledger at `context/findings.md` (Step 4), the durable
 record of findings and their status.
 
-The quality-gate config controls when another workflow invokes this skill
-automatically. An explicit `/audit` or `$audit` request always selects the audit
-regardless of whether the applicable gate is `manual`, conditional, or `always`.
-A missing config means built-in defaults. If it exists but is invalid, stop and
-point to `/doctor` before writing the findings ledger.
+`/implement` and `/complete` invoke this skill automatically only for work that
+touches a security boundary - authentication, authorization, payments, secrets,
+personal data, migrations, or destructive operations. An explicit `/audit` or
+`$audit` request always runs it, whatever the work touches.
 
 ## Input
 
@@ -39,9 +34,9 @@ Optional scope:
 
 - no scope argument: use `current` when an active feature exists, otherwise use
   `changed` when local changes exist, otherwise use `full`
-- `current`: audit the active `current-feature.md`, every committed feature-branch
-  change from its merge base through `HEAD`, staged and unstaged changes,
-  untracked source files, and nearby code affected by the feature
+- `current`: audit the active `current-feature.md`, the commits made for this
+  work order, staged and unstaged changes, untracked source files, and nearby
+  code affected by the feature
 - `changed`: audit staged, unstaged, and untracked source files plus nearby code
 - `full`: audit all project-owned source, tests, and configuration while excluding
   dependencies, generated files, build output, coverage output, caches, vendored
@@ -73,31 +68,24 @@ If the lens is unclear, use all lenses and state that choice.
 Read:
 
 - `AGENTS.md`
-- `blueprint/config.json`
-- `blueprint/context/project-overview.md`
-- `blueprint/context/coding-standards.md`
-- `blueprint/context/current-feature.md`
+- `context/current-feature.md`
 - the spec named on its `Spec:` line, in `docs/features/` or `docs/specs/`. **Audit
   the code against the spec, not only against the work order.** A behaviour,
   state, or accessibility requirement the spec names and the code does not deliver
   is a finding, whether or not any build step mentioned it
 - `docs/project-brief.md`, for the conventions, secure-coding rules, browser
   targets, and accessibility standard that apply project-wide
-- `blueprint/context/findings.md`, for existing IDs and statuses
-- `blueprint/context/ai-interaction.md`
-- `blueprint/build-plan.md`, as optional roadmap context only
-- git branch and working tree status
+- `context/findings.md`, for existing IDs and statuses
+- git working tree status
 - relevant source files, tests, and configs for the chosen scope
 
-For `current`, resolve the comparison base without network access:
-
-1. Use a base branch declared by the active spec or project instructions.
-2. Otherwise use the locally recorded remote default branch when available.
-3. Otherwise use an existing local `main`, then `master`.
-4. Find the merge base and inspect the committed delta through `HEAD`, then add
-   staged, unstaged, and untracked work.
-5. If no reliable base exists, say so and use the active spec plus local changes.
-   Never claim that committed feature work was fully covered in that case.
+For `current`, resolve the comparison base without network access. The work
+order records the commit the work started from; use it and inspect the delta
+through `HEAD`, then add staged, unstaged, and untracked work. If the work order
+records no starting commit, fall back to the commits made since the last
+`/complete` archive, and say which base you used. If no reliable base exists, say
+so and use the active spec plus local changes - never claim committed work was
+fully covered in that case.
 
 Do not fetch or pull to discover the base. For `full`, state the excluded paths
 before reviewing so generated or third-party code does not consume the audit.
@@ -162,7 +150,7 @@ audit evidence before responding.
 
 ## Step 4 - update the findings ledger
 
-`blueprint/context/findings.md` is the durable record of findings. Chat reports
+`context/findings.md` is the durable record of findings. Chat reports
 do not survive a context clear; the ledger does. It is the only file this skill
 writes. If it is missing (an older install), create it with a `# Findings`
 heading first.
@@ -206,7 +194,7 @@ After the review:
   past the highest ID present in the ledger (entries carried forward from
   earlier work count; a fresh ledger starts at `F-01`).
 - Record an unverified risk worth tracking as `unverified`. It is a lead, not a
-  defect, and never gates a merge.
+  defect, and never blocks completion.
 - Update the entries this pass re-examined: correct the status or severity and
   note the evidence in **Resolution**.
 - Move a `fixed` finding to `closed` only when all three hold: this pass's
@@ -256,7 +244,7 @@ Then include:
 - commands run and results
 - selected scope
 - selected lens or lenses
-- base branch, merge base, and commit range for `current`, when available
+- comparison base and commit range for `current`, when available
 - files or directories reviewed
 - generated, third-party, or otherwise excluded paths
 - applicable standards checked
@@ -287,6 +275,6 @@ review as a full-project audit.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

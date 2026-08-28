@@ -136,3 +136,100 @@ Still open: `/discovery` has not been taught the spec system and will still
 present `build-plan.md` as the tracker. The Writing section of
 `coding-standards.md` bans em dashes as an AI tell, which contradicts the voice of
 every doc in this repo, including this log — unresolved.
+
+---
+
+## 2026-08-28 (later) — The Blueprint absorbed, tier by tier
+
+Stepped back from the adoption and changed the approach. The previous session had
+rewritten fifteen skills in place, which worked, but it left the scaffold carrying
+a second system: `blueprint/` with its own context files, its own coding standards,
+its own config, and an installer for something that was already installed. The
+goal was never "my scaffold has the Blueprint bolted on" — it was "my scaffold has
+a build loop." Those turn out to want opposite things.
+
+**The Blueprint is four layers, not one thing.** Verbs (`.agents/skills/`),
+context (`blueprint/context/`), planning (`project-plan.md`, `build-plan.md`), and
+runtime state (`config.json`, `.state/`). Only the first was ever wanted. The
+coupling looked total — nearly every skill referenced `blueprint/` — but counting
+the references deflated it: `run.json` appeared once per skill as a dashboard
+breadcrumb, `ai-interaction.md` once as a "write concise markdown" pointer. One
+line each. The only genuinely load-bearing shared file was `current-feature.md`.
+
+Sorted the twenty-two skills into three tiers by what they actually need, and took
+them in that order.
+
+**Tier A — six advisory skills, no state at all.** `brief`, `debug`, `tests`,
+`ci`, `prototype`, `release`. Stripped the two boilerplate lines from each and
+repointed every context read at `docs/project-brief.md` and `AGENTS.md`. Net
+shrink of twenty-two lines. `debug` and `release` had each been reading
+`current-feature.md`; pointed them at the spec system instead, which made them
+better — `debug` now finds the spec governing the failing code by matching files
+back to `docs/specs/`, and `release` reads `docs/security.md` for headers and CSP,
+which the Blueprint version never consulted despite writing deployment config.
+
+Tested both live. `/brief` picked Button (the only `Ready` spec) and found three
+real blockers: the spec's props table and TC-11 presume a component abstraction
+that Vanilla + plain CSS doesn't have, eleven test cases with no runner
+configured, and a `spinner.svg` that doesn't exist. It also caught a genuine
+cross-reference bug — `button.spec.md` claims it's used in `main-layout.spec.md`,
+which lists only `ThemeToggle`. `/ci` correctly refused to do anything: no
+typecheck (JavaScript), no tests, and no build, because Vite is marked `[active]`
+but was never installed. Writing a workflow there would have produced a green
+check that proves nothing.
+
+Both refusals surfaced the same thing about this repo: the gap between "selected
+in the brief" and "present in the repo" is *by design* for a template. Which means
+these two skills can only ever be tested from a clone.
+
+**Tier B — the build loop.** The realisation that shaped it: `WORKFLOW.md` Steps
+4–10 already *are* a build loop, written for humans and executed by copy-pasted
+prompts. So this was never about adding a loop; it was about automating the one
+already documented. Every verb had to map onto a step already written, and
+anything that didn't map was ceremony. Steps 4, 5 and 6 — feature specs, component
+specs, design tokens — stay manual. That's the "human takes control" half of the
+premise, and the loop doesn't touch it.
+
+Two decisions came out of that mapping.
+
+*No branching.* `/implement` created `feature/<name>` and `/complete`
+squash-merged to main. `WORKFLOW.md` has never mentioned branches — it says
+"commit your work" at Steps 3, 6, and 8. Imposing a branching model on a scaffold
+whose prerequisites table explains what a terminal is would have been adding a
+workflow nobody asked for. Both skills now commit to whatever branch is checked
+out. In its place `/implement` records a `Base commit:` on the work order, which
+is how `/audit` scopes "what changed" without a merge base.
+
+*`/create-component` deleted.* It did the same job as `/implement` but was
+Claude-only, so Step 7 had to apologise for it: "Other agents don't support it."
+Its co-located `<Name>.spec.md` behaviour was ported into `/implement` along with
+the spec→code directory table. Step 7 is now `/feature` then `/implement`,
+identical across Claude Code, Cursor, and Copilot.
+
+State moved to `context/`, beside this log: `current-feature.md`, `findings.md`,
+and `history/{features,fixes,rollbacks}/`. The two stubs were extracted
+programmatically from `/complete`'s own reset text so the shipped files and what
+the skill writes back can't drift. `config.json` is gone — its values became
+documented defaults, same behaviour, one less file.
+
+Ran `/status` as a smoke test. It read the spec queue, found the new `context/`
+files, skipped the template, and named `/feature button` as the next action. No
+`blueprint/` involved.
+
+**Still open.** Eight Tier C skills — `adopt`, `onboard`, `doctor`, `overview`,
+`discovery`, `rollback`, `autopilot`, `continuous` — still point at `blueprint/`,
+and are now its only consumers. The directory can't go until they're either
+adopted or deleted. `adopt`, `onboard`, and `doctor` are the installer for
+something already installed and should probably just go; the other five are real
+features, `/rollback` especially, since `/implement` and `/complete` still handle
+`Type: Rollback` work orders and those paths were kept intact and repointed at
+`context/**`.
+
+The em-dash ban noted last session is now moot for the loop itself —
+`coding-standards.md` is only read by the unadopted Tier C skills. It becomes a
+live question again only if any of them are kept.
+
+Tier B is considered work, not demonstrated work. `/status` is the only piece that
+could actually be exercised here, because `/feature` needs a buildable `Ready`
+spec and Button isn't one. The loop wants shaking out on a real project before
+it's trusted.

@@ -1,13 +1,9 @@
 ---
 name: debug
-description: Diagnose a failing test, broken build, crash, error, regression, or unexpected behavior without editing source or Blueprint state. Reproduces the symptom with the smallest safe command, localizes the failing path, tests competing hypotheses, identifies the root cause when evidence supports one, and reports a repair handoff to /fix or /implement. Use when the user runs /debug, invokes $debug, asks why something is failing or broken, wants a root-cause investigation, or asks to diagnose before fixing.
+description: Diagnose a failing test, broken build, crash, error, regression, or unexpected behavior without editing source or spec state. Reproduces the symptom with the smallest safe command, localizes the failing path, tests competing hypotheses, identifies the root cause when evidence supports one, and reports a repair handoff to /fix or /implement. Use when the user runs /debug, invokes $debug, asks why something is failing or broken, wants a root-cause investigation, or asks to diagnose before fixing.
 ---
 
 # debug - find the cause before changing the code
-
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
 
 Where this sits in the workflow:
 
@@ -36,9 +32,9 @@ smallest known reproduction. Do not guess which problem the user means.
 Read the project instructions and the context relevant to the failure:
 
 - `AGENTS.md` and its real commands
-- `blueprint/context/project-overview.md`
-- `blueprint/context/coding-standards.md`
-- `blueprint/context/current-feature.md`
+- `docs/project-brief.md` - stack, conventions, and standards
+- the spec governing the failing code: its `docs/specs/` or `docs/features/`
+  entry, found by matching the affected files back to a spec
 - the reported error, failing output, and affected files
 - git status, diff, and recent log when a regression is possible
 
@@ -132,8 +128,8 @@ Choose the next action without writing files:
 
 ## Rules
 
-- Diagnose, do not repair. Never edit source, tests, configuration, lockfiles, or
-  Blueprint files.
+- Diagnose, do not repair. Never edit source, tests, configuration, lockfiles,
+  or specs.
 - Never create, switch, merge, or delete branches. Never commit or push.
 - Do not update the findings ledger. `/audit` owns recorded code-quality
   findings; `/debug` reports one investigated failure in chat.
@@ -144,6 +140,5 @@ Choose the next action without writing files:
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown with a short
-evidence list and a clear next action.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown with a short evidence list and a clear next action.

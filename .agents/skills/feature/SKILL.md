@@ -1,13 +1,9 @@
 ---
 name: feature
-description: Turn a Ready spec into a buildable work order. With no argument, picks the next spec marked Ready in docs/features/ or docs/specs/; given a name or path, uses that one. Refuses Draft specs and will not re-implement Complete ones. If a request has no spec yet, offers to draft one as Draft for the human to review and promote. Sizes the work, writes small reviewable build steps to blueprint/context/current-feature.md, then red-teams its own draft for gaps, oversized steps, and scope creep before stopping at a review gate. Use when the user runs /feature, names a spec or feature, asks to start the next feature, or asks to break down or start work on a spec.
+description: Turn a Ready spec into a buildable work order. With no argument, picks the next spec marked Ready in docs/features/ or docs/specs/; given a name or path, uses that one. Refuses Draft specs and will not re-implement Complete ones. If a request has no spec yet, offers to draft one as Draft for the human to review and promote. Sizes the work, writes small reviewable build steps to context/current-feature.md, then red-teams its own draft for gaps, oversized steps, and scope creep before stopping at a review gate. Use when the user runs /feature, names a spec or feature, asks to start the next feature, or asks to break down or start work on a spec.
 ---
 
 # feature - turn a Ready spec into a buildable work order
-
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
 
 Where this sits in the workflow:
 
@@ -21,14 +17,9 @@ waiting for an engine, and this skill is that engine: it reads one `Ready` spec
 and sequences it into small, reviewable build steps.
 
 The spec says *what* and *why*. This skill decides *in what order*, and writes
-that ordering to `blueprint/context/current-feature.md` as a disposable work
+that ordering to `context/current-feature.md` as a disposable work
 order. The spec is the contract; the work order is scaffolding that gets archived
 at `/complete`.
-
-`blueprint/build-plan.md` is an optional high-level roadmap of which specs to
-write next. It is **not** the work queue and it is never the authority on what is
-built. Where a build-plan checkbox and a spec `**Status:**` line disagree, the
-spec wins.
 
 ## Input
 
@@ -44,9 +35,8 @@ The request may also describe something with no spec yet. That goes through the
 components they depend on, so a `Ready` feature usually implies the component
 work under it.
 
-If `blueprint/build-plan.md` has real content, use its ordering to break a tie
-between several `Ready` specs. If more than one is `Ready` and the order is not
-obvious, list them and ask which to build rather than guessing.
+If more than one spec is `Ready` and the order is not obvious, list them and ask
+which to build rather than guessing.
 
 ## Step 1 - pick the target spec
 
@@ -107,7 +97,7 @@ roadmap line ever would. Then pull surrounding context:
 
 - `docs/project-brief.md` - stack, conventions, browser targets, accessibility
   standard, agent rules
-- `blueprint/context/project-overview.md` - when it exists, for product context
+- `docs/project-brief.md` - when it exists, for product context
 - any component specs the feature spec names as dependencies
 
 Decide how big the work is:
@@ -124,7 +114,7 @@ Decide how big the work is:
 Two levels of breakdown - don't confuse them:
 
 - **Separate specs** - each is a standalone contract with its own status line,
-  branch, review-and-merge cycle, and archive entry.
+  review cycle, and archive entry.
 - **Build steps** (in the work order, Step 3) - small diffs *within* one spec.
 
 Worked example - a feature spec for "Authentication" covers registration, login,
@@ -140,7 +130,7 @@ reviewable diffs it takes to satisfy it is a build decision.
 ## Step 3 - write the work order
 
 For the one spec being built now, write a work order to
-`blueprint/context/current-feature.md` (create `blueprint/context/` if needed), following
+`context/current-feature.md` (create `context/` if needed), following
 `reference/feature-spec-template.md`. Fill every section: goal, in/out of scope,
 the build loop, small build steps as a checklist (`- [ ]`, each with an observable
 "done when" - `/implement` ticks them off and resumes from the first unchecked
@@ -164,7 +154,7 @@ against the contract instead of against your paraphrase of it.
 "make it look like X" - recreating an existing design, matching a mockup, or
 rebuilding a Canva/Figma artifact - prose underspecifies the target and the build
 will approximate it wrong. Ask the user for a screenshot or image if one isn't
-already provided, save it under `blueprint/reference/` (create the folder if
+already provided, save it under `docs/reference/` (create the folder if
 needed), and link it from the spec's Design reference section. Don't write a
 visual spec from words alone when an image could exist.
 
@@ -230,7 +220,7 @@ Tell the user to review and adjust. This skill plans; it never starts building.
   the app working.
 - **Lock data contracts early.** If a shape (type, API response, stored field) is
   used by a later feature, define it now and flag it as load-bearing.
-- **Flag client vs server** and any conventions from `blueprint/context/coding-standards.md`
+- **Flag client vs server** and any conventions from `docs/project-brief.md`
   (for example, filtering user-scoped queries by the authenticated user's id).
 - **Scope honestly.** State what is deferred so the feature stays contained.
 
@@ -238,8 +228,7 @@ Tell the user to review and adjust. This skill plans; it never starts building.
 
 `/complete` handles it: it sets the source spec's `**Status:**` to `Complete`,
 updates its `**Last updated:**` line, archives the finished work order to
-`blueprint/history/features/`, and checks the matching `build-plan.md` line if one
-exists. Then run `/feature` again for the next `Ready` spec.
+`context/history/features/`. Then run `/feature` again for the next `Ready` spec.
 
 **This skill never edits a spec file.** Not the status line, not the content. The
 only exceptions in the whole workflow are `/complete` writing the status back, and
@@ -248,6 +237,6 @@ explicit approval.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

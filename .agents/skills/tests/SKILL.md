@@ -1,20 +1,16 @@
 ---
 name: tests
-description: Add or normalize unit testing for a Blueprint project. Detects the stack, reuses an existing test runner when present, or installs the stack-native unit test runner when missing, then adds one small example test, updates AGENTS.md commands, runs build and tests, and reports the diff. Use when the user runs /tests, invokes $tests, asks to add unit tests, set up unit testing, configure tests, or make tests part of the Blueprint workflow.
+description: Add or normalize unit testing for a spec-first project. Detects the stack, reuses an existing test runner when present, or installs the stack-native unit test runner when missing, then adds one small example test, updates AGENTS.md commands, runs build and tests, and reports the diff. Use when the user runs /tests, invokes $tests, asks to add unit tests, set up unit testing, configure tests, or make tests part of the build workflow.
 ---
 
 # tests - add unit testing to the project
-
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
 
 Where this sits in the workflow:
 
     any time  ->  [tests]  ->  test command in AGENTS.md  ->  /feature + /implement use it
                   (setup)     (the opt-in testing gate)      (logic steps get tests)
 
-Testing is optional in the Blueprint until the project declares a real test
+Testing is optional until the project declares a real test
 command in `AGENTS.md`. This skill is the explicit setup path. It adds or
 normalizes **unit testing** only; browser automation and end-to-end testing are
 separate setup work.
@@ -36,7 +32,7 @@ Read enough files to identify the real setup:
 - existing test files
 - package manager lockfile
 - an existing `Verify` command and `.github/workflows/verify.yml`, when present
-- `blueprint/context/coding-standards.md`
+- `docs/project-brief.md`
 
 Do not assume Next.js. Detect the stack from files.
 
@@ -72,8 +68,8 @@ Apply the smallest practical diff:
 5. If a `Verify` command already exists, add the real test command to it between
    typecheck and build while preserving any established project checks. Do not
    create verification or CI only because `/tests` was invoked.
-6. Update `blueprint/context/coding-standards.md` only if the project needs a
-   stack-specific testing note different from the default.
+6. Update the testing section of `docs/project-brief.md` only if the project
+   needs a stack-specific testing note it does not already carry.
 
 Do not write a broad test suite for existing app code. This skill proves the
 testing path and turns on the gate; feature work adds focused tests later.
@@ -125,6 +121,6 @@ Show the diff summary. Do not commit, merge, push, or start product feature work
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

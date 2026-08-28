@@ -1,13 +1,9 @@
 ---
 name: check
-description: Prove the current work actually does what its spec says by running the real app and observing behavior against the "done when" criteria in current-feature.md. Drives the app (browser, CLI, or server), captures evidence (screenshots, output, console/network errors), and reports pass/fail per criterion. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build. (Supersedes the built-in /verify with a spec-aware version inside blueprint projects.)
+description: Prove the current work actually does what its spec says by running the real app and observing behavior against the "done when" criteria in current-feature.md. Drives the app (browser, CLI, or server), captures evidence (screenshots, output, console/network errors), and reports pass/fail per criterion. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build. (Supersedes the built-in /verify with a spec-aware version.)
 ---
 
 # check - prove it works against the spec, with evidence
-
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
 
 Where this sits in the workflow:
 
@@ -30,18 +26,16 @@ nothing - it runs the app and reports what it saw.
 
 Optional: a specific thing to check (a step, a flow, a URL). With no argument,
 verify the whole current feature against every "done when" in
-`blueprint/context/current-feature.md`.
+`context/current-feature.md`.
 
 ## Step 1 - build the checklist
 
-Read `blueprint/config.json` first. A missing file means the built-in defaults
-apply. If the file exists but is invalid, stop and point the user to `/doctor`.
-Configuration never grants permission to start a server or take any other action
-that the project instructions or user have not authorized.
-The quality-gate config controls automatic invocation only. An explicit `/check`
-or `$check` request always runs.
+`/check` runs automatically only when `/implement` or `/complete` judges that a
+"done when" needs observed runtime behaviour. An explicit `/check` or `$check`
+request always runs. Running it never grants permission to start a server or take
+any other action the project instructions or user have not authorized.
 
-Read `blueprint/context/current-feature.md`, then **the spec named on its `Spec:`
+Read `context/current-feature.md`, then **the spec named on its `Spec:`
 line**. Pull the observable "done when" criteria from the build steps, and pull
 the acceptance criteria, states, and **test cases** from the spec itself.
 
@@ -91,11 +85,11 @@ Drive the app to each checklist item and capture evidence as you go:
 - Watch for **console errors and failed network requests**; a clean-looking screen
   with errors in the console is not a pass.
 
-With `verification.uiEvidence: "required"`, every UI claim needs direct browser
-evidence, including a screenshot and the relevant console and network check. If
-that evidence path is unavailable, mark the claim unverifiable instead of
-passing it from build output. With `when-available`, use the strongest available
-evidence and report any gap plainly.
+Use the strongest evidence available, and report any gap plainly. Where a
+browser, CLI, or server can actually be driven, a UI claim needs direct
+evidence - a screenshot plus the relevant console and network check. Where that
+path is unavailable, mark the claim unverifiable rather than passing it from
+build output.
 
 ## Step 4 - report
 
@@ -109,7 +103,7 @@ Give a short, honest verdict, one line per checklist item:
 Then state the bottom line: are all the feature's done-whens proven, or not yet.
 
 - All proven -> update only the `**Status:**` line in
-  `blueprint/context/current-feature.md` to `verified`, then say it is ready for
+  `context/current-feature.md` to `verified`, then say it is ready for
   `/complete`.
 - Anything failed -> update only that status line to `verification failed`, then
   hand back to `/implement`; name what to fix. Do not fix it here.
@@ -133,6 +127,6 @@ Do not change the spec, checkboxes, findings, or product files from `/check`.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

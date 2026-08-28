@@ -1,38 +1,26 @@
 ---
 name: implement
-description: "Build the feature, fix, or rollback spec'd in blueprint/context/current-feature.md, one small reviewable step at a time. Creates the matching branch, implements each step, shows the diff and explains it in plain English, tests, and iterates until it works. Type: Rollback specs use a guarded reverse patch that preserves Blueprint history. After each approved step it offers an optional commit checkpoint on the branch; the work-level commit, merge, and logging are /complete's job. Use when the user runs /implement, or asks to build, implement, or start the current feature, fix, or rollback once its spec is ready."
+description: "Build the feature, fix, or rollback spec'd in context/current-feature.md, one small reviewable step at a time. Implements each step, shows the diff and explains it in plain English, tests, and iterates until it works. Type: Rollback specs use a guarded reverse patch that preserves the loop's own history. After each approved step it offers an optional commit checkpoint; the work-level commit and logging are /complete's job. Use when the user runs /implement, or asks to build, implement, or start the current feature, fix, or rollback once its spec is ready."
 ---
 
 # implement - build the current spec, one reviewed step at a time
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
     /feature, /fix, or /rollback  ->  [implement]  ->  /complete  ->  next
-    (the spec)                         (build it,       (commit +
-                                        reviewed)        merge + log)
+    (the spec)                         (build it,       (commit + log)
+                                        reviewed)
 
 `/feature`, `/fix`, or `/rollback` wrote the spec to
-`blueprint/context/current-feature.md` and stopped.
-This skill turns that spec into code, following the build loop in
-`blueprint/context/ai-interaction.md`, without vibe coding: small steps, a visible diff plus
-a plain-English explanation for each, testing, and iteration until it works,
-using the project's configured review cadence. It builds on a branch and can
-offer optional commit checkpoints when enabled; the work-level commit, merging,
-and logging are `/complete`'s job.
+`context/current-feature.md` and stopped. This skill turns that spec into code,
+without vibe coding: small steps, a visible diff plus a plain-English explanation
+for each, testing, and iteration until it works. It commits on the branch you are
+already on - this loop does not create or switch branches. The work-level commit
+and the logging are `/complete`'s job.
 
 ## Before you start
 
-Read `blueprint/config.json` before changing code. A missing file means the
-built-in defaults apply. If the file exists but is invalid, stop and point the
-user to `/doctor`; a mutating workflow must not guess past invalid configuration.
-Configuration can change workflow behavior, but it never grants permission to
-commit, merge, push, deploy, publish, or take destructive action.
-
-Read `blueprint/context/current-feature.md`. **Then read the spec named on its
+Read `context/current-feature.md`. **Then read the spec named on its
 `Spec:` line**, in `docs/features/` or `docs/specs/`. The work order carries the
 sequencing; the spec carries the contract - interface, behaviour, states,
 accessibility requirements, and test cases. Build against both, and where they
@@ -47,12 +35,11 @@ adjust a criterion you found inconvenient. If the spec is wrong or ambiguous,
 stop and ask the human to change it. Only `/complete` writes to a spec, and only
 its `**Status:**` and `**Last updated:**` lines.
 
-If it has no real work order (still the stub, or its
-status is already complete), stop and tell the user to run `/feature` (for a
-planned feature), `/fix` (for an ad-hoc bug or change), or `/rollback` (for a
-completed feature reversal) first. Pull the
-conventions from `blueprint/context/coding-standards.md` and the data model from
-`blueprint/context/project-overview.md` so the code matches them.
+If it has no real work order (still the stub, or its status is already complete),
+stop and tell the user to run `/feature` (for a planned feature), `/fix` (for an
+ad-hoc bug or change), or `/rollback` (for a completed feature reversal) first.
+Pull the conventions, active stack, browser targets, and accessibility standard
+from `docs/project-brief.md` so the code matches them.
 
 If the spec's Design reference points at `prototypes/*.html`, those mockups are
 the visual target - build components to match them, and treat `prototypes/theme.css`
@@ -62,24 +49,28 @@ stylesheet before the components are built).
 **Resuming?** If the spec already has some build steps checked off (`- [x]`), this
 feature was started earlier and interrupted (often a cleared context). The spec and
 its ticked steps are files, so pick up where it left off: read which steps are done,
-check the git branch and `git status`/log to see what is committed and what is still
+check `git status` and the log to see what is committed and what is still
 in the working tree, then continue from the **first unchecked step** instead of
 starting over. No separate save/load is needed - the project instructions load
 `current-feature.md` every session.
 
-## Step 1 - branch
+## Step 1 - record where this work starts
 
-Create and check out a branch named from the spec, using the prefixes in
-`blueprint/config.json`. The defaults are `feature/<name>` for a feature,
-`fix/<name>` for a fix, and `rollback/<name>` for a Type: Rollback spec. If the
-project isn't a git repo yet, say so and ask the user to run `git init` first;
-the loop needs branches. On resume, the branch already exists - check it out
-instead of creating a new one.
+Before the first product edit, write the current `HEAD` to the work order's
+`**Base commit:**` line. `/audit` uses it to find what this work changed, and
+`/complete` uses it to scope the work commit. If the project isn't a git repo
+yet, say so and ask the user to run `git init` first; the loop needs commit
+history to work with. On resume, the line is already filled - leave it alone.
+
+This loop does not create, switch, merge, or delete branches. It commits to
+whatever branch is checked out, matching the "commit your work" checkpoints in
+`WORKFLOW.md`. If the user wants feature branches, that is their call to make
+before running `/implement`.
 
 ### Type: Rollback safeguard
 
 For a rollback spec, do not hand-delete the old feature and do not run a whole
-commit `git revert`. Completed feature commits also contain Blueprint history and
+commit `git revert`. Completed feature commits also contain loop history and
 plan bookkeeping, while `current-feature.md` now contains the active rollback
 spec. Reversing the whole commit would damage that state.
 
@@ -94,8 +85,8 @@ Before the first rollback build step:
    parent exactly equals `Target parent`. Stop on any mismatch.
 3. Confirm the resolved target is an ancestor of `HEAD` and the only dirty path
    before applying the patch is the approved rollback spec. Stop on drift.
-4. Preview the resolved target's product diff while excluding `.agents/**`, `.claude/**`,
-   `blueprint/**`, `AGENTS.md`, `CLAUDE.md`, and
+4. Preview the resolved target's product diff while excluding `.agents/**`,
+   `.claude/**`, `context/**`, `docs/**`, `AGENTS.md`, `CLAUDE.md`, and
    `prototypes/**`. Confirm the preview is non-empty and matches the Product
    paths in the spec.
 5. Apply that resolved product diff in reverse with three-way conflict detection
@@ -103,7 +94,8 @@ Before the first rollback build step:
 
        git diff --binary <target-parent> <target-commit> -- . \
          ':(exclude).agents/**' \
-         ':(exclude).claude/**' ':(exclude)blueprint/**' \
+         ':(exclude).claude/**' ':(exclude)context/**' \
+         ':(exclude)docs/**' \
          ':(exclude)AGENTS.md' ':(exclude)CLAUDE.md' \
          ':(exclude)prototypes/**' |
          git apply --reverse --3way --index
@@ -124,14 +116,8 @@ Before the first product edit in this run, set the spec's `**Status:**` to `in
 progress`. This invalidates any older verification state. Do the same whenever
 implementation resumes after a passing check and changes product code again.
 
-Work through the spec's build steps in order, one at a time. For each step:
-
-- With `workflow.stepReview: "every"`, use the review and approval gate below
-  after every step.
-- With `workflow.stepReview: "feature"`, still implement, explain, and verify
-  small steps, but collect them into one final review packet. Stop early for a
-  failed check, a decision, a conflict, unsafe work, or scope drift. Do not make
-  a checkpoint commit before the final review is approved.
+Work through the spec's build steps in order, one at a time, using the review and
+approval gate below after every step.
 
 1. Implement just that step: the smallest change that satisfies its "done when."
 2. Show the **diff**, not whole files.
@@ -143,56 +129,42 @@ Work through the spec's build steps in order, one at a time. For each step:
    path: the command, URL, click, endpoint, or output the user can check.
 4. **Verify the step.** If `AGENTS.md` declares a `Verify` command, run that exact
    command as the automated gate. It is only an umbrella for checks the project
-   actually has, so do not invent tests or other checks to satisfy it. With
-   `verification.logicTests: "required"`, a logic change without a configured
-   test runner stops and points to `/tests`; `when-configured` uses the existing
-   testing gate. If no
-   `Verify` command exists, run the documented build command and the test command
-   when the project declares one. A step that adds logic must ship a passing test
-   in the same diff when the test gate is on, and the suite must be green before
-   the step is approved (see the Testing gate in `coding-standards.md`). UI and
-   integration-only steps ride on screenshot plus build evidence. With
-   `verification.uiEvidence: "required"`, a UI done-when cannot pass on build
-   output alone. Run a focused
-   test separately when it gives faster feedback, then use `Verify` as the final
-   automated gate. For UI or integration done-whens, prefer Playwright when it is
-   already installed or declared in `AGENTS.md`; do not add it silently for an
-   unrelated feature. Create focused test files next to the source they cover,
-   per `coding-standards.md`. Never install a runner mid-step unless the current
-   spec is explicitly the unit-testing setup itself (for example `/fix "add unit
-   testing"`). If a step surfaces non-trivial logic the spec did not foresee, add
-   a focused test then, or note why not. Apply the regular check gate from
-   `qualityGates.regular`: `manual` runs `/check` only when explicitly requested,
-   `when-behavioral` runs it when a done-when needs observed runtime behavior,
-   and `always` runs it for every work item. A click, download, request, CLI
-   command, background job, or flow across screens is behavioral. When the gate
-   runs, prove it against the real app or command rather than eyeballing it.
+   actually has, so do not invent tests or other checks to satisfy it. If no
+   `Verify` command exists, run the documented build command, and the test
+   command when the project declares one. The Unit testing selection in
+   `docs/project-brief.md` is the switch: when a runner is active, a step that
+   adds logic must ship a passing test in the same diff and the suite must be
+   green before the step is approved; when it is `None`, say so plainly rather
+   than claiming the step is tested. UI and integration-only steps ride on
+   screenshot plus build evidence. Run a focused test separately when it gives
+   faster feedback, then use `Verify` as the final automated gate. Create focused
+   test files next to the source they cover. Never install a runner mid-step
+   unless the current spec is explicitly the unit-testing setup itself (for
+   example `/fix "add unit testing"`); point at `/tests` instead. If a step
+   surfaces non-trivial logic the spec did not foresee, add a focused test then,
+   or note why not. Run `/check` when a "done when" needs observed runtime
+   behaviour - a click, download, request, CLI command, background job, or flow
+   across screens - and prove it against the real app rather than eyeballing it.
 5. **Iterate until it works.** If it fails or the user wants changes, revise the
    step (re-prompt or hand-edit the code), show the updated diff, and re-test.
-   With per-step review, repeat until the user approves. With feature review,
-   repeat until the step passes self-review and hold all commit activity for the
-   final approval gate.
+   Repeat until the user approves.
 6. **Mark it done, then prompt when required.** After the applicable gate is
    satisfied, check the step off (`- [x]`) in
-   `blueprint/context/current-feature.md` so progress survives a context
+   `context/current-feature.md` so progress survives a context
    clear. If the step repaired a finding tracked in
-   `blueprint/context/findings.md`, set that finding's status to `fixed` now too
+   `context/findings.md`, set that finding's status to `fixed` now too
    and note the repair in its **Resolution** line. Never set `closed`: a repair
    is re-reviewed by `/audit` before it clears, because a fix can introduce a
-   worse defect than the one it removed. With feature review, continue to the
-   next step without prompting. With
-   per-step review and `workflow.checkpointCommits: "disabled"`, continue
-   without offering or making
-   a checkpoint commit. With `enabled`, offer a short choice, noting that
-   checkpoints are optional since `/complete` makes the real feature-level
+   worse defect than the one it removed. Then offer a short choice, noting that
+   checkpoints are optional since `/complete` makes the real work-level
    commit. Use the current tool's short
    user-input prompt when available; when you've just produced a long block to
    read (a deep explanation, a big
    walk-through), ask in plain text instead, so the prompt doesn't cover what the
    user is still reading:
    - **Continue** (default) - roll into the next step without committing.
-   - **Commit checkpoint** - commit just this step on the branch with a
-     conventional message (a cheap rollback point).
+   - **Commit checkpoint** - commit just this step with a conventional message
+     (a cheap rollback point).
    - **Walk me through it** - give a deeper, line-level explanation of the new or
      changed code (why this approach, what each part does, any gotchas), then
      re-ask this checkpoint prompt. A loop-back, not a terminal choice.
@@ -201,8 +173,29 @@ Work through the spec's build steps in order, one at a time. For each step:
    On **Continue** or after **Commit checkpoint**, go to the next step. On **Walk
    me through it**, explain in depth and then re-ask this prompt in plain text (the
    explanation is long, so a modal would cover it). On **Stop here**, stop and say
-   where things stand: the branch is intact; run `/implement` again to resume, or
-   `/complete` to wrap up what's built so far.
+   where things stand: the work is intact on disk; run `/implement` again to
+   resume, or `/complete` to wrap up what's built so far.
+
+### Where the code goes, and the co-located spec copy
+
+Generated code follows the project's convention, one directory per contract:
+
+| Spec | Code |
+|------|------|
+| `docs/specs/components/<name>.spec.md` | `src/components/<Name>/` |
+| `docs/specs/pages/<name>.spec.md`      | `src/pages/<Name>/`      |
+| `docs/specs/layouts/<name>.spec.md`    | `src/layouts/<Name>/`    |
+
+When a step creates one of those directories, drop a copy of the source spec in
+it as `<Name>.spec.md`, so anyone opening the folder has the contract next to the
+code. The copy is a convenience only: `docs/specs/` stays the source of truth,
+`/complete` writes the status back there and never to the copy, and if the two
+ever differ the `docs/specs/` version wins. Refresh the copy if the source spec
+changes while the work is in flight.
+
+File extensions follow the active Language and Styles selections in
+`docs/project-brief.md`. Never add a prop, event, or behaviour the spec does not
+name.
 
 Never batch the whole thing into one diff. If a step's diff is too big to read,
 split it. The documented `Verify` command, or the fallback build and tests, must
@@ -210,8 +203,8 @@ pass before any commit.
 
 ## Step 3 - hand off to /complete
 
-Before handing off, check `blueprint/context/findings.md`. A P0 or P1 finding
-still `open` or `fixed` there means `/complete` will refuse the merge, so close
+Before handing off, check `context/findings.md`. A P0 or P1 finding
+still `open` or `fixed` there means `/complete` will refuse to finish, so close
 the loop now:
 
 - Repair each `open` P0 or P1 as an extra reviewed step. First append it to the
@@ -234,7 +227,6 @@ is durable workflow evidence for `/status` and the dashboard. Do not set it when
 a required command, observable done-when, or configured gate failed or could not
 run.
 
-- branch name
 - what changed, grouped by file or area
 - checks run, with the exact command or proof used
 - how to try it manually, or a pointer to `/try`
@@ -242,31 +234,26 @@ run.
 - known risks, skipped checks, or follow-up notes
 - next action, usually `/complete`
 
-Name the effective regular audit, check, and try-guide policies in the packet so
-the user knows which gates `/complete` will run automatically.
-
-Then tell the user `/complete` makes the one work-level commit, logs it (archive,
-update the build plan for a feature or rollback, reset), and merges with
-approval. This skill does not touch main.
+Then tell the user `/complete` makes the one work-level commit and logs the work
+(writes the spec's status back, archives the work order, resets the ledger).
 
 ## Rules
 
-- One small step per diff. Follow the configured review cadence, and never commit
-  before its current review gate is approved.
+- One small step per diff, reviewed and approved before the next one starts.
 - Explain every change in plain English. Understanding the code is the point.
-- Iterate on the branch until each step works; never commit code the user hasn't
-  approved.
-- Follow `blueprint/context/coding-standards.md` (server vs client, scope user-owned queries
-  by the authenticated user id, validate inputs, and so on).
+- Iterate until each step works; never commit code the user hasn't approved.
+- Follow the conventions in `docs/project-brief.md`, the platform guidance in
+  `docs/modern-platform-guide.md`, and the tokens in `docs/design-tokens.md`.
 - Build only what the spec says. If the spec is wrong or thin, stop and fix the
   spec first, do not improvise.
-- Per-step commits are optional checkpoints only when enabled in project config.
-  The work-level commit, the merge, and any push are `/complete`'s job.
+- Never create, switch, merge, or delete a branch. Per-step commits are optional
+  checkpoints; the work-level commit is `/complete`'s job, and any push needs the
+  user's explicit yes.
 - For Type: Rollback, reverse only the approved product diff and preserve all
-  protected Blueprint paths.
+  protected loop paths.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

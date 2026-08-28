@@ -5,10 +5,6 @@ description: Interactively prototype the look of a project. Asks about the desir
 
 # prototype - lock the look before you build
 
-**First action:** Before project inspection, preflight, or any other tool call,
-publish `running` to `blueprint/.state/run.json` using the dashboard activity
-contract in `AGENTS.md`.
-
 Where this sits in the workflow:
 
     plan  ->  /overview  ->  [prototype]  ->  /feature  ->  build
@@ -26,8 +22,8 @@ and only then write any files. Never generate mockups before the user approves.
 ## Step 1 - read what the plan already says
 
 Pull the stated look and feel and the screen/route list from
-`blueprint/context/project-overview.md` (its UI/UX section); fall back to the UI/UX section
-of `blueprint/project-plan.md` if the overview isn't generated yet. Use this
+`docs/project-brief.md` (its UI/UX and design-token sections) and any page or
+layout specs already in `docs/specs/pages/` and `docs/specs/layouts/`. Use this
 as the starting point, so you're refining the user's intent, not asking from
 scratch.
 
@@ -98,6 +94,6 @@ never lands. This skill locks the look, it does not build the app.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

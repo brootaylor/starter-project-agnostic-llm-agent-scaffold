@@ -1,6 +1,6 @@
 ---
 name: try
-description: Generate a human manual try guide for the current or most recently completed Blueprint feature, fix, or rollback. Reads the spec, project commands, and available app context, then tells the user exactly what to start, where to go, what to click or run, what to expect, and what would count as wrong. Read-only. Use when the user runs /try, invokes $try, asks how to test manually, asks where to click, asks how to see the change, or wants a manual review path after /implement, /autopilot, /check, or /complete.
+description: Generate a human manual try guide for the current or most recently completed feature, fix, or rollback. Reads the spec, project commands, and available app context, then tells the user exactly what to start, where to go, what to click or run, what to expect, and what would count as wrong. Read-only. Use when the user runs /try, invokes $try, asks how to test manually, asks where to click, asks how to see the change, or wants a manual review path after /implement, /check, or /complete.
 ---
 
 # try - manual review guide
@@ -27,9 +27,9 @@ never counts as evidence that the user performed the walkthrough.
 Optional scope:
 
 - no argument: use the active feature, fix, or rollback in
-  `blueprint/context/current-feature.md`
-- `latest`: use the most recent archive under `blueprint/history/features/`,
-  `blueprint/history/fixes/`, or `blueprint/history/rollbacks/`
+  `context/current-feature.md`
+- `latest`: use the most recent archive under `context/history/features/`,
+  `context/history/fixes/`, or `context/history/rollbacks/`
 - a step name or number: focus the guide on that current-feature step
 - a path, route, or command: include it as the main thing to try
 
@@ -41,20 +41,16 @@ wants to try instead of guessing.
 Read:
 
 - `AGENTS.md`
-- `blueprint/config.json`
-- `blueprint/context/current-feature.md`
+- `context/current-feature.md`
 - the spec named on its `Spec:` line, in `docs/features/` or `docs/specs/` - the
   contract the work is held to, and the best source for the states and edge cases
   a human should actually try
-- `docs/project-brief.md`, for the accessibility standard and browser targets the
-  manual pass should cover
-- `blueprint/context/project-overview.md`
-- `blueprint/context/coding-standards.md`
-- `blueprint/build-plan.md`, as optional roadmap context only
-- latest files under `blueprint/history/features/`,
-  `blueprint/history/fixes/`, and `blueprint/history/rollbacks/`, if the current
+- `docs/project-brief.md`, for the accessibility standard, browser targets, and
+  conventions the manual pass should cover
+- latest files under `context/history/features/`,
+  `context/history/fixes/`, and `context/history/rollbacks/`, if the current
   feature is reset
-- git branch and working tree status
+- git working tree status
 
 Prefer the active spec. If `current-feature.md` is the reset stub, use the most
 recent archived feature, fix, or rollback by filename or modification time and
@@ -125,6 +121,6 @@ such as an API response, CLI output, log line, or unit test command.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with numbered
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with numbered
 steps for the manual path and short bullets for warnings.

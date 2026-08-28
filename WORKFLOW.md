@@ -155,29 +155,25 @@ Once a spec's status is `Ready`, it's time to build.
 - Use the spec as your blueprint
 - Work through it in order: interface first, tests next, then implementation
 
-**With an agent** — prompt for a single spec:
+**With an agent** — two commands, in order:
 
 ```
-Read `docs/specs/components/button.spec.md` and scaffold the implementation.
+/feature button
 ```
 
-Or scaffold all ready specs at once:
+`/feature` reads the spec, sizes the work, and writes small reviewable build steps to `context/current-feature.md`. It refuses a `Draft` spec, so promote it to `Ready` first. Read what it wrote before continuing — that's the review gate.
 
 ```
-Read all specs in `docs/specs/` with a status of `Ready` and scaffold the implementation for each one.
+/implement
 ```
 
-Claude Code users can also use the custom command shorthand:
+`/implement` builds those steps one at a time. For each step it shows the diff, explains it in plain English, runs whatever checks the project has, and waits for you to approve before moving on. It commits to whatever branch you're on and never creates or merges branches.
 
-```bash
-/create-component Button
-```
-
-> `/create-component` is defined in `.agents/claude/commands/create-component.md` and is Claude Code-specific. Other agents don't support it — use the prompt examples above instead.
-
-The agent will read the spec, derive the interface, write the tests first, then implement until all tests pass.
+To preview a spec before committing to it, run `/brief` — it explains what the spec involves, what it depends on, and what would block it, without writing anything.
 
 If the agent stops to ask a question, the spec is likely ambiguous in that area. Go back, clarify the relevant section, and re-run.
+
+> These commands live in `.agents/skills/` and work the same in Claude Code, Cursor, and Copilot. Prefer them to freehand prompts — they encode the review gates.
 
 ---
 
@@ -189,6 +185,14 @@ Generated code appears in `src/` under the relevant directory (see the table in 
 - Does the implementation match the behaviour described?
 - Are the accessibility requirements met?
 
+**With an agent**, three commands cover this:
+
+```
+/check     prove each "done when" against the running app
+/audit     review the code against the project's standards
+/try       get a step-by-step manual walkthrough to click through yourself
+```
+
 **If something is wrong**, there are two likely causes:
 
 - **The spec is ambiguous** — update the spec first, then ask the agent to fix the implementation
@@ -199,7 +203,7 @@ Generated code appears in `src/` under the relevant directory (see the table in 
 
 Don't edit the implementation directly without also updating the spec. The spec is the source of truth — if the two drift apart, the agent's output becomes unpredictable.
 
-Once everything checks out, update the spec status to `Complete`.
+Once everything checks out, update the spec status to `Complete` — or run `/complete`, which writes that status back for you, archives the work order to `context/history/`, and makes one commit covering the code and the bookkeeping.
 
 > **Commit your work** once the spec is marked `Complete` and all tests are passing.
 
@@ -228,6 +232,10 @@ For deployment, [Netlify](https://www.netlify.com) and [Vercel](https://vercel.c
 ## Step 10 — Iterate
 
 Once a spec is marked `Complete` and committed, return to Step 4 and repeat the cycle for the next feature — feature spec first, then component specs, then build and review.
+
+Run `/status` at any point — after a break, or after clearing your agent's context — to see the spec queue, what's in progress, and the exact next action. Everything it reports comes from files on disk, so a fresh session knows exactly as much as the last one did.
+
+Found a bug that has no spec? `/fix "<description>"` writes a short fix spec and runs it through the same build loop, logged separately under `context/history/fixes/`.
 
 As the project grows, update `docs/project-brief.md` with any new conventions or constraints the agent needs to know about.
 

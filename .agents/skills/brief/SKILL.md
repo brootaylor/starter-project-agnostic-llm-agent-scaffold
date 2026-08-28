@@ -1,6 +1,6 @@
 ---
 name: brief
-description: "Read-only briefing on a spec before you build it. With no argument, briefs the next Ready spec; given a name or path, briefs that one, whatever its status. Reads the spec, docs/project-brief.md, and any project overview, then explains what it is, what it depends on, what it will touch, how big it is, whether it will split, and what still blocks it - without writing anything. Use when the user runs /brief, asks what the next feature involves, wants to preview a spec before /feature, wants to know why a Draft spec is not ready, or is deciding what to build next."
+description: "Read-only briefing on a spec before you build it. With no argument, briefs the next Ready spec; given a name or path, briefs that one, whatever its status. Reads the spec, docs/project-brief.md, and the specs it depends on, then explains what it is, what it depends on, what it will touch, how big it is, whether it will split, and what still blocks it - without writing anything. Use when the user runs /brief, asks what the next feature involves, wants to preview a spec before /feature, wants to know why a Draft spec is not ready, or is deciding what to build next."
 ---
 
 # brief - understand a spec before you build it
@@ -56,8 +56,8 @@ Gather these, then synthesize. Don't dump file contents; explain.
    on. A `Ready` feature resting on a `Draft` component is the single most useful
    thing this briefing can surface.
 3. **Project context** - `docs/project-brief.md` for stack, conventions, browser
-   targets, and accessibility standard; `blueprint/context/project-overview.md`
-   for product context when it exists.
+   targets, and accessibility standard; the parent feature spec in
+   `docs/features/` for product context when the target is a component spec.
 4. **What already exists** - specs already marked `Complete`, the state of `src/`,
    and if useful git history, to ground the dependency read (what must be in place
    first, what this unblocks later).
@@ -111,6 +111,6 @@ locked, or "clear X first" when a dependency blocks it.
 
 ## Formatting
 
-Format the output to match the project's conventions in
-`blueprint/context/ai-interaction.md`: concise, scannable markdown, with lists for
-enumerations and tables for matrices rather than dense paragraphs.
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

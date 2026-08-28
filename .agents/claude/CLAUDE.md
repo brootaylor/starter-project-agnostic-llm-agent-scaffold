@@ -9,10 +9,10 @@ context files Claude Code keeps loaded each session.
 
 @AGENTS.md
 
-@blueprint/context/project-overview.md
-@blueprint/context/coding-standards.md
-@blueprint/context/ai-interaction.md
-@blueprint/context/current-feature.md
+@docs/project-brief.md
+
+@context/current-feature.md
+@context/findings.md
 
 ---
 
@@ -27,25 +27,25 @@ operating systems or agent versions:
 ln -s .agents/claude/CLAUDE.md CLAUDE.md
 ```
 
-The workflow skills need two more pointers:
+The workflow skills need one more pointer:
 
 ```bash
 ln -s ../.agents/skills .claude/skills
-ln -s ../.agents/claude/commands .claude/commands
 ```
 
-All three are gitignored, so they never travel with the repo.
+Both are gitignored, so they never travel with the repo.
 
 ---
 
 ## Claude Code-specific notes
 
-Workflow skills are in `.agents/skills/` and are shared with every other agent.
-Custom slash commands are in `.agents/claude/commands/`. Model and context file
-settings are in `.agents/claude/settings.json`.
+Workflow skills are in `.agents/skills/` and are shared with every other agent —
+there are no Claude-only commands. Model and context file settings are in
+`.agents/claude/settings.json`.
 
-When a custom command exists for a task (e.g. `/create-component`), use it rather
-than improvising — the commands encode the required workflow.
+When a skill covers the task (`/feature`, `/implement`, `/check`, `/complete`,
+and so on), use it rather than improvising — the skills encode the review gates.
+`AGENTS.md` lists them in the order you'd run them.
 
 Spec files live in:
 
@@ -55,5 +55,11 @@ Spec files live in:
 - `docs/specs/layouts/` — layout specs
 
 Always read the relevant spec before generating or editing anything. Co-located
-`*.spec.md` files in `src/` are copies; the `docs/specs/` version is the source of
-truth if they ever differ.
+`*.spec.md` files in `src/` are copies written by `/implement`; the `docs/specs/`
+version is the source of truth if they ever differ.
+
+The loop's working state lives in `context/`:
+
+- `current-feature.md` — the work order in flight, or the stub when idle
+- `findings.md` — the review ledger `/audit` writes
+- `history/` — archived work orders, the record of what was built
