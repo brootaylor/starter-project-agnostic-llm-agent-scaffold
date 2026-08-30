@@ -1,6 +1,92 @@
 # WORKFLOW.md
 
-A step-by-step guide to using this scaffold to build a web project — by hand or with an AI coding agent.
+A step-by-step guide to using this scaffold to build a web project — by hand or with an "Ai" coding agent.
+
+---
+
+## The whole thing at a glance
+
+Set up once, then loop. The ten steps below are the long form of this:
+
+```
+SETUP  ·  once per project
+
+  clone the template
+      │
+      ├─  Step 1   configure agent ····  .agents/<tool>/, linked to it
+      ├─  Step 2   project-brief.md ····  describe it, pick your stack
+      └─  Step 3   set up the stack ····  dependencies and configuration
+                                          + /tests  /ci
+      │
+      ▼
+SPEC  ·  per feature, and always human work
+
+      ├─  Step 4   feature spec ·······  docs/features/<name>.md
+      ├─  Step 5   component specs ····  docs/specs/**/<name>.spec.md
+      └─  Step 6   design tokens ······  docs/design-tokens.md
+      │
+      │           every one of them written as   Status: Draft
+      ▼
+  ┌────────────────────────────────────────────────────────────┐
+  │ HUMAN GATE     you promote   Draft ──▶ Ready               │
+  │ No skill ever does this. It is how you say the             │
+  │ contract is settled and building may begin.                │
+  └────────────────────────────────────────────────────────────┘
+      │
+      ▼
+BUILD LOOP  ·  per spec, one spec at a time      ← Steps 7 and 8
+
+      ├─  + /brief      preview a spec before committing to it
+      │
+      ├─  /feature ───▶  context/current-feature.md      « review gate »
+      │                 the work order: small build steps
+      │
+      ├─  /implement ─▶  src/** + checkpoint commits     « gate per step »
+      │                 diff + plain-English explanation
+      │
+      ├─  /check ─────▶  evidence against each "done when"
+      │
+      ├─  /audit ─────▶  context/findings.md
+      │                 the worst two severities block /complete
+      │
+      ├─  + /try        manual walkthrough to click through yourself
+      │
+      └─  /complete ──▶  Status: Complete  ·  archived to context/history/
+                        one commit covering code + bookkeeping
+      │
+      └──────────────▶  next Ready spec, back to the top of the loop
+                        (or back to Step 4 for a whole new feature)
+
+
+Optional routes  ·  each replaces work above rather than adding to it
+
+  /discovery   ▶  Steps 2 and 4, drafted from a conversation
+  /prototype   ▶  Step 6, arrived at visually instead of abstractly
+
+Anytime         /status  where things stand    /fix       bug with no spec
+                /debug   why is this failing   /rollback  undo a feature
+```
+
+`+` marks an optional addition — run it as well, or not at all. The two
+optional routes are worth knowing about properly:
+
+**`/discovery` is another way through Steps 2 and 4.** Instead of filling in the
+brief and your first feature specs from a blank page, it interviews you — one
+question at a time, over as many turns as the project needs — then drafts both
+files from that conversation and shows you everything before it writes. What it
+writes is always `Draft`, so promotion stays yours. Use it when you'd rather
+talk the product through than write it cold; writing by hand is equally valid,
+and skipping it changes nothing downstream.
+
+**`/prototype` is another way through Step 6.** Instead of choosing colour,
+spacing, and type values abstractly, it writes static mockups of your real
+screens into `prototypes/`, all sharing one `theme.css`, so you can look at
+actual screens and adjust until the look is right. It runs once you have a
+feature spec (Step 4) to prototype against. The mockups are throwaway — the
+theme is the keeper, and becomes `docs/design-tokens.md`.
+
+Everything from `/feature` down is the build loop — see
+[AGENTS.md](./AGENTS.md) for the full skill reference.
 
 ---
 
@@ -40,13 +126,21 @@ Make sure your agent has what it needs:
 | Cursor | The [Cursor app](https://cursor.sh) |
 | GitHub Copilot | A GitHub account with [Copilot access](https://github.com/features/copilot) + the relevant IDE extension |
 
-Open `.agents/<your-agent>/` and follow the setup notes there to point your agent at the config file. For Claude Code:
+Every agent is hardwired to look for its configuration file at one fixed filename — `CLAUDE.md` in the project root for Claude Code, `.cursor/rules` for Cursor, `.github/copilot-instructions.md` for Copilot — and most give you no way to change it.
+
+This scaffold keeps the real configuration files in `.agents/` instead, so cloning it never forces one developer's tool on everybody else. Your one setup task is to create a link at the filename your agent expects, pointing back into `.agents/`. For Claude Code:
 
 ```bash
 ln -s .agents/claude/CLAUDE.md CLAUDE.md
+mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 ```
 
-See `AGENTS.md` for a full explanation of how agent config files are wired up.
+> [!IMPORTANT]
+> `.claude/` is gitignored, so it does not exist in a fresh clone. Without the `mkdir -p`, that second command fails with `No such file or directory` and none of the workflow skills are available to you.
+
+Every one of those links is gitignored, so your choice of agent never travels with the repository. On Windows, where `ln -s` needs Developer Mode or an elevated terminal, copy the file instead and keep the two in sync by hand.
+
+See `AGENTS.md` for the full table of filenames each agent expects, and the notes on adding an agent that isn't listed here.
 
 ---
 
@@ -125,7 +219,8 @@ Look at the "Components required" section of your feature spec. For each item li
 
 See `docs/specs/components/button.spec.md` for a complete worked example.
 
-Set the status to `Draft` while writing. Change it to `Ready` only when every section is complete — the agent will not proceed with a `Draft` spec.
+> [!IMPORTANT]
+> Set the status to `Draft` while writing, and change it to `Ready` only when every section is complete. An agent will not proceed with a `Draft` spec, and it will never promote one for you — that decision is yours alone, and it is how you say the contract is settled.
 
 ---
 
@@ -146,7 +241,7 @@ Read `docs/design-tokens.md` and create the token and main style files.
 
 If `docs/design-tokens.md` is empty, the agent will stop and ask you to fill it in first.
 
-> **Want to settle the look first?** `/prototype` writes throwaway static mockups to `prototypes/` that share one set of theme variables — a way to agree the visual direction before any spec is built. It sits outside the spec loop and nothing it writes is meant to ship.
+> **Want to settle the look first?** `/prototype` writes throwaway static mockups to `prototypes/` that share one set of theme variables. It runs once a feature spec exists (Step 4) and before you build — its one durable output is that theme, which becomes this file. Nothing else it writes is meant to ship.
 
 > **Commit your work** once your tokens are defined and implemented.
 
@@ -210,7 +305,8 @@ Generated code appears in `src/` under the relevant directory (see the table in 
   Re-read the Behaviour section of `docs/specs/components/button.spec.md` and correct the implementation.
   ```
 
-Don't edit the implementation directly without also updating the spec. The spec is the source of truth — if the two drift apart, the agent's output becomes unpredictable.
+> [!IMPORTANT]
+> Don't edit the implementation directly without also updating the spec. The spec is the source of truth — if the two drift apart, the agent's output becomes unpredictable.
 
 Once everything checks out, update the spec status to `Complete` — or run `/complete`, which writes that status back for you, archives the work order to `context/history/`, and makes one commit covering the code and the bookkeeping.
 

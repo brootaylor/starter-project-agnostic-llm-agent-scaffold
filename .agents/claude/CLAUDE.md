@@ -30,8 +30,11 @@ ln -s .agents/claude/CLAUDE.md CLAUDE.md
 The workflow skills need one more pointer:
 
 ```bash
-ln -s ../.agents/skills .claude/skills
+mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 ```
+
+`.claude/` is gitignored, so it won't exist in a fresh clone — without the
+`mkdir` the symlink fails with `No such file or directory`.
 
 Both are gitignored, so they never travel with the repo.
 

@@ -103,6 +103,18 @@ Spec files live in `docs/specs/`. Use `docs/specs/_component-template.spec.md` a
 
 If you're building with an agent, the workflow is a set of shared skills in `.agents/skills/` — plain markdown any capable agent can read and follow. They run in order, once per spec, and each one stops at a review gate rather than running on into the next:
 
+```
+  a spec you have promoted to  Ready
+       │
+       ├─  /feature ───▶  work order   context/current-feature.md
+       ├─  /implement ─▶  code         src/** + checkpoint commits
+       ├─  /check ─────▶  evidence     every "done when" proven
+       ├─  /audit ─────▶  findings     context/findings.md
+       └─  /complete ──▶  done         Status: Complete, archived
+       │
+       └──────────────▶  the next Ready spec
+```
+
 | Skill | What it does |
 |-------|--------------|
 | `/brief` | Preview a spec before committing to it — what it involves, what would block it |
@@ -116,7 +128,8 @@ If you're building with an agent, the workflow is a set of shared skills in `.ag
 
 Others sit outside the loop — `/discovery`, `/fix`, `/rollback`, `/debug`, `/prototype`, `/tests`, `/ci`, and `/release` — plus `/autopilot`, which carries a settled spec the whole way instead of stopping at each gate.
 
-Two rules hold however a skill is invoked: **no skill promotes a spec to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.
+> [!IMPORTANT]
+> Two rules hold however a skill is invoked: **no skill promotes a spec to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.
 
 ---
 
