@@ -382,8 +382,10 @@ and reset its status to `Ready` before asking the agent to revise the implementa
 If an agent encounters a `Draft` spec that is required by a feature it is working
 on, it should stop and ask the user to complete the spec before continuing.
 
-The spec template lives at `docs/specs/_component-template.spec.md`. All new
-specs must follow this template.
+All new specs must follow the template for their kind:
+`docs/features/_feature-template.md` for a feature,
+`docs/specs/_component-template.spec.md` for a component, page, or layout. See
+Features and components below if it is not obvious which one applies.
 
 ---
 
@@ -467,19 +469,55 @@ They apply regardless of which agent is used.
 
 ## Features and components
 
-Understanding the difference between features and components is important for
-working with this scaffold effectively.
+A **feature** is a unit of user value — something a person can do, and why that
+matters to them. A **component** is a unit of code — a reusable piece of user
+interface built so that a feature can happen.
 
-A **feature** describes a piece of functionality from the user's perspective —
-what they can do and why. Feature specs live in `docs/features/` and are written
-in terms of user stories and acceptance criteria.
+|  | Feature | Component |
+|---|---------|-----------|
+| Lives in | `docs/features/<name>.md` | `docs/specs/components/<name>.spec.md` |
+| Template | `docs/features/_feature-template.md` | `docs/specs/_component-template.spec.md` |
+| Written as | User stories (`US-##`) and acceptance criteria (`AC-##`) | Interface, states, behaviour, test cases |
+| Answers | Why does this exist, and how do we know it is done? | What does it take in, render, and do? |
+| Reusable | No — one feature, one goal | Yes — many features can use the same one |
 
-A **component** is a discrete, reusable piece of UI that implements part of a
-feature. Component specs live in `docs/specs/components/` and define the
-interface, behaviour, states, and test cases needed to build it.
+**The decision rule.** Can you write it as *"As a user, I want… so that…"*? If
+yes, it is a feature. If the honest answer is *"nobody wants this on its own,
+they want the thing it enables"*, it is a component. Nobody wants a toggle; they
+want their colour scheme remembered.
 
-A feature will typically depend on one or more components. The feature spec
-lists which components are required before implementation can begin.
+Neither implies the other. A purely visual element such as `Button` can have a
+component spec with no feature above it, and a feature that is entirely logic may
+need no components at all.
+
+**A feature spec depends on its components.** It lists them in a Components
+required table, and none of the work can start until every one of them has
+reached `Ready`. The dependency runs one way only — a component can be specified
+and built on its own.
+
+**Shared values belong to the feature.** Any value more than one component has to
+agree on — an attribute name, a storage key, a precedence order, a route path —
+is fixed once in the feature spec's Implementation notes table. Component specs
+reference it and must never restate it.
+
+> [!IMPORTANT]
+> A shared value copied into a component spec rather than referenced is a silent
+> failure. Both files read as correct and nothing errors; they drift apart the
+> first time either is edited on its own, and the mismatch surfaces later as a
+> bug with no obvious cause.
+
+**Three things are called "feature" in this scaffold.** They are not
+interchangeable:
+
+| Name | What it is |
+|------|------------|
+| `docs/features/<name>.md` | A feature spec — a durable description of user value |
+| `context/current-feature.md` | The work order being built right now — a generated file, not a spec |
+| `/feature` | The skill that turns the first into the second |
+
+Only the first is written by hand. `context/current-feature.md` is regenerated
+every time work starts and reset by `/complete`, so nothing durable should ever
+be written there.
 
 ---
 
@@ -548,8 +586,9 @@ docs/
   storybook.md                                            # ← storybook configuration
   security.md                                             # ← security headers and CSP configuration
   features/                                               # ← user-facing feature specs
+    _feature-template.md                                  # ← feature spec template
   specs/
-    _component-template.spec.md                           # ← spec template
+    _component-template.spec.md                           # ← component / page / layout spec template
     components/                                           # ← authoritative component specs
     pages/                                                # ← page / view specs
     layouts/                                              # ← layout specs
@@ -583,6 +622,9 @@ WORKFLOW.md                                               # ← the ten-step hum
 
 | Question | File |
 |----------|------|
+| Which kind of spec do I write? | `docs/project-brief.md` → Features and components |
+| How do I write a feature spec? | `docs/features/_feature-template.md` |
+| How do I write a component, page, or layout spec? | `docs/specs/_component-template.spec.md` |
 | What does a feature need to do? | `docs/features/<feature>.md` |
 | What should a component do? | `docs/specs/components/<name>.spec.md` |
 | What should a page look like? | `docs/specs/pages/<name>.spec.md` |

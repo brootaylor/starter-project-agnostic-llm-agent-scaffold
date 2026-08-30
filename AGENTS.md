@@ -57,7 +57,13 @@ back when the work is done.
 
 **Agents read specs and never edit them.** Do not implement a `Draft` spec; stop
 and ask. Do not re-implement or overwrite a `Complete` spec; the human resets it
-to `Ready` first. New specs follow `docs/specs/_component-template.spec.md`.
+to `Ready` first.
+
+New specs follow the template for their kind — `docs/features/_feature-template.md`
+for something a user can do, `docs/specs/_component-template.spec.md` for a
+component, page, or layout. A feature spec's Implementation notes table is
+authoritative for any value its components must agree on; component specs
+reference those values and never restate them.
 
 Two edits are the only exceptions in the whole workflow:
 

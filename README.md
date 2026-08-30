@@ -95,7 +95,14 @@ Each spec defines the interface, behaviour, states, accessibility requirements, 
 > [!IMPORTANT]
 > **Promoting a spec from `Draft` to `Ready` is always a human act.** No agent or skill grants itself that signal — it's how you say the contract is settled before anything gets built.
 
-Spec files live in `docs/specs/`. Use `docs/specs/_component-template.spec.md` as your starting point for any new spec.
+Specs come in two kinds, and which one you write depends on what you are describing:
+
+| You are describing | Start from | It lands in |
+|--------------------|-----------|-------------|
+| Something a **user can do**, and why it matters | `docs/features/_feature-template.md` | `docs/features/` |
+| A reusable **component, page, or layout** | `docs/specs/_component-template.spec.md` | `docs/specs/` |
+
+The test: can you write it as *"As a user, I want… so that…"*? If yes, it's a feature. If nobody wants it on its own — they want the thing it enables — it's a component. See [project-brief.md](./docs/project-brief.md) → Features and components for the full distinction, including which spec owns values the two must agree on.
 
 ---
 
@@ -145,6 +152,7 @@ my-project/
 │   ├── storybook.md
 │   ├── security.md
 │   ├── features/                           ← user-facing feature specs
+│   │   └── _feature-template.md
 │   └── specs/                              ← technical specs for components, pages, layouts
 │       ├── _component-template.spec.md
 │       ├── components/
