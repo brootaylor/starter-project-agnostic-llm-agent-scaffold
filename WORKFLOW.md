@@ -136,7 +136,10 @@ mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 ```
 
 > [!IMPORTANT]
-> `.claude/` is gitignored, so it does not exist in a fresh clone. Without the `mkdir -p`, that second command fails with `No such file or directory` and none of the workflow skills are available to you.
+> Two ways this step goes wrong:
+>
+> - `.claude/` is gitignored, so it does not exist in a fresh clone. Without the `mkdir -p`, that second command fails with `No such file or directory` and none of the workflow skills are available to you.
+> - **Do not run Claude Code's built-in `/init`.** It generates a `CLAUDE.md` by analysing the codebase, but here that filename is a symlink into `.agents/`. Running it either overwrites the tracked original or replaces your pointer with a regular file that shadows it and drifts from it silently. If you have already run it: delete the root `CLAUDE.md`, check `git status` for changes to `.agents/claude/CLAUDE.md`, then recreate the link.
 
 Every one of those links is gitignored, so your choice of agent never travels with the repository. On Windows, where `ln -s` needs Developer Mode or an elevated terminal, copy the file instead and keep the two in sync by hand.
 

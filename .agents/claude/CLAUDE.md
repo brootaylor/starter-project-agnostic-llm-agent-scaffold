@@ -38,6 +38,12 @@ mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 
 Both are gitignored, so they never travel with the repo.
 
+Do not run `/init` in this project. It would write a new `CLAUDE.md` at the
+root, where that filename is a symlink to this file — overwriting the tracked
+original or shadowing it with a copy that drifts. Nothing needs generating: the
+imports above already load the project's context every session. If someone asks
+for an orientation, run `/status`.
+
 ---
 
 ## Claude Code-specific notes
