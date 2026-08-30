@@ -34,6 +34,7 @@ It also means the tool choice comes last, not first — React, Astro, an "Ai" ag
 |---|---|---|
 | **How** | Use the specs and workflow as directions for building yourself | Use an "Ai" coding agent to read specs and generate implementation |
 | **Setup** | No extra config needed | See [AGENTS.md](./AGENTS.md) for agent setup |
+| **Building** | Work through the spec in order — interface, tests, implementation | Run the build loop: `/feature` → `/implement` → `/check` → `/audit` → `/complete` |
 
 Both paths follow the same workflow and use the same specs.
 
@@ -44,6 +45,7 @@ Both paths follow the same workflow and use the same specs.
 - **Spec-first workflow** — specs are written before any code is produced; the spec is the source of truth for humans and agents alike
 - **Tech-agnostic** — currently supports 'Vanilla', Astro, Eleventy, React, and Svelte. More tech stack options can be added if needed.
 - **Agent-agnostic** — currently includes config for Claude Code, Cursor, and GitHub Copilot, with a clear pattern for adding others
+- **A build loop with review gates** — 17 shared workflow skills take a `Ready` spec through work order, implementation, verification, audit, and completion, stopping for human review at each step. They're plain markdown shared by every agent, not one tool's feature
 - **Modern platform guide** — a reference for humans and agents for which web platform APIs and features to use, and when a fallback is acceptable.
 - **Optional: service worker** — offline and caching support with a strategy selector and framework-specific guidance
 - **Optional: Storybook** — component development and documentation environment for React, Svelte, and plain JavaScript (aka, 'Vanilla')
@@ -70,6 +72,14 @@ Optional configuration docs:
 | [`docs/storybook.md`](./docs/storybook.md) | Storybook — enable in `project-brief.md` |
 | [`docs/security.md`](./docs/security.md) | Security headers and CSP — set active option in `project-brief.md` |
 
+The build loop's working state, generated as you go — useful to read, no need to edit by hand:
+
+| File | Purpose |
+|------|---------|
+| [`context/current-feature.md`](./context/current-feature.md) | The work order in flight, or a stub when nothing is being built |
+| [`context/findings.md`](./context/findings.md) | Review findings raised by `/audit`, cleared by `/complete` |
+| [`context/history/`](./context/history/) | Archived work orders — the record of what was built |
+
 ---
 
 ## How specs work
@@ -82,7 +92,31 @@ Each spec defines the interface, behaviour, states, accessibility requirements, 
 | `Ready` | Complete — proceed with implementation |
 | `Complete` | Implemented and tested |
 
+> [!IMPORTANT]
+> **Promoting a spec from `Draft` to `Ready` is always a human act.** No agent or skill grants itself that signal — it's how you say the contract is settled before anything gets built.
+
 Spec files live in `docs/specs/`. Use `docs/specs/_component-template.spec.md` as your starting point for any new spec.
+
+---
+
+## The build loop
+
+If you're building with an agent, the workflow is a set of shared skills in `.agents/skills/` — plain markdown any capable agent can read and follow. They run in order, once per spec, and each one stops at a review gate rather than running on into the next:
+
+| Skill | What it does |
+|-------|--------------|
+| `/brief` | Preview a spec before committing to it — what it involves, what would block it |
+| `/feature` | Turn a `Ready` spec into a work order with small, reviewable build steps |
+| `/implement` | Build those steps one at a time — diff, plain-English explanation, approval |
+| `/check` | Prove each "done when" against the running app |
+| `/audit` | Review the code against the project's standards |
+| `/try` | Get a manual walkthrough to click through yourself |
+| `/complete` | Write `Complete` back to the spec, archive the work, make one commit |
+| `/status` | See the queue, what's in flight, and the exact next action |
+
+Others sit outside the loop — `/discovery`, `/fix`, `/rollback`, `/debug`, `/prototype`, `/tests`, `/ci`, and `/release` — plus `/autopilot`, which carries a settled spec the whole way instead of stopping at each gate.
+
+Two rules hold however a skill is invoked: **no skill promotes a spec to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.
 
 ---
 
@@ -110,10 +144,16 @@ my-project/
 │   ├── styles/
 │   ├── assets/
 │   └── scripts/
+├── context/                                ← the build loop's working state
+│   ├── current-feature.md                  ← the work order in flight
+│   ├── findings.md                         ← review findings ledger
+│   └── history/                            ← archived work orders
 └── .agents/
     ├── claude/
     ├── cursor/
-    └── copilot/
+    ├── copilot/
+    └── skills/                             ← shared workflow skills, read by any agent
 ```
 
+> [!IMPORTANT]
 > The example specs in `docs/features/` and `docs/specs/` are real, working examples that follow the same conventions you'd use in a production project. Use them as a reference or replace them with your own.

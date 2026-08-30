@@ -19,6 +19,26 @@ ln -s .agents/copilot/copilot-instructions.md .github/copilot-instructions.md
 
 ---
 
+## Read these alongside this file
+
+Cross-tool instructions live in `AGENTS.md` — the spec statuses, the build loop,
+and the rules every agent in this project follows. Read it in full.
+
+Workflow skills are in `.agents/skills/`, shared with every other agent. When a
+skill covers the task, follow its `SKILL.md` rather than improvising — the skills
+encode the review gates. `AGENTS.md` lists them in the order you'd run them.
+
+The loop's working state lives in `context/`:
+
+- `current-feature.md` — the work order in flight, or the stub when idle
+- `findings.md` — the review ledger `/audit` writes
+- `history/` — archived work orders, the record of what was built
+
+Two rules hold regardless: never promote a spec from `Draft` to `Ready` (that is
+the human's signal), and never create, switch, merge, or delete a branch.
+
+---
+
 ## Copilot-specific notes
 
 Before generating or editing anything, check whether a spec exists in the

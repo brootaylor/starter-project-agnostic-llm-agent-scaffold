@@ -448,7 +448,10 @@ They apply regardless of which agent is used.
 - **Read the spec before implementing** — never generate implementation code without first reading the relevant spec
 - **Do not implement `Draft` specs** — see Spec conventions above
 - **Do not re-implement `Complete` specs** — if a spec is marked `Complete`, skip it. If changes are needed, the human must update the spec and reset its status to `Ready` first
-- **Do not modify spec files** — specs are written by humans. Agents read them; they do not edit them. If a spec is ambiguous or incomplete, stop and ask
+- **Do not promote a spec to `Ready`** — moving a spec from `Draft` to `Ready` is the human's signal that the contract is settled. An agent that grants itself that signal has removed the gate this project is built around. Drafting a brand-new spec is allowed on explicit request, but only as `Draft`
+- **Do not modify spec files** — specs are written by humans. Agents read them; they do not edit them. If a spec is ambiguous or incomplete, stop and ask. The one exception is `/complete`, which sets a finished spec's `**Status:**` and `**Last updated:**` lines and nothing else
+- **Use the workflow skills when one covers the task** — `/feature`, `/implement`, `/check`, `/audit`, `/complete` and the rest live in `.agents/skills/` and are listed in `AGENTS.md`. Prefer them to freehand work: they encode the review gates that make the output reviewable
+- **Do not create, switch, merge, or delete branches** — the build loop commits to whatever branch is already checked out. Branch management is the human's decision
 - **Do not delete files without confirmation** — always ask before removing any file that was not created in the current session
 - **Do not install unlisted dependencies** — only install packages directly required by the active stack selections or an explicit spec requirement
 - **Design tokens before styles** — read `docs/design-tokens.md` before writing any CSS. If the file is empty or incomplete, stop and ask the user to fill it in
@@ -550,7 +553,12 @@ docs/
     components/                                           # ← authoritative component specs
     pages/                                                # ← page / view specs
     layouts/                                              # ← layout specs
-    hooks/                                                # ← hook specs
+context/                                                  # ← the build loop's working state (generated)
+  current-feature.md                                      # ← the work order in flight, or a stub when idle
+  findings.md                                             # ← review findings ledger, written by /audit
+  history/                                                # ← archived work orders: features, fixes, rollbacks
+AGENTS.md                                                 # ← cross-tool agent instructions and skill reference
+WORKFLOW.md                                               # ← the ten-step human guide, setup to deployment
 ```
 
 ### Assets
@@ -579,8 +587,11 @@ docs/
 | What should a component do? | `docs/specs/components/<name>.spec.md` |
 | What should a page look like? | `docs/specs/pages/<name>.spec.md` |
 | What should a layout do? | `docs/specs/layouts/<name>.spec.md` |
-| What does a hook do? | `docs/specs/hooks/<name>.spec.md` |
 | What are the design tokens? | `docs/design-tokens.md` |
 | How is the service worker configured? | `docs/service-worker.md` |
 | How is Storybook configured? | `docs/storybook.md` |
 | What are the security headers and CSP? | `docs/security.md` |
+| What is being built right now? | `context/current-feature.md` |
+| What review findings are open? | `context/findings.md` |
+| What has been built already, and in what order? | `context/history/` |
+| Which skill do I run, and when? | `AGENTS.md` |

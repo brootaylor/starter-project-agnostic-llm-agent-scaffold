@@ -124,7 +124,6 @@ at the location it expects.
 |----------|-----------|
 | `CLAUDE.md` | `.agents/claude/CLAUDE.md` |
 | `.claude/skills` | `../.agents/skills` |
-| `.claude/commands` | `../.agents/claude/commands` |
 | `.cursor/rules` | `.agents/cursor/rules` |
 | `.github/copilot-instructions.md` | `.agents/copilot/copilot-instructions.md` |
 

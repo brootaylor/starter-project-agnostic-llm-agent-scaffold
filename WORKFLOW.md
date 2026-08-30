@@ -20,7 +20,7 @@ A step-by-step guide to using this scaffold to build a web project — by hand o
 
 ## Before you start
 
-The scaffold comes with a full set of starter files: root config (`README.md`, `package.json`, `.gitignore`, `.nvmrc`), docs (`project-brief.md`, `design-tokens.md`, feature and spec examples), default source files (`src/index.html`, `src/scripts/main.js`), and agent configs under `.agents/`.
+The scaffold comes with a full set of starter files: root config (`README.md`, `package.json`, `.gitignore`, `.nvmrc`), docs (`project-brief.md`, `design-tokens.md`, feature and spec examples), default source files (`src/index.html`, `src/scripts/main.js`), agent configs under `.agents/`, and the build loop's empty working state under `context/`.
 
 The spec and feature files are illustrative examples — replace or modify them to suit your project.
 
@@ -95,6 +95,8 @@ The agent will populate `package.json`, generate any required config files, and 
 
 **Starting files:** `src/index.html` and `src/scripts/main.js` are included for Vanilla, React, and Svelte stacks. For React and Svelte, `main.js` needs to be updated to mount the app. For Astro and Eleventy, remove both files — those frameworks manage their own pages and templating.
 
+> **Testing and automatic checks are opt-in.** `/tests` adds a unit test runner for your active stack and turns the testing gate on; `/ci` defines one `Verify` command and the matching GitHub Actions workflow. Run either now or later — the loop works without them.
+
 > **Commit your work** once setup is complete and dependencies are in place.
 
 ---
@@ -144,6 +146,8 @@ Read `docs/design-tokens.md` and create the token and main style files.
 
 If `docs/design-tokens.md` is empty, the agent will stop and ask you to fill it in first.
 
+> **Want to settle the look first?** `/prototype` writes throwaway static mockups to `prototypes/` that share one set of theme variables — a way to agree the visual direction before any spec is built. It sits outside the spec loop and nothing it writes is meant to ship.
+
 > **Commit your work** once your tokens are defined and implemented.
 
 ---
@@ -175,6 +179,8 @@ To preview a spec before committing to it, run `/brief` — it explains what the
 
 If the agent stops to ask a question, the spec is likely ambiguous in that area. Go back, clarify the relevant section, and re-run.
 
+> **`/autopilot`** runs that whole pass — work order, build steps, verification, gates, checkpoint commits — without pausing at each review point, then stops with a review packet for you. It never runs `/complete`, pushes, or deploys. It's opt-in only: the step-at-a-time path above is the default, because the review between steps is the point of a spec-first loop.
+
 > These commands live in `.agents/skills/` and work the same in Claude Code, Cursor, and Copilot. Prefer them to freehand prompts — they encode the review gates.
 
 ---
@@ -198,6 +204,7 @@ Generated code appears in `src/` under the relevant directory (see the table in 
 **If something is wrong**, there are two likely causes:
 
 - **The spec is ambiguous** — update the spec first, then ask the agent to fix the implementation
+- **You can't tell why it's failing** — `/debug` reproduces the symptom, isolates the failing path, and hands the evidence to `/fix` or `/implement`. It edits nothing itself
 - **The spec is clear but the output is wrong** — re-prompt with the relevant section highlighted:
   ```
   Re-read the Behaviour section of `docs/specs/components/button.spec.md` and correct the implementation.
@@ -227,7 +234,9 @@ npm install
 npx @11ty/eleventy --serve
 ```
 
-For deployment, [Netlify](https://www.netlify.com) and [Vercel](https://vercel.com) work well with all of these frameworks. Connect your Git repository, set the build command and output directory for your framework, and they handle the rest.
+For deployment, [Netlify](https://www.netlify.com), [Vercel](https://vercel.com), and [Render](https://render.com) all work well with these frameworks. Connect your Git repository, set the build command and output directory for your framework, and they handle the rest.
+
+**With an agent**, `/release` covers Render and Vercel specifically: it checks build, start command, output directory, env vars, and health checks, and can write `render.yaml` or `vercel.json` for you. It stops before any actual deploy, remote service change, or push — those need a separate yes from you.
 
 ---
 
