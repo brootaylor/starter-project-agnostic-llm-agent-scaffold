@@ -166,6 +166,7 @@ my-project/
 │   ├── assets/
 │   └── scripts/
 ├── context/                                ← the build loop's working state
+│   ├── sessions.md                         ← your session log (gitignored)
 │   ├── current-feature.md                  ← the work order in flight
 │   ├── findings.md                         ← review findings ledger
 │   └── history/                            ← archived work orders

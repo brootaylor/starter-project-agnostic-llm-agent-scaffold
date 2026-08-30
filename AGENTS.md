@@ -23,10 +23,40 @@ The workflow is defined by the local skills and context files below.
 
 ## Read these for full context
 
+- `context/sessions.md` - the running log of past sessions, and the only context
+  that survives a `/compact` or `/clear`. Gitignored and personal to you, so it
+  will not exist in a fresh clone; create it on first use. Entries are an `H2` of
+  `## YYYY-MM-DD - Title` followed by prose. **See "Keep the session log current"
+  below - it has obligations the other files here do not**
 - `context/current-feature.md` - the work order for the one feature, fix, or
   rollback being built right now, or the stub when nothing is in flight
 - `context/findings.md` - the review ledger `/audit` writes and `/complete` clears
 - `context/history/` - archived work orders: what was built, in what order, and why
+
+## Keep the session log current
+
+**`context/sessions.md` is the only thing that survives a context reset.** A
+`/compact` or `/clear` discards the conversation; the log is what tells the next
+session where the work stands. Anything of substance that exists only in the
+conversation is lost the moment either runs, and nothing warns you - there is no
+error, just a later session that has to rediscover it.
+
+**Read it before acting when starting cold.** After a reset, or in any session
+where recent history is not already in context, read the last two or three
+entries first. Each closes with a "Still open" paragraph naming what carries
+forward.
+
+**Update it as you go, not only at the end.** Append or extend the current
+entry whenever something lands that a future session would need: work completed,
+a decision made and its reasoning, an approach tried and abandoned, a discovered
+constraint, anything deliberately left undone. Do not wait to be asked, and do
+not save it all for a wrap-up that a `/clear` may pre-empt. If the user asks to
+update memory, that always includes this file.
+
+**Write it for a reader with no memory of the conversation.** State what changed
+and why it mattered, not just which files moved. Record reversals and rejected
+options too - knowing an approach was tried and dropped is what stops a later
+session repeating it.
 
 The project's own documentation set is authoritative for everything else:
 

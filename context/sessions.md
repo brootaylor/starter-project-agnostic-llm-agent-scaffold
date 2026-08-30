@@ -385,3 +385,119 @@ expanded anywhere — it is defined by meaning in `/audit` but never spelled out
 The `« review gate »` markers in the new diagram are the one piece of notation a
 fresh reader cannot decode from the diagram alone. Further diagram refinement was
 explicitly deferred.
+
+---
+
+## 2026-08-30 (later) — Features and components, and a lesson in scope
+
+Started as a plain question — what is the difference between a feature and a
+component here — and turned into finding that two documents answered it wrongly.
+
+**The distinction was already load-bearing, just badly documented.** `/feature`
+scans both `docs/features/` and `docs/specs/` for its work queue.
+`dark-mode.md` already gates implementation behind a Components required table
+and already tells component specs not to restate the values in its
+Implementation notes. All of that machinery ran whether or not anyone could
+explain it. The explanation itself was twelve lines of abstract prose buried at
+line 468 of `project-brief.md`, with no example and no decision rule.
+
+**Two documents were actively wrong.** `README.md` and `AGENTS.md` both said to
+use `docs/specs/_component-template.spec.md` as the starting point for *any* new
+spec. An agent following `AGENTS.md` literally would write a feature spec as
+props tables, states, and test cases — the wrong shape entirely for something
+that wants user stories. Both now route by kind.
+
+**`docs/features/` had no template.** `docs/specs/` has shipped one since May;
+the feature side has only ever had `dark-mode.md`, which `README.md` explicitly
+invites consumers to replace. Delete the example and the format leaves the repo.
+Added `docs/features/_feature-template.md`, mirroring the component template's
+house style — status header, guidance blockquotes, `Draft → Ready` checklist —
+and both templates now open with an "Is this the right template?" routing table
+that tells you to delete it once you know. The test they both give: can you write
+it as *"As a user, I want… so that…"*? If yes it is a feature; if nobody wants it
+on its own, only the thing it enables, it is a component.
+
+The `project-brief.md` section became a comparison table, that decision rule, the
+one-way dependency, and the rule that any value more than one component must
+agree on is fixed once in the feature spec and only referenced elsewhere — a
+silent failure, since a copied key leaves both files reading as correct until
+they drift. It also now names the three things called "feature" in this
+scaffold: the spec in `docs/features/`, the generated work order at
+`context/current-feature.md`, and the `/feature` skill that turns one into the
+other. Only the first is written by hand.
+
+**Two renames were made and then reverted.** `feature-spec-template.md` and
+`rollback-spec-template.md` under `.agents/skills/` both describe work orders,
+not specs — the names are inaccurate in exactly the way the session was about.
+They were renamed to match, then backed out when the question came: is there a
+clear benefit in what it is and how it's used? There wasn't. Neither changed any
+behaviour, both files are read only by an agent mid-skill and never by a human,
+and the second rename had been justified partly by an inconsistency the first one
+created. `.agents/` ended the session byte-identical to where it started.
+
+The scope menu offered at the outset is what let that happen: it bundled the two
+genuine defect fixes and the cosmetic renames into a single recommended option,
+so there was no way to approve one without the other. Worth splitting those next
+time.
+
+**The log's own warning worked.** A dead-link sweep over the docs flagged
+`docs/services.md` as missing — precisely the thing the previous entry recorded
+as looking like drift but not being it. It sits in "Other spec types", which
+describes what a project adds as it grows, and was left alone for the second
+time.
+
+`UI` turned out to be the only unexpanded acronym in `project-brief.md`, in the
+one sentence defining what a component is. Now spelled out.
+
+**Still open.** `/fix` has no work-order template at all — it writes
+`context/current-feature.md` freehand from prose in its own `SKILL.md`, while
+`/feature` and `/rollback` both work from a file in `reference/`. The shape of a
+fix work order is therefore pinned down nowhere. Noted and deliberately not
+acted on, since closing it means authoring a template rather than tidying one.
+
+Nothing here moved the loop from considered work to demonstrated work. This was
+a documentation session; no skill was run and no spec was built. Button is still
+not a buildable `Ready` spec.
+
+**Then this log turned out to be invisible.** Asked to update session memory, I
+wrote only to the `~/.claude` memory directory and reported the task done -
+`context/sessions.md` was mentioned in exactly zero files in the repository.
+`CLAUDE.md` imports `AGENTS.md`, `project-brief.md`, `current-feature.md`, and
+`findings.md`, but not this one, and nothing instructed an agent to maintain it.
+A file kept primarily so the agent knows where things stand, that no agent-facing
+document named.
+
+**It is now personal context rather than template content.** It had been tracked,
+which meant anyone cloning the scaffold would inherit sixteen entries about
+building the scaffold itself - the same error the 2026-08-28 entry records for
+the planning files. It is now gitignored under a new "Personal context" section,
+alongside the agent pointers. The convention travels; the entries do not. Note
+`.gitignore` does not apply to an already-tracked file, so this needs
+`git rm --cached context/sessions.md` once to take effect.
+
+**Documented in the three places that enumerate `context/`.** Both folder trees,
+project-brief's "Where to look", and a new "Keep the session log current" section
+in `AGENTS.md` - deliberately there rather than in `CLAUDE.md`, so Cursor and
+Copilot get it too. That section states the obligation the file actually has:
+read the recent entries when starting cold, and update as work lands rather than
+saving it for a wrap-up that a `/clear` may pre-empt.
+
+**Two hooks, in personal settings only.** `.claude/settings.json` is gitignored,
+so it is the right home for a Claude Code-specific reminder. `PreCompact` warns
+when the log has no entry from today and stays silent when it does, so it is
+signal rather than nagging; `SessionStart` injects a pointer to read the last
+entries. Both were pipe-tested against the real payload and emit valid JSON.
+Worth recording: `jq` is not installed on this machine, so neither command uses
+it - the common formulation from the hook documentation would have failed
+silently.
+
+**A gap left open deliberately.** `.agents/claude/settings.json` is documented in
+`CLAUDE.md` but never symlinked to `.claude/settings.json` by any setup step, so
+it is currently dead - Claude Code never reads it. That makes it the wrong place
+for a hook today. Wiring it would give consumers the same reminder, at the cost
+of another setup step; not done without a decision.
+
+**Still open, revised.** `/fix` still has no work-order template. The untracking
+command above has not been run. And the reminder mechanism is Claude Code-only:
+the `AGENTS.md` instruction covers every agent, but nothing enforces it for
+Cursor or Copilot the way a hook does for Claude.
