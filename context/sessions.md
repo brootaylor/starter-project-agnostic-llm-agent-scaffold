@@ -310,3 +310,78 @@ Discovery writes into `project-brief.md`, a file with a lot of shipped reference
 material below its checklist that it's told to leave alone; rollback has never
 been run at all, and its git surgery is the least forgiving thing in the repo.
 Both want exercising on a clone before they're trusted.
+
+---
+
+## 2026-08-30 — Branch renamed, and the documentation caught up with the code
+
+**The branch is now `dev`.** `dev-ai-blueprint-adoption` renamed and pushed with
+tracking set. Two branches that appeared to exist on the remote turned out to be
+stale local tracking references: `git ls-remote` showed origin had only ever
+held `dev` and `main`, so all of the Blueprint absorption work had never left
+this machine until today's push. Pruned the stale references and deleted the old
+`dev-ai-blueprint` branch.
+
+**The documentation had not kept up with the absorption.** `AGENTS.md` and
+`WORKFLOW.md` were rewritten during it; `README.md` received two lines, and
+`docs/project-brief.md`, the Copilot instructions, and the Cursor rules were
+untouched entirely — despite `AGENTS.md` naming the brief as the single source
+of truth. A sweep of all 42 markdown files found twelve things to fix.
+
+Two were genuinely broken pointers. The `.claude/commands` row in `AGENTS.md`
+pointed at a directory deleted along with `/create-component`, so anyone
+following the setup table would symlink to nothing. And the feature spec template
+still cited `coding-standards.md` for its testing gate, a file that went with
+`blueprint/`; it now points at the real gate, which is a `test` command in
+`AGENTS.md`.
+
+The rest was absence rather than error. `README.md` never mentioned the build
+loop, the skills, or `context/` — the largest change on the branch was invisible
+in the first document anyone reads. `project-brief.md` had no `context/` in its
+folder tree, no work-order rows in "Where to look", and none of the three rules
+the loop rests on in its agent behaviour rules. The Copilot and Cursor configs
+never pointed at `AGENTS.md`, the skills, or `context/`, while `CLAUDE.md`
+imports `AGENTS.md` directly — the agent-agnostic claim was thinnest exactly
+where it is advertised. `WORKFLOW.md` named Netlify and Vercel for deployment
+while `/release` actually covers Render and Vercel, and six of the seventeen
+skills appeared nowhere in the human guide at all.
+
+**One thing that looked like drift wasn't.** `docs/specs/hooks/` and
+`docs/services.md` are both named in project-brief's "Other spec types" section,
+which explicitly presents them as things a project adds as it grows. They were
+removed from the folder tree and "Where to look" — which describe what ships —
+and the forward-looking section was left alone. Worth remembering before
+"fixing" them again.
+
+**Diagrams, in ASCII, in two places.** A full setup-to-complete map at the top of
+`WORKFLOW.md` and a compact loop-only version in README's build loop section.
+Mermaid was considered and rejected: it renders as a real graphic on GitHub, but
+it would have been the only Mermaid in the repository, every one of the
+seventeen skills already draws its flow in ASCII, and a Mermaid block is
+precisely the content that reads differently to a human on GitHub than to an
+agent parsing the file — which cuts against the premise the scaffold sells.
+
+The diagram took three passes to stop being misleading. The first used one
+bracket notation for three different relationships, so `/discovery` read as
+something you do *as well as* picking your stack, when it is an alternative route
+that covers Steps 2 and 4 together. The second fixed that but labelled the block
+"Instead of, or alongside", which names no object. Optional additions are now
+marked `+`, alternative routes say which step they replace, and the fuller
+explanation moved to prose below the diagram where it has room.
+
+**A real bug, found while rewriting Step 1.** The documented skills symlink fails
+on a fresh clone. `.claude/` is gitignored, so it does not exist, and `ln -s`
+will not create a missing parent directory. Tested it: `ln: .claude/skills: No
+such file or directory`. Anyone following `CLAUDE.md`'s setup note ends up with
+no workflow skills and no obvious reason why. Both places now say
+`mkdir -p .claude && ln -s ../.agents/skills .claude/skills`, and Step 1 gained
+the explanation it never had: that agents hardwire a config filename, which is
+why a link is needed at all.
+
+**Still open.** The loop remains considered work rather than demonstrated work;
+nothing today changed that, and Button is still not a buildable `Ready` spec. The
+severity scale is used across eight files and the `P` in `P0` to `P3` is never
+expanded anywhere — it is defined by meaning in `/audit` but never spelled out.
+The `« review gate »` markers in the new diagram are the one piece of notation a
+fresh reader cannot decode from the diagram alone. Further diagram refinement was
+explicitly deferred.
