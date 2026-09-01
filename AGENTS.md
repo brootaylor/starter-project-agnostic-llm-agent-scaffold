@@ -1,8 +1,14 @@
 # AGENTS.md
 
-Instructions for AI coding agents working in this project. This is the cross-tool
-entry point: Codex, OpenCode, Cursor, GitHub Copilot, Gemini CLI, Aider, Zed,
-Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports this file, so there is a single source of truth.
+Instructions for AI coding agents working in this project. `AGENTS.md` is a
+cross-tool convention that most coding agents read directly, so this is the
+entry point for any of them. Claude Code reads `CLAUDE.md`, which imports this
+file, so there is a single source of truth either way.
+
+Ready-made configs ship for three agents - Claude Code, Cursor, and GitHub
+Copilot - under `.agents/`. An agent that reads `AGENTS.md` natively needs no
+config of its own and works as soon as it opens the project. For one that expects
+its own config file, see "Adding a new agent" below.
 
 ## What this is
 
@@ -148,7 +154,7 @@ Every file inside an agent directory does two things only:
    settings)
 
 Nothing else belongs in them. `.agents/skills/` is shared, not tool-specific:
-Codex, Claude Code, GitHub Copilot, and OpenCode all read the same tree.
+Codex, Claude Code, Cursor, GitHub Copilot, and OpenCode all read the same tree.
 
 ### How the pointers are wired
 
@@ -257,6 +263,7 @@ any capable agent can read and follow, exposed through tool-specific adapters:
 
 - Codex: `.agents/skills/<skill>/SKILL.md`
 - Claude Code: `.claude/skills/<skill>/SKILL.md`
+- Cursor: `.cursor/rules` plus `.agents/skills/<skill>/SKILL.md`
 - GitHub Copilot: `AGENTS.md` plus `.agents/skills/<skill>/SKILL.md`
 - OpenCode: `AGENTS.md` plus the compatible `.agents/skills/` or
   `.claude/skills/` tree already installed for the selected tools
@@ -268,10 +275,10 @@ dangling - no config and no skills, with `ls -l` still showing links that look
 healthy. What you can remove is the sibling directory for an agent you do not
 use, such as `.agents/cursor/`, along with its pointer.
 
-So: Codex, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode can also
-reuse `.claude/` when Claude Code is selected. A project using no Claude Code can
-delete the `CLAUDE.md` pointer, `.claude/`, and `.agents/claude/`, but should
-keep `AGENTS.md`, which every other tool reads. Do not duplicate the same skills
+So: Codex, Cursor, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode
+can also reuse `.claude/` when Claude Code is selected. A project using no
+Claude Code can delete the `CLAUDE.md` pointer, `.claude/`, and
+`.agents/claude/`, but should keep `AGENTS.md`, which every other tool reads. Do not duplicate the same skills
 under `.opencode/skills/`; OpenCode already discovers the compatible trees.
 
 When changing shared workflow behavior, edit
@@ -325,9 +332,10 @@ path above is the default, and the review between each step is the point of a
 spec-first loop.
 
 In Claude Code, invoke these as slash commands (`/feature`, `/implement`, and so
-on). In Codex, invoke them as skills (`$feature`, `$implement`). In OpenCode or
-other tools without a dedicated invocation syntax, ask the agent to run the
-matching skill or follow its `SKILL.md` manually.
+on). In Codex, invoke them as skills (`$feature`, `$implement`). In Cursor,
+GitHub Copilot, OpenCode, and any other tool with no dedicated syntax for these,
+name the skill and ask the agent to follow its `SKILL.md` - the gates are in the
+file, so a skill followed manually behaves the same as one invoked.
 
 **Two rules hold however a skill is invoked.** No skill promotes a spec to
 `Ready` - that is the human's signal that the contract is settled. And no skill
