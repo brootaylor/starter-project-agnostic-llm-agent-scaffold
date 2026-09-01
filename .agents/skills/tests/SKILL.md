@@ -38,7 +38,10 @@ Do not assume Next.js. Detect the stack from files.
 
 ## Step 2 - choose the smallest test setup
 
-Prefer the existing runner if one is already present. If none exists, choose the
+Prefer the existing runner if one is already present. If none exists, check
+whether `docs/project-brief.md` marks one `[active]` under Stack -> Unit testing.
+That is the human's own selection and it wins over every default below. Only
+when it marks `None`, or the project is not one the brief covers, choose the
 stack-native unit test runner:
 
 - TypeScript or JavaScript app: Vitest by default, unless the project already

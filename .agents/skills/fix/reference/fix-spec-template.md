@@ -49,7 +49,7 @@ clear: a fresh session resumes from the first unchecked step.
 - How to confirm it is fixed: what to click, run, or test.
 - Regression path: `<a small nearby flow that must still work>`
 - If a test runner is configured and this fix touches in-scope logic (parsers,
-  formatters, validators, server actions), the fix ships with a test that fails
+  formatters, validators, data transforms), the fix ships with a test that fails
   before it and passes after. The testing gate is on only when `AGENTS.md` lists
   a real `test` command under Commands.
 

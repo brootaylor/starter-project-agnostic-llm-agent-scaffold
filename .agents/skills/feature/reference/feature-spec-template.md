@@ -68,7 +68,7 @@ session reads which boxes are ticked and resumes from the first unchecked step.
 
 - How to verify: what to click through, and the observable done-when per step.
 - If a test runner is configured, name the in-scope logic that needs a test
-  (parsers, formatters, validators, server actions - not components or
+  (parsers, formatters, validators, data transforms - not components or
   integration/render routes), so each logic-bearing step ships its test. If no
   runner is configured, say so and rely on screenshot plus build evidence. The
   testing gate is on only when `AGENTS.md` lists a real `test` command under

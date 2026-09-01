@@ -1,7 +1,9 @@
 /* Theme variables - the durable output of /prototype.
-   Define the project's look as CSS variables here, then port this block into the
-   real app's globals.css @theme. The values below are EXAMPLES; derive real ones
-   from the project's stated look and feel. */
+   Define the project's look as CSS variables here, then port this block into
+   docs/design-tokens.md and the project's real stylesheet - the file and
+   extension follow the active Styles selection in docs/project-brief.md.
+   The values below are EXAMPLES; derive real ones from the project's stated
+   look and feel. */
 
 :root {
   /* surfaces */

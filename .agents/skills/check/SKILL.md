@@ -98,7 +98,7 @@ Give a short, honest verdict, one line per checklist item:
     [pass] Download PDF saves certificate-<slug>.pdf - file downloaded, opened to the cert
     [pass] Both buttons show a loading state - screenshot: loading-state.png
     [fail] PDF border missing - printBackground not set; screenshot: pdf-no-border.png
-    [skip] Vercel render - can't verify locally (feature 9)
+    [skip] Production redirect behaviour - can't verify locally (feature 9)
 
 Then state the bottom line: are all the feature's done-whens proven, or not yet.
 

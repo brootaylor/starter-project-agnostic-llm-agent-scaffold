@@ -16,7 +16,7 @@ Agent-specific configs live in `.agents/`.
 These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any AI agent working on the project.
 
 - [ ] **What this project is** — describe the project, who it's for, its goals, and any known constraints
-- [ ] **Stack** — mark one option per category as `[active]`
+- [ ] **Stack** — mark one option per category as `[active]`, replacing the defaults the scaffold ships with
 - [ ] **Browser support** — update the targets table if the defaults don't match your project
 - [ ] **Accessibility standard** — review the default and update it if your project has different requirements
 
@@ -57,6 +57,15 @@ These are the only sections you need to fill in before starting. Everything else
 
 This section defines the framework and tooling for the project.
 Mark exactly one option per category as `[active]`. Leave all others blank.
+
+> [!IMPORTANT]
+> **The `[active]` marks below are the scaffold's shipped default, not a
+> recommendation.** They sit on Vanilla, JavaScript, plain CSS, and Vite because
+> the example specs and the `src/` starting files are written against that
+> combination — nothing about it has been chosen for your project. Replace them
+> with your own selections (`WORKFLOW.md` Step 2) before any setup runs. Nothing
+> errors if you don't: an agent reads a shipped default exactly as it reads a
+> settled decision, and will install and scaffold against it.
 
 ### Framework
 
@@ -461,6 +470,7 @@ They apply regardless of which agent is used.
 - **Modern platform before implementation** — read `docs/modern-platform-guide.md` before writing any HTML, CSS, or JavaScript. Use native platform APIs and features unless that file explicitly permits a fallback.
 - **Tests before implementation** — write tests first, then implement until they pass
 - **One spec at a time** — unless explicitly asked to scaffold multiple specs at once, implement one spec per session and confirm before moving to the next
+- **Confirm the stack before setup** — the `[active]` marks in the Stack section ship pre-filled with the scaffold's default, and nothing distinguishes a default left untouched from a decision the human made. Before running initial project setup, or generating any config file or dependency list from those marks, state the active selections back to the human and confirm they are this project's actual choices
 - **Read compatibility notes before setup** — before generating any config file, check the Stack compatibility notes section above for the active stack combination and follow any instructions there
 - **Stop and report when setup fails** — if initial project setup produces errors or a tool cannot be configured correctly after a single attempt, stop immediately. Report exactly what failed, the full error message, and what was tried. Do not attempt further fixes in a loop. Wait for the human to review and advise before continuing
 - **Ask, don't assume** — if a spec is ambiguous, a constraint is unclear, or a decision would affect the whole project, ask rather than guess

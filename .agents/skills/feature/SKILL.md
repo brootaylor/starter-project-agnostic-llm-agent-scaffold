@@ -176,9 +176,8 @@ relevant mockups from the spec's Design reference section instead of asking for 
 screenshot - they beat a flat image, since they carry the exact tokens. Treat
 `theme.css` as the source of truth for colors, type, and spacing, and make the
 feature's **first build step** port those tokens into the app's global stylesheet
-(`@theme` for Tailwind v4, or the project's equivalent) before building components
-against the mockups. The mockups are throwaway: once the look is built they get
-discarded at `/complete`.
+before building components against the mockups. The mockups are throwaway: once
+the look is built they get discarded at `/complete`.
 
 This is a draft. Don't present it yet - critique it first.
 
