@@ -63,9 +63,10 @@ Mark exactly one option per category as `[active]`. Leave all others blank.
 > recommendation.** They sit on Vanilla, JavaScript, plain CSS, and Vite because
 > the example specs and the `src/` starting files are written against that
 > combination — nothing about it has been chosen for your project. Replace them
-> with your own selections (`WORKFLOW.md` Step 2) before any setup runs. Nothing
-> errors if you don't: an agent reads a shipped default exactly as it reads a
-> settled decision, and will install and scaffold against it.
+> with your own selections (`WORKFLOW.md` Step 2) before any setup runs, clearing
+> the shipped mark rather than adding a second one beside it. Nothing errors if
+> you don't: an agent reads a shipped default exactly as it reads a settled
+> decision, and will install and scaffold against it.
 
 ### Framework
 
@@ -470,7 +471,7 @@ They apply regardless of which agent is used.
 - **Modern platform before implementation** — read `docs/modern-platform-guide.md` before writing any HTML, CSS, or JavaScript. Use native platform APIs and features unless that file explicitly permits a fallback.
 - **Tests before implementation** — write tests first, then implement until they pass
 - **One spec at a time** — unless explicitly asked to scaffold multiple specs at once, implement one spec per session and confirm before moving to the next
-- **Confirm the stack before setup** — the `[active]` marks in the Stack section ship pre-filled with the scaffold's default, and nothing distinguishes a default left untouched from a decision the human made. Before running initial project setup, or generating any config file or dependency list from those marks, state the active selections back to the human and confirm they are this project's actual choices
+- **Confirm the stack before setup** — the `[active]` marks in the Stack section ship pre-filled with the scaffold's default, and nothing distinguishes a default left untouched from a decision the human made. Before running initial project setup, or generating any config file or dependency list from those marks, count the marks in every category, then state the active selections back to the human and confirm they are this project's actual choices. **A category with two or more `[active]` marks, or with none, is unresolved — stop and ask which one applies rather than picking one.** Two marks usually means a shipped default was never cleared, so do not assume the newer or lower entry is the intended one
 - **Read compatibility notes before setup** — before generating any config file, check the Stack compatibility notes section above for the active stack combination and follow any instructions there
 - **Stop and report when setup fails** — if initial project setup produces errors or a tool cannot be configured correctly after a single attempt, stop immediately. Report exactly what failed, the full error message, and what was tried. Do not attempt further fixes in a loop. Wait for the human to review and advise before continuing
 - **Ask, don't assume** — if a spec is ambiguous, a constraint is unclear, or a decision would affect the whole project, ask rather than guess

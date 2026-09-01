@@ -139,7 +139,7 @@ mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 > Two ways this step goes wrong:
 >
 > - `.claude/` is gitignored, so it does not exist in a fresh clone. Without the `mkdir -p`, that second command fails with `No such file or directory` and none of the workflow skills are available to you.
-> - **Do not run Claude Code's built-in `/init`.** It generates a `CLAUDE.md` by analysing the codebase, but here that filename is a symlink into `.agents/`. Running it either overwrites the tracked original or replaces your pointer with a regular file that shadows it and drifts from it silently. If you have already run it: delete the root `CLAUDE.md`, check `git status` for changes to `.agents/claude/CLAUDE.md`, then recreate the link.
+> - **Do not run Claude Code's built-in `/init`.** It generates a `CLAUDE.md` by analysing the codebase, but here that filename is a symlink into `.agents/`. Running it either writes straight through the link and overwrites the tracked original, or replaces your pointer with a regular file that shadows it and drifts from it silently. If you have already run it: delete the root `CLAUDE.md`, then run `git status`. If it reports `.agents/claude/CLAUDE.md` as modified, the original was overwritten — restore it with `git restore .agents/claude/CLAUDE.md`. Then recreate the link. Deleting the root file alone does not undo the overwrite: the link will resolve happily to the generated content, so check `git status` before assuming you have recovered.
 
 Every one of those links is gitignored, so your choice of agent never travels with the repository. On Windows, where `ln -s` needs Developer Mode or an elevated terminal, copy the file instead and keep the two in sync by hand.
 
@@ -153,7 +153,7 @@ Open `docs/project-brief.md` and complete two things before anything else:
 
 **Describe your project** — replace the placeholder under "What this project is" with a plain description of what you're building and who it's for.
 
-**Choose your stack** — mark exactly one option per category as `[active]`:
+**Choose your stack** — the `[active]` marks arrive pre-filled with the scaffold's shipped default (Vanilla, JavaScript, plain CSS, Vite), because the example specs and the `src/` starting files are written against that combination. **Replace them rather than adding to them** — clear the shipped mark in a category before marking your own, so exactly one option per category ends up `[active]`:
 
 - Framework
 - Language
@@ -167,6 +167,8 @@ Open `docs/project-brief.md` and complete two things before anything else:
 - Security *(optional)*
 
 `project-brief.md` is the first thing the agent reads. Getting it right before writing any specs avoids problems later.
+
+**No tool checks this for you.** A category left with two `[active]` marks — the shipped default plus the one you added — or with none at all is not an error anything reports. An agent reads whatever it finds and installs against it, so a leftover default can pull in a framework you never chose. Your agent is required to read the selections back to you before it generates any config or dependency list (see "Confirm the stack before setup" in `project-brief.md` → Agent behaviour rules); check that list against what you actually picked, and say so if a category names two.
 
 > **Not sure yet?** `/discovery` runs a guided interview — one question at a time — and drafts this file and your first feature specs from the conversation, showing you everything before it writes. It's optional, and it never promotes a spec past `Draft`. Writing them by hand is equally valid.
 
