@@ -49,8 +49,13 @@ for an orientation, run `/status`.
 ## Claude Code-specific notes
 
 Workflow skills are in `.agents/skills/` and are shared with every other agent —
-there are no Claude-only commands. Model and context file settings are in
-`.agents/claude/settings.json`.
+there are no Claude-only commands.
+
+This scaffold ships no `settings.json`. Claude Code reads one from `.claude/`,
+which is gitignored, so anything put there stays personal to whoever set it up —
+which is the right home for machine-specific paths, permission rules, and hooks.
+The context files above are loaded by the `@` imports at the top of this file,
+not by a settings key, so a fresh clone needs no settings file to arrive briefed.
 
 When a skill covers the task (`/feature`, `/implement`, `/check`, `/complete`,
 and so on), use it rather than improvising — the skills encode the review gates.

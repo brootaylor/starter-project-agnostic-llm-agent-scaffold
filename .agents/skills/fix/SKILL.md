@@ -28,22 +28,23 @@ while a spec is active, repair its findings through `/implement` instead.
 
 ## Step 1 - write the fix spec
 
-Pull context from `docs/project-brief.md` and `docs/project-brief.md`,
-then write a short spec to `context/current-feature.md` (this file holds whatever
-is being built now, feature or fix). Keep it lighter than a feature spec:
+Pull context from `docs/project-brief.md` and `AGENTS.md`, then write a short
+spec to `context/current-feature.md` (this file holds whatever is being built
+now, feature or fix), following `reference/fix-spec-template.md`. Keep it
+lighter than a feature spec: the problem, the fix, build steps, files, and how
+to verify.
 
-- **Title** - the bug or change in a few words.
-- **Type:** Fix  (so `/complete` logs it to `context/history/fixes/`, not `context/history/features/`).
-- **Status:** not started - `/implement` updates this durable workflow state as
-  work and verification progress.
-- **Fixes:** `<finding id>` - only when the fix targets a ledger finding. The
-  stamp makes the repair traceable: `/implement` marks that finding `fixed`
-  when the repairing step lands, and `/audit` re-reviews it before it closes.
-- **The problem** - what's wrong or what needs to change, and where.
-- **The fix** - the approach, and anything it must not break.
-- **Build steps** - usually one small step; split only if the diff would be too
-  big to read. Each ends with an observable "done when".
-- **Verify** - how to confirm it's fixed (what to click or test).
+Three fields in that header are load-bearing, and each fails quietly if you get
+it wrong:
+
+- **`Type: Fix`** - what `/complete` reads to log this to
+  `context/history/fixes/` rather than `context/history/features/`.
+- **`Work status:`** - not `Status:`. That name belongs to a spec's own status
+  line, which only `/complete` may write; a work order that borrows it invites
+  an agent to edit the wrong file.
+- **No `Spec:` line at all.** A fix has no source spec, and both `/implement`
+  and `/complete` treat its absence as correct. `Spec: none` is worse than
+  omitting it - it reads as a path that will not resolve.
 
 Then stop. Tell the user to review the fix spec, then run `/implement` to build it.
 
