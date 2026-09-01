@@ -14,8 +14,15 @@ agent-agnostic structure. Symlinking is one option, though it isn't guaranteed
 to work across all operating systems or agent versions:
 
 ```bash
-ln -s .agents/copilot/copilot-instructions.md .github/copilot-instructions.md
+mkdir -p .github && ln -s ../.agents/copilot/copilot-instructions.md .github/copilot-instructions.md
 ```
+
+Both parts matter. `.github/copilot-instructions.md` is gitignored, so `.github/`
+may not exist in a fresh clone and `ln -s` will not create it. And the target is
+resolved relative to the link's own directory, so it needs the leading `../` —
+without it the link is created successfully but points at
+`.github/.agents/…`, which does not exist. A dangling link still looks correct in
+`ls -l`; `cat .github/copilot-instructions.md` is what proves it resolves.
 
 ---
 

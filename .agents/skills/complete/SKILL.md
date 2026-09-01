@@ -55,8 +55,9 @@ Before logging or committing, run a short safety pass and report blockers only:
   clear manual try path
 - when the project declares a test runner, logic changes have passing focused
   tests; when it does not, say so rather than implying the logic is tested
-- if workflow files changed, `.agents` and `.claude` stayed in sync where both
-  adapters exist
+- if workflow files changed, they were edited in the tracked `.agents/` tree
+  rather than inside a gitignored pointer directory such as `.claude/`, where
+  git would never see them
 - no P0 or P1 finding in `context/findings.md` is `open` or `fixed`.
   `fixed` still blocks on purpose: the repair exists but no review has looked at
   it - run `/audit` to close it. The only waivers are `accepted` (the user's

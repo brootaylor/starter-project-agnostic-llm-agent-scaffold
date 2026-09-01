@@ -9,7 +9,13 @@ Cursor expects its rules file at .cursor/rules. It lives here instead at
 .agents/cursor/rules as part of this project's agent-agnostic structure.
 Symlinking is one option, though it isn't guaranteed to work across all
 operating systems or agent versions:
-ln -s .agents/cursor/rules .cursor/rules
+mkdir -p .cursor && ln -s ../.agents/cursor/rules .cursor/rules
+
+Both parts matter. .cursor/ is gitignored, so it may not exist in a fresh clone
+and ln -s will not create it. And the target is resolved relative to the link's
+own directory, so it needs the leading ../ - without it the link is created
+successfully but points at .cursor/.agents/..., which does not exist. A dangling
+link still looks correct in ls -l; cat .cursor/rules is what proves it resolves.
 
 ---
 

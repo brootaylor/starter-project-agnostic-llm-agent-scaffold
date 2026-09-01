@@ -160,19 +160,34 @@ at the location it expects.
 |----------|-----------|
 | `CLAUDE.md` | `.agents/claude/CLAUDE.md` |
 | `.claude/skills` | `../.agents/skills` |
-| `.cursor/rules` | `.agents/cursor/rules` |
-| `.github/copilot-instructions.md` | `.agents/copilot/copilot-instructions.md` |
+| `.cursor/rules` | `../.agents/cursor/rules` |
+| `.github/copilot-instructions.md` | `../.agents/copilot/copilot-instructions.md` |
 
-**macOS and Linux** - symlink:
+**macOS and Linux** - symlink. Create only the pointer your agent needs:
 
 ```bash
 ln -s .agents/claude/CLAUDE.md CLAUDE.md
+mkdir -p .claude && ln -s ../.agents/skills .claude/skills
+mkdir -p .cursor && ln -s ../.agents/cursor/rules .cursor/rules
+mkdir -p .github && ln -s ../.agents/copilot/copilot-instructions.md .github/copilot-instructions.md
 ```
 
-**Windows** - `ln -s` needs Developer Mode or an elevated terminal. If neither is
-available, copy the file instead and keep the two in sync by hand:
+> [!IMPORTANT]
+> Every pointer below the project root needs both the `mkdir -p` and the leading
+> `../`, and each guards a different failure. The parent directory is gitignored,
+> so it does not exist in a fresh clone and `ln -s` will not create it. And a
+> symlink's target is resolved relative to the link's own directory, so
+> `.agents/…` without the `../` creates a link pointing at `.cursor/.agents/…` -
+> which `ln` reports as success and `ls -l` displays as if it were correct.
+> `cat` the pointer to prove it resolves; only the root-level `CLAUDE.md` line
+> needs neither.
 
-```bash
+**Windows** - `ln -s` needs Developer Mode or an elevated terminal. If neither is
+available, create the directory and copy the file instead, then keep the two in
+sync by hand:
+
+```bat
+if not exist .github mkdir .github
 copy .agents\copilot\copilot-instructions.md .github\copilot-instructions.md
 ```
 
@@ -246,15 +261,23 @@ any capable agent can read and follow, exposed through tool-specific adapters:
 - OpenCode: `AGENTS.md` plus the compatible `.agents/skills/` or
   `.claude/skills/` tree already installed for the selected tools
 
-Unused adapters can be removed. Codex, GitHub Copilot, and OpenCode can share
-`.agents/`. OpenCode can also reuse `.claude/` when Claude Code is selected.
-Codex-only, Copilot-only, or OpenCode-only projects can delete `CLAUDE.md` and
-`.claude/`. Claude Code-only projects can delete `.agents/`, but should keep
-`AGENTS.md` because `CLAUDE.md` imports it. Do not duplicate the same skills
+Unused adapters can be removed, but **`.agents/` is never one of them.** Those
+adapter paths are gitignored pointers; `.agents/` holds the only real copies of
+both the agent configs and the skills tree. Deleting it leaves every pointer
+dangling - no config and no skills, with `ls -l` still showing links that look
+healthy. What you can remove is the sibling directory for an agent you do not
+use, such as `.agents/cursor/`, along with its pointer.
+
+So: Codex, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode can also
+reuse `.claude/` when Claude Code is selected. A project using no Claude Code can
+delete the `CLAUDE.md` pointer, `.claude/`, and `.agents/claude/`, but should
+keep `AGENTS.md`, which every other tool reads. Do not duplicate the same skills
 under `.opencode/skills/`; OpenCode already discovers the compatible trees.
 
-When changing shared workflow behavior, update the matching skill in both
-adapter folders so Codex, Claude Code, GitHub Copilot, and OpenCode stay aligned.
+When changing shared workflow behavior, edit
+`.agents/skills/<skill>/SKILL.md` - the one tracked copy. Every tool reaches it
+through its own pointer, so there is nothing to keep in sync and no second tree
+to create.
 
 ### The build loop
 
