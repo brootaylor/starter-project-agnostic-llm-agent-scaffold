@@ -285,6 +285,14 @@ Outside the loop:
 | `ci` | Sets up one project-specific `Verify` command and matching automatic GitHub checks |
 | `release` | Render or Vercel deployment readiness: local config, env review, smoke-test planning |
 
+`tests`, `ci`, and `release` detect the project's real stack, so they handle
+runtimes the Stack table in `docs/project-brief.md` does not list - Python, Go,
+Rust, and others. That is deliberate headroom, not a gap in the table: the
+scaffold's specs, design tokens, and platform guide are written for front-end
+web work, while the skills that touch build, test, and deploy tooling are
+written to detect whatever is actually there. Do not narrow them to match the
+table, and do not widen the table to match them.
+
 One more sits above the loop rather than inside it. `autopilot` runs a single
 bounded pass - work order, build steps, verification, gates, checkpoint commits -
 without pausing at each review point, then stops with a review packet for a
