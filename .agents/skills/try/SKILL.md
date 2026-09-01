@@ -18,9 +18,10 @@ expect this result, and watch for these failure signs.
 It is always read-only. It does not edit files, install dependencies, commit,
 merge, push, or run destructive commands.
 
-The quality-gate config controls when another workflow generates this guide
-automatically. An explicit `/try` or `$try` request always runs. A generated guide
-never counts as evidence that the user performed the walkthrough.
+`/try` runs automatically only when `/complete` or `/autopilot` judges that the
+change affects something a person uses directly: UI, navigation, copy, a public
+API or CLI, or output. An explicit `/try` or `$try` request always runs. A
+generated guide never counts as evidence that the user performed the walkthrough.
 
 ## Input
 

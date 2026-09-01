@@ -44,9 +44,22 @@ the human's signal), and never create, switch, merge, or delete a branch.
 Before generating or editing anything, check whether a spec exists in the
 relevant directory:
 
+- `docs/features/` — user-facing feature specs
 - `docs/specs/components/` — component specs
 - `docs/specs/pages/` — page / view specs
 - `docs/specs/layouts/` — layout specs
 
-If no spec exists, tell the user to create one using
-`docs/specs/_component-template.spec.md`.
+If no spec exists, tell the user to create one — and route by kind, because the
+two templates are different shapes and the wrong one produces the wrong document:
+
+| They are describing | Template | It lands in |
+|---------------------|----------|-------------|
+| Something a **user can do**, and why it matters | `docs/features/_feature-template.md` | `docs/features/` |
+| A reusable **component, page, or layout** | `docs/specs/_component-template.spec.md` | `docs/specs/` |
+
+The test: can it be written as *"As a user, I want… so that…"*? If yes it is a
+feature. If nobody wants it on its own — only the thing it enables — it is a
+component.
+
+Co-located `*.spec.md` files in `src/` are copies written by `/implement`; the
+`docs/specs/` version is the source of truth if they ever differ.

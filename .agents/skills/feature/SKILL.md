@@ -73,8 +73,17 @@ change. Those still belong in `/fix`.
 2. If it is genuinely new, **stop and say a spec is needed first.** Specs are
    human-owned contracts; this skill does not get to invent one and then build
    against it in the same breath.
-3. Offer to draft it from `docs/specs/_component-template.spec.md` (or the
-   feature-spec shape in `docs/features/`). Only draft it on explicit approval.
+3. Offer to draft it, from the template for its kind - the two are different
+   shapes and the wrong one produces the wrong document:
+
+   | It is | Template | It lands in |
+   |-------|----------|-------------|
+   | Something a user can do, and why it matters | `docs/features/_feature-template.md` | `docs/features/<name>.md` |
+   | A reusable component, page, or layout | `docs/specs/_component-template.spec.md` | `docs/specs/<kind>/<name>.spec.md` |
+
+   The test: can it be written as *"As a user, I want... so that..."*? If yes it
+   is a feature; if nobody wants it on its own, only the thing it enables, it is
+   a component. Only draft it on explicit approval.
 4. If approved, write the draft with `**Status:** Draft`, never `Ready`. Then
    stop. The human reviews it, fills the gaps, and promotes it to `Ready`. Only
    then does this skill run again against it.
@@ -97,7 +106,9 @@ roadmap line ever would. Then pull surrounding context:
 
 - `docs/project-brief.md` - stack, conventions, browser targets, accessibility
   standard, agent rules
-- `docs/project-brief.md` - when it exists, for product context
+- the parent feature spec in `docs/features/`, when the target is a component,
+  page, or layout spec - for product context, and for the Implementation notes
+  table that fixes any value the components must agree on
 - any component specs the feature spec names as dependencies
 
 Decide how big the work is:

@@ -125,8 +125,12 @@ For `docs/project-brief.md`:
 
 For each spec in `docs/features/`:
 
-- follow the shape of `docs/features/dark-mode.md`: overview, user stories,
-  acceptance criteria, and the components the feature requires
+- follow `docs/features/_feature-template.md`: overview, user stories,
+  acceptance criteria, the components the feature requires, and the
+  Implementation notes table that fixes any value those components must agree
+  on. Delete the template's "Is this the right template?" section from each
+  draft, as it instructs. `docs/features/dark-mode.md` is a worked example of
+  the same shape if one is useful
 - describe what a user can do, not how it is built. Interface and behaviour
   detail belongs in the component specs written at Step 5
 - set `**Status:** Draft`. Promoting a spec to `Ready` is a human review

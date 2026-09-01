@@ -1,6 +1,6 @@
 ---
 name: check
-description: Prove the current work actually does what its spec says by running the real app and observing behavior against the "done when" criteria in current-feature.md. Drives the app (browser, CLI, or server), captures evidence (screenshots, output, console/network errors), and reports pass/fail per criterion. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build. (Supersedes the built-in /verify with a spec-aware version.)
+description: Prove the current work actually does what its spec says by running the real app and observing behavior against the "done when" criteria in current-feature.md. Drives the app (browser, CLI, or server), captures evidence (screenshots, output, console/network errors), and reports pass/fail per criterion. Does not edit source or commit - it observes; fixing stays /implement's job. Use when the user runs /check, asks to confirm a step or feature works, wants proof before /complete, or wants to check a change in the running app rather than just the build.
 ---
 
 # check - prove it works against the spec, with evidence
@@ -102,22 +102,24 @@ Give a short, honest verdict, one line per checklist item:
 
 Then state the bottom line: are all the feature's done-whens proven, or not yet.
 
-- All proven -> update only the `**Status:**` line in
+- All proven -> update only the `**Work status:**` line in
   `context/current-feature.md` to `verified`, then say it is ready for
   `/complete`.
-- Anything failed -> update only that status line to `verification failed`, then
-  hand back to `/implement`; name what to fix. Do not fix it here.
-- Anything unverifiable -> update only that status line to `verification
-  incomplete`, then say why; never report it as a pass.
+- Anything failed -> update only that line to `verification failed`, then hand
+  back to `/implement`; name what to fix. Do not fix it here.
+- Anything unverifiable -> update only that line to `verification incomplete`,
+  then say why; never report it as a pass.
 
-The status-line update is generated workflow state, not a product-source edit.
-Do not change the spec, checkboxes, findings, or product files from `/check`.
+`**Work status:**` is the work order's own field. The spec's `**Status:**` line
+is a different thing in a different file, and `/check` never touches it. The
+update above is generated workflow state, not a product-source edit. Do not
+change the spec, checkboxes, findings, or product files from `/check`.
 
 ## Rules
 
-- **Observe product behavior, don't repair it.** `/check` changes only the
-  current spec's status line as described above. It never edits product source,
-  commits, or merges. Fixing is `/implement`'s job.
+- **Observe product behavior, don't repair it.** `/check` changes only the work
+  order's `**Work status:**` line as described above. It never edits a spec,
+  product source, commits, or merges. Fixing is `/implement`'s job.
 - **Evidence or it didn't happen.** Every `pass` is backed by something observed -
   a screenshot, output, a response. No assumed passes from reading the code.
 - **Honest over green.** "Couldn't verify" and "failed" are valid, useful results.

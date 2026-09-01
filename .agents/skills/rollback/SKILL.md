@@ -22,7 +22,7 @@ A completed feature by name or archive path, plus an optional reason. Examples:
 
     /rollback 4 because the new export flow is corrupting files
     /rollback "PDF export"
-    /rollback context/history/features/2026-03-11-04-pdf-export.md
+    /rollback context/history/features/04-pdf-export.md
 
 With no target, list a short set of recent completed feature archives and ask the
 user to choose. Never silently pick the latest feature. If the reason is missing,

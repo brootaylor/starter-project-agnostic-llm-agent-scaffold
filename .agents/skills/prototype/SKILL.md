@@ -21,11 +21,20 @@ and only then write any files. Never generate mockups before the user approves.
 
 ## Step 1 - read what the plan already says
 
-Pull the stated look and feel and the screen/route list from
-`docs/project-brief.md` (its UI/UX and design-token sections) and any page or
-layout specs already in `docs/specs/pages/` and `docs/specs/layouts/`. Use this
-as the starting point, so you're refining the user's intent, not asking from
-scratch.
+Pull whatever direction already exists, so you're refining the user's intent
+rather than asking from scratch:
+
+- `docs/project-brief.md` - "What this project is" for the product, its audience,
+  and any known constraints that bear on the look; "Accessibility standard" for
+  the contrast and motion floor the theme has to clear
+- `docs/design-tokens.md` - if it has already been filled in, those values are
+  the starting point rather than something to reinvent
+- `docs/features/` - the feature specs that name the screens worth mocking
+- `docs/specs/pages/` and `docs/specs/layouts/` - any page or layout spec already
+  written
+
+Expect most of these to be empty or untouched at this stage; that is normal, and
+Step 2 is where the gaps get filled by asking.
 
 ## Step 2 - ask about the look and the pages
 

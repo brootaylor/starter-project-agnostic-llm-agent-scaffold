@@ -4,7 +4,7 @@
 **Spec:** `docs/features/<name>.md`
 **Base commit:** <filled in by /implement before the first step>
 **Work status:** not started
-**Target archive:** `context/history/features/YYYY-MM-DD-NN-name.md`
+**Target archive:** `context/history/features/NN-name.md`
 **Target commit:** `<full 40-character commit SHA>`
 **Target parent:** `<full 40-character parent SHA>`
 **Reason:** Why this completed feature must be removed

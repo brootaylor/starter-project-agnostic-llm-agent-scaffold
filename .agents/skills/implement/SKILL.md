@@ -112,9 +112,15 @@ new rollback plan.
 
 ## Step 2 - build one step, review, iterate, checkpoint
 
-Before the first product edit in this run, set the spec's `**Status:**` to `in
-progress`. This invalidates any older verification state. Do the same whenever
-implementation resumes after a passing check and changes product code again.
+Before the first product edit in this run, set `**Work status:**` to
+`in progress` in `context/current-feature.md`. This invalidates any older
+verification state. Do the same whenever implementation resumes after a passing
+check and changes product code again.
+
+That is the work order's own field. It is **not** the spec's `**Status:**` line:
+the spec stays `Ready` throughout, only `/complete` ever writes to it, and
+`Complete` is the only value it may write. A spec set to `in progress` corrupts
+the queue `/status` and `/feature` read.
 
 Work through the spec's build steps in order, one at a time, using the review and
 approval gate below after every step.
@@ -222,10 +228,11 @@ the loop now:
 When every step is built and `Verify`, or the fallback build and tests, passes
 (committed as checkpoints or not), stop with a compact review packet:
 
-Set the spec's `**Status:**` to `verified` immediately before that packet. This
-is durable workflow evidence for `/status` and the dashboard. Do not set it when
-a required command, observable done-when, or configured gate failed or could not
-run.
+Set the work order's `**Work status:**` to `verified` immediately before that
+packet. This is durable workflow evidence for `/status`. Do not set it when a
+required command, observable done-when, or configured gate failed or could not
+run. Again, this is the work order's field in `context/current-feature.md`, never
+the spec's `**Status:**` line.
 
 - what changed, grouped by file or area
 - checks run, with the exact command or proof used

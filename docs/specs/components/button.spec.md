@@ -25,7 +25,7 @@ List anything an agent would need to locate or implement before building this co
 
 | Type | Name | Location |
 |------|------|----------|
-| Asset | `spinner.svg` | `src/assets/spinner.svg` |
+| Asset | `spinner.svg` | `src/assets/icons/spinner.svg` |
 | Tokens | Colour | `docs/design-tokens.md#colour` |
 | Tokens | Spacing | `docs/design-tokens.md#spacing` |
 | Tokens | Typography | `docs/design-tokens.md#typography` |
@@ -200,8 +200,8 @@ Additional context, constraints, and implementation guidance that the agent
 should be aware of before writing any code.
 
 - **CSS** — import from `./Button.css` or `./Button.scss` depending on active styles selection in `docs/project-brief.md`
-- **Assets** — `src/assets/spinner.svg` must be imported and inlined; do not use `<img>`
-- **Related specs** — this component is used in `docs/specs/layouts/main-layout.spec.md`
+- **Assets** — `src/assets/icons/spinner.svg` must be imported and inlined; do not use `<img>`
+- **Related specs** — none. A purely visual component can be specified on its own, with no feature spec above it; see `docs/project-brief.md` → Features and components
 - **Gotchas** — no animation libraries; CSS only for all transitions and spinner animation
 
 ---

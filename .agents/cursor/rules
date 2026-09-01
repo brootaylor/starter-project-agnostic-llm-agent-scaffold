@@ -35,11 +35,24 @@ human's signal), and never create, switch, merge, or delete a branch.
 Cursor-specific notes:
 
 Spec files live in:
+- docs/features/         — user-facing feature specs
 - docs/specs/components/ — component specs
 - docs/specs/pages/      — page / view specs
 - docs/specs/layouts/    — layout specs
 
-Always read the relevant *.spec.md before generating or editing anything.
+Always read the relevant spec before generating or editing anything.
+
+Specs come in two kinds and the templates are different shapes, so route by kind
+when one needs writing. The wrong template produces the wrong document — a
+feature written as a props table, or a component written as user stories:
+- Something a user can do, and why it matters → docs/features/_feature-template.md
+  → docs/features/<name>.md
+- A reusable component, page, or layout → docs/specs/_component-template.spec.md
+  → docs/specs/<kind>/<name>.spec.md
+
+The test: can it be written as "As a user, I want… so that…"? If yes it is a
+feature. If nobody wants it on its own — only the thing it enables — it is a
+component.
 
 Co-located *.spec.md files in src/components/, src/pages/, and src/layouts/
 are copies — the docs/specs/ version is the source of truth if they ever differ.

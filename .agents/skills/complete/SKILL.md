@@ -69,9 +69,13 @@ Do not claim "passed", "verified", or "working" without naming the command,
 route, screenshot, or output that proves it. Stop before Step 1 if required
 evidence is missing.
 
-After this safety pass succeeds, set the active spec's `**Status:**` to
-`verified` before archiving it. If the status was already `verified`, rerun the
-required final checks anyway because `/complete` owns the final safety pass.
+After this safety pass succeeds, set the work order's `**Work status:**` to
+`verified` before archiving it. If it was already `verified`, rerun the required
+final checks anyway because `/complete` owns the final safety pass.
+
+That is the work order's own field in `context/current-feature.md`. The source
+spec's `**Status:**` line is written separately in Step 1, and `Complete` is the
+only value this skill may put there.
 
 ## Step 1 - log the work
 
