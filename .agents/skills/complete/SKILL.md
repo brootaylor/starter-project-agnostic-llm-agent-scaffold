@@ -1,0 +1,233 @@
+---
+name: complete
+description: Wrap up a finished feature, fix, or rollback. Runs a final safety pass, writes the source spec's Status line back to Complete, archives the work order to context/history/features/, context/history/fixes/, or context/history/rollbacks/, resets context/current-feature.md to its stub, and makes one work-level commit. Asks before pushing. Use when the user runs /complete, or asks to finish, wrap up, or close out the current feature, fix, or rollback after it is built and reviewed.
+---
+
+# complete - log the finished work and make the work commit
+
+Where this sits in the workflow:
+
+    /feature, /fix, or /rollback  ->  /implement  ->  [complete]  ->  next
+    (the spec)                         (build it)      (commit + log)
+
+`/implement` built the feature, fix, or rollback, with optional per-step commit
+checkpoints. This skill closes it out: it writes the spec's status back, logs the
+work, and makes the single work-level commit. Run it only when the work is done,
+reviewed, and the documented `Verify` command, or the fallback build and tests,
+passes.
+
+## Before you start
+
+Confirm the work is actually finished: `context/current-feature.md` holds a real
+work order, its steps are all checked, and `Verify`, or the fallback build and
+tests, passes. Uncommitted step work is expected because per-step checkpoints are
+optional; this skill commits it. Don't require the steps to be pre-committed.
+
+## Quality gates
+
+Run these before logging or committing:
+
+- **Check** - run `/check` when any "done when" needs observed runtime behaviour:
+  a click, request, CLI command, download, background job, or multi-screen flow.
+- **Audit** - run `/audit current` when the work touched a security boundary:
+  authentication, authorization, payments, secrets, personal or user data,
+  migrations, destructive operations, or external side effects.
+- **Try guide** - run `/try` when the change affects UI, navigation, copy, a
+  public API or CLI, output, or another workflow a person uses directly.
+
+Apply them in that order: `/check`, `/audit current`, then `/try`. Reuse adequate
+evidence produced during the current work item instead of repeating it. A gate
+that is needed but cannot run is a blocker. `/try` only generates instructions
+for human review; never claim the user performed them. The user can always ask
+for any of these explicitly, and P0/P1 finding blockers apply either way.
+
+## Step 0 - final safety pass
+
+Before logging or committing, run a short safety pass and report blockers only:
+
+- an active work order exists and its build steps are all checked
+- changed files are tied to the active spec, with no unrelated dirty work mixed
+  in (a dirty `context/findings.md` is expected, since `/audit` writes it)
+- the exact `Verify` command from `AGENTS.md` passed in this session, when one is
+  declared; otherwise the build passed, and tests passed when the project has a
+  declared test command and the change touched logic
+- every gate named above that applied to this work has evidence, and there is a
+  clear manual try path
+- when the project declares a test runner, logic changes have passing focused
+  tests; when it does not, say so rather than implying the logic is tested
+- if workflow files changed, they were edited in the tracked `.agents/` tree
+  rather than inside a gitignored pointer directory such as `.claude/`, where
+  git would never see them
+- no P0 or P1 finding in `context/findings.md` is `open` or `fixed`.
+  `fixed` still blocks on purpose: the repair exists but no review has looked at
+  it - run `/audit` to close it. The only waivers are `accepted` (the user's
+  explicit decision in the current chat, reason recorded; never set it for
+  them) or `invalid` (an `/audit` re-examination verdict with recorded
+  evidence, or the user's explicit call). A missing ledger file means no
+  findings.
+
+Do not claim "passed", "verified", or "working" without naming the command,
+route, screenshot, or output that proves it. Stop before Step 1 if required
+evidence is missing.
+
+After this safety pass succeeds, set the work order's `**Work status:**` to
+`verified` before archiving it. If it was already `verified`, rerun the required
+final checks anyway because `/complete` owns the final safety pass.
+
+That is the work order's own field in `context/current-feature.md`. The source
+spec's `**Status:**` line is written separately in Step 1, and `Complete` is the
+only value this skill may put there.
+
+## Step 1 - log the work
+
+Check whether the work order is a feature, fix, or rollback. A fix is marked
+`Type: Fix` and has no source spec. A rollback is marked `Type: Rollback` and
+records the exact target feature, archive, commit, and parent.
+
+### Write the spec status back
+
+**This is the one place in the workflow allowed to edit a spec file, and it may
+touch only two lines.** Read the work order's `Spec:` line to find the source
+spec in `docs/features/` or `docs/specs/`, then:
+
+- Set `**Status:**` to `Complete` (or back to `Ready` for a rollback).
+- Set `**Last updated:**` to today's date, in the format the file already uses.
+
+Change nothing else. Not the interface, not the behaviour, not the test cases,
+not a typo you noticed. The spec's body is a human-owned contract, and an agent
+editing it silently is the failure this status machine exists to prevent.
+
+If the work order has no `Spec:` line, or the path does not resolve, **stop and
+say so** rather than guessing which spec to mark. A fix legitimately has no
+source spec; a feature that lost one is drift worth reporting.
+
+If a feature spec's components each have their own specs, mark a component spec
+`Complete` only when that component was actually built and verified in this work.
+A feature spec goes `Complete` when its own acceptance criteria are met.
+
+### Archive the work order
+
+- **Feature** - archive `context/current-feature.md` to
+  `context/history/features/NN-name.md`. Number sequentially from what is
+  already in that folder. The spec status written above is the authority on what
+  is built; this archive is the record of how it was built.
+- **Fix** - archive it to `context/history/fixes/name.md`. A fix has no source
+  spec, so there is no status to write back.
+- **Rollback** - archive it to
+  `context/history/rollbacks/YYYY-MM-DD-NN-name.md`, preserving the original
+  completed feature archive. Create `context/history/rollbacks/` first if an
+  older installation does not have it yet. Reset the target spec's `**Status:**`
+  from `Complete` back to `Ready`, since the contract still stands and only the
+  implementation was withdrawn. If the user later decides the feature is permanently abandoned rather than
+  pending rebuild, retiring the spec is a separate human decision.
+
+**Archive resolved findings.** If `context/findings.md` holds any
+findings, append a `## Findings` section to the archive file just written with
+every `closed`, `accepted`, or `invalid` entry at its final status (`accepted`
+entries keep their recorded reason). Prefix each ID with the archive name for
+global uniqueness: feature 12's `F-03` becomes `12/F-03`; fixes and rollbacks
+use their archive filename as the prefix. An entry carried forward from earlier
+work archives with the item that resolved it; its **Found** line preserves
+where it came from. Only `closed`, `accepted`, and `invalid` entries are
+resolved for archival. A `fixed` entry is not resolved at any severity: never
+append it to the archive or remove it from the live ledger.
+
+Then remove only the archived entries from the ledger. Entries with `open`,
+`fixed`, or `unverified` status stay in the ledger with their IDs so they are
+never silently dropped. A fixed P2/P3 finding does not block completion, but it
+must remain verbatim for a later `/audit` re-review. When no `open`, `fixed`, or
+`unverified` entries remain, reset the ledger to exactly this stub, and create it the
+same way if the file is missing (an older install):
+
+    # Findings
+
+    > **Generated file.** The findings ledger: review findings raised by `/audit`
+    > against the work in progress, each with a durable ID, severity (P0-P3), and
+    > status. `/implement` marks repaired findings `fixed`, a later `/audit` pass
+    > moves them to `closed`, and `/complete` refuses to finish while any P0 or
+    > P1 finding is `open` or `fixed`, then archives resolved findings with the
+    > work and resets this file.
+
+    _No findings recorded. `/audit` appends findings here when it finds them._
+
+Keep every unresolved entry in the ledger. Do not replace it with the empty stub
+while it still contains any open, fixed, or unverified finding. After archiving
+resolved findings, replace `context/current-feature.md` with
+the canonical stub below. Do not paraphrase it or substitute an abbreviated "no
+work" stub. Before committing, read the file and confirm it exactly matches:
+
+    # Current Feature
+
+    > **Generated file.** Holds the work order for the one feature, fix, or rollback
+    > being built right now. Run `/feature <spec>` to sequence a `Ready` spec from
+    > `docs/features/` or `docs/specs/`, or `/fix "<bug>"` for an ad-hoc fix. Use
+    > `/rollback <completed-feature>` to plan a safe reversal. Build one thing at a
+    > time; `/complete` writes the spec's status back, archives this under
+    > `context/history/`, and resets this file.
+
+    _Nothing in progress. Run `/feature`, `/fix`, or `/rollback` to start._
+
+When no open, fixed, or unverified ledger entries remain, confirm
+`context/findings.md` exactly matches the canonical Findings stub
+above. Otherwise, preserve the remaining entries without rewriting them.
+
+Don't commit yet; the next step makes one work commit covering the code and these
+documentation changes. The archive is the build history.
+
+**Discard consumed prototypes.** If this feature built the look from `prototypes/`
+- its Design reference pointed there and an early step ported `prototypes/theme.css`
+into the app - delete the `prototypes/` folder now. The tokens live in the real
+stylesheet and the HTML mockups were always throwaway; fold the deletion into this
+feature's commit. Skip this if the feature didn't consume prototypes.
+
+## Step 2 - make the work commit
+
+Stage everything for this work item (any uncommitted step work plus the Step 1
+logging changes) and make one conventional work commit (for example
+`feat: <feature>`, `fix: <name>`, or `revert: roll back <feature>`). `Verify`, or
+the fallback build and tests, must pass first.
+
+If the work carried per-step checkpoint commits, leave them as they are. They are
+this work item's history on the current branch, and rewriting them is not this
+skill's job.
+
+## Step 3 - offer to push
+
+Stop and ask whether to push. Completing is not permission to push: it needs a
+separate explicit yes in the current chat. If the repo has no remote or upstream,
+say so instead of guessing.
+
+Then point the user at `/feature`, `/fix`, or `/rollback` for the next thing.
+
+Finish with a concise **How to try it** note for the completed work. For a
+rollback, explain how to confirm the removed behavior is gone and name one
+unaffected regression path. If the
+manual path is more than a couple of steps, tell the user to run `/try latest`;
+that command can read the archived feature after `current-feature.md` is reset.
+
+## Rules
+
+- The work item is the unit of history: one work commit that closes out the
+  feature, fix, or rollback, plus any checkpoints made along the way.
+- A rollback preserves the original feature archive and adds a separate rollback
+  archive. Never rewrite history to make the feature look as if it never existed.
+- Don't complete unfinished or failing work. The documented `Verify` command, or
+  the fallback build and tests, must pass first.
+- Never complete while a P0 or P1 finding is `open` or `fixed` in the ledger. The
+  recorded ways past the gate without code are `accepted` (only by the user's
+  explicit decision, with their reason) or `invalid` (only from re-examination
+  evidence or the user's explicit call); both travel into the archive, never a
+  silent drop.
+- Never create, switch, merge, or delete a branch. This skill commits to the
+  branch that is already checked out.
+- Pushing is the user's call. Do not treat `/complete`, an approved work commit,
+  or "looks good" as permission to push; ask, and push only after an explicit yes
+  in the current chat.
+- One item per completion. If a parent feature still has unchecked sub-features,
+  leave the parent unchecked.
+
+## Formatting
+
+Format the output to match the project's conventions in `AGENTS.md`: concise,
+scannable markdown, with lists for enumerations and tables for matrices rather
+than dense paragraphs.

@@ -7,6 +7,27 @@
 
 ---
 
+## Is this the right template?
+
+| You are describing | Use |
+|--------------------|-----|
+| A reusable piece of user interface | **This template** → `docs/specs/components/<name>.spec.md` |
+| A **whole screen** built from several components | **This template** → `docs/specs/pages/<name>.spec.md` |
+| A **page structure** that wraps other content | **This template** → `docs/specs/layouts/<name>.spec.md` |
+| Something a **user can do**, and why it matters to them | `docs/features/_feature-template.md` → `docs/features/<name>.md` |
+
+The test: can you write it as *"As a user, I want… so that…"*? If yes, it belongs
+in `docs/features/` instead. A component is a unit of code; a feature is a unit
+of user value. One component often serves several features.
+
+If this component belongs to a feature, read that feature spec first — its
+Implementation notes table fixes any value the two must agree on, and this spec
+must reference those values rather than restate them.
+
+> _Delete this section once you know which template you are in._
+
+---
+
 ## Purpose
 
 > A single paragraph describing what problem this component solves, who uses it,

@@ -16,7 +16,7 @@ Agent-specific configs live in `.agents/`.
 These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any AI agent working on the project.
 
 - [ ] **What this project is** — describe the project, who it's for, its goals, and any known constraints
-- [ ] **Stack** — mark one option per category as `[active]`
+- [ ] **Stack** — mark one option per category as `[active]`, replacing the defaults the scaffold ships with
 - [ ] **Browser support** — update the targets table if the defaults don't match your project
 - [ ] **Accessibility standard** — review the default and update it if your project has different requirements
 
@@ -57,6 +57,16 @@ These are the only sections you need to fill in before starting. Everything else
 
 This section defines the framework and tooling for the project.
 Mark exactly one option per category as `[active]`. Leave all others blank.
+
+> [!IMPORTANT]
+> **The `[active]` marks below are the scaffold's shipped default, not a
+> recommendation.** They sit on Vanilla, JavaScript, plain CSS, and Vite because
+> the example specs and the `src/` starting files are written against that
+> combination — nothing about it has been chosen for your project. Replace them
+> with your own selections (`WORKFLOW.md` Step 2) before any setup runs, clearing
+> the shipped mark rather than adding a second one beside it. Nothing errors if
+> you don't: an agent reads a shipped default exactly as it reads a settled
+> decision, and will install and scaffold against it.
 
 ### Framework
 
@@ -382,8 +392,10 @@ and reset its status to `Ready` before asking the agent to revise the implementa
 If an agent encounters a `Draft` spec that is required by a feature it is working
 on, it should stop and ask the user to complete the spec before continuing.
 
-The spec template lives at `docs/specs/_component-template.spec.md`. All new
-specs must follow this template.
+All new specs must follow the template for their kind:
+`docs/features/_feature-template.md` for a feature,
+`docs/specs/_component-template.spec.md` for a component, page, or layout. See
+Features and components below if it is not obvious which one applies.
 
 ---
 
@@ -448,7 +460,10 @@ They apply regardless of which agent is used.
 - **Read the spec before implementing** — never generate implementation code without first reading the relevant spec
 - **Do not implement `Draft` specs** — see Spec conventions above
 - **Do not re-implement `Complete` specs** — if a spec is marked `Complete`, skip it. If changes are needed, the human must update the spec and reset its status to `Ready` first
-- **Do not modify spec files** — specs are written by humans. Agents read them; they do not edit them. If a spec is ambiguous or incomplete, stop and ask
+- **Do not promote a spec to `Ready`** — moving a spec from `Draft` to `Ready` is the human's signal that the contract is settled. An agent that grants itself that signal has removed the gate this project is built around. Drafting a brand-new spec is allowed on explicit request, but only as `Draft`
+- **Do not modify spec files** — specs are written by humans. Agents read them; they do not edit them. If a spec is ambiguous or incomplete, stop and ask. The one exception is `/complete`, which sets a finished spec's `**Status:**` and `**Last updated:**` lines and nothing else
+- **Use the workflow skills when one covers the task** — `/feature`, `/implement`, `/check`, `/audit`, `/complete` and the rest live in `.agents/skills/` and are listed in `AGENTS.md`. Prefer them to freehand work: they encode the review gates that make the output reviewable
+- **Do not create, switch, merge, or delete branches** — the build loop commits to whatever branch is already checked out. Branch management is the human's decision
 - **Do not delete files without confirmation** — always ask before removing any file that was not created in the current session
 - **Do not install unlisted dependencies** — only install packages directly required by the active stack selections or an explicit spec requirement
 - **Design tokens before styles** — read `docs/design-tokens.md` before writing any CSS. If the file is empty or incomplete, stop and ask the user to fill it in
@@ -456,6 +471,7 @@ They apply regardless of which agent is used.
 - **Modern platform before implementation** — read `docs/modern-platform-guide.md` before writing any HTML, CSS, or JavaScript. Use native platform APIs and features unless that file explicitly permits a fallback.
 - **Tests before implementation** — write tests first, then implement until they pass
 - **One spec at a time** — unless explicitly asked to scaffold multiple specs at once, implement one spec per session and confirm before moving to the next
+- **Confirm the stack before setup** — the `[active]` marks in the Stack section ship pre-filled with the scaffold's default, and nothing distinguishes a default left untouched from a decision the human made. Before running initial project setup, or generating any config file or dependency list from those marks, count the marks in every category, then state the active selections back to the human and confirm they are this project's actual choices. **A category with two or more `[active]` marks, or with none, is unresolved — stop and ask which one applies rather than picking one.** Two marks usually means a shipped default was never cleared, so do not assume the newer or lower entry is the intended one
 - **Read compatibility notes before setup** — before generating any config file, check the Stack compatibility notes section above for the active stack combination and follow any instructions there
 - **Stop and report when setup fails** — if initial project setup produces errors or a tool cannot be configured correctly after a single attempt, stop immediately. Report exactly what failed, the full error message, and what was tried. Do not attempt further fixes in a loop. Wait for the human to review and advise before continuing
 - **Ask, don't assume** — if a spec is ambiguous, a constraint is unclear, or a decision would affect the whole project, ask rather than guess
@@ -464,19 +480,55 @@ They apply regardless of which agent is used.
 
 ## Features and components
 
-Understanding the difference between features and components is important for
-working with this scaffold effectively.
+A **feature** is a unit of user value — something a person can do, and why that
+matters to them. A **component** is a unit of code — a reusable piece of user
+interface built so that a feature can happen.
 
-A **feature** describes a piece of functionality from the user's perspective —
-what they can do and why. Feature specs live in `docs/features/` and are written
-in terms of user stories and acceptance criteria.
+|  | Feature | Component |
+|---|---------|-----------|
+| Lives in | `docs/features/<name>.md` | `docs/specs/components/<name>.spec.md` |
+| Template | `docs/features/_feature-template.md` | `docs/specs/_component-template.spec.md` |
+| Written as | User stories (`US-##`) and acceptance criteria (`AC-##`) | Interface, states, behaviour, test cases |
+| Answers | Why does this exist, and how do we know it is done? | What does it take in, render, and do? |
+| Reusable | No — one feature, one goal | Yes — many features can use the same one |
 
-A **component** is a discrete, reusable piece of UI that implements part of a
-feature. Component specs live in `docs/specs/components/` and define the
-interface, behaviour, states, and test cases needed to build it.
+**The decision rule.** Can you write it as *"As a user, I want… so that…"*? If
+yes, it is a feature. If the honest answer is *"nobody wants this on its own,
+they want the thing it enables"*, it is a component. Nobody wants a toggle; they
+want their colour scheme remembered.
 
-A feature will typically depend on one or more components. The feature spec
-lists which components are required before implementation can begin.
+Neither implies the other. A purely visual element such as `Button` can have a
+component spec with no feature above it, and a feature that is entirely logic may
+need no components at all.
+
+**A feature spec depends on its components.** It lists them in a Components
+required table, and none of the work can start until every one of them has
+reached `Ready`. The dependency runs one way only — a component can be specified
+and built on its own.
+
+**Shared values belong to the feature.** Any value more than one component has to
+agree on — an attribute name, a storage key, a precedence order, a route path —
+is fixed once in the feature spec's Implementation notes table. Component specs
+reference it and must never restate it.
+
+> [!IMPORTANT]
+> A shared value copied into a component spec rather than referenced is a silent
+> failure. Both files read as correct and nothing errors; they drift apart the
+> first time either is edited on its own, and the mismatch surfaces later as a
+> bug with no obvious cause.
+
+**Three things are called "feature" in this scaffold.** They are not
+interchangeable:
+
+| Name | What it is |
+|------|------------|
+| `docs/features/<name>.md` | A feature spec — a durable description of user value |
+| `context/current-feature.md` | The work order being built right now — a generated file, not a spec |
+| `/feature` | The skill that turns the first into the second |
+
+Only the first is written by hand. `context/current-feature.md` is regenerated
+every time work starts and reset by `/complete`, so nothing durable should ever
+be written there.
 
 ---
 
@@ -545,12 +597,19 @@ docs/
   storybook.md                                            # ← storybook configuration
   security.md                                             # ← security headers and CSP configuration
   features/                                               # ← user-facing feature specs
+    _feature-template.md                                  # ← feature spec template
   specs/
-    _component-template.spec.md                           # ← spec template
+    _component-template.spec.md                           # ← component / page / layout spec template
     components/                                           # ← authoritative component specs
     pages/                                                # ← page / view specs
     layouts/                                              # ← layout specs
-    hooks/                                                # ← hook specs
+context/                                                  # ← the build loop's working state (generated)
+  sessions.md                                             # ← your session log, read when starting cold (gitignored)
+  current-feature.md                                      # ← the work order in flight, or a stub when idle
+  findings.md                                             # ← review findings ledger, written by /audit
+  history/                                                # ← archived work orders: features, fixes, rollbacks
+AGENTS.md                                                 # ← cross-tool agent instructions and skill reference
+WORKFLOW.md                                               # ← the ten-step human guide, setup to deployment
 ```
 
 ### Assets
@@ -575,12 +634,19 @@ docs/
 
 | Question | File |
 |----------|------|
+| Which kind of spec do I write? | `docs/project-brief.md` → Features and components |
+| How do I write a feature spec? | `docs/features/_feature-template.md` |
+| How do I write a component, page, or layout spec? | `docs/specs/_component-template.spec.md` |
 | What does a feature need to do? | `docs/features/<feature>.md` |
 | What should a component do? | `docs/specs/components/<name>.spec.md` |
 | What should a page look like? | `docs/specs/pages/<name>.spec.md` |
 | What should a layout do? | `docs/specs/layouts/<name>.spec.md` |
-| What does a hook do? | `docs/specs/hooks/<name>.spec.md` |
 | What are the design tokens? | `docs/design-tokens.md` |
 | How is the service worker configured? | `docs/service-worker.md` |
 | How is Storybook configured? | `docs/storybook.md` |
 | What are the security headers and CSP? | `docs/security.md` |
+| What happened in past sessions? | `context/sessions.md` |
+| What is being built right now? | `context/current-feature.md` |
+| What review findings are open? | `context/findings.md` |
+| What has been built already, and in what order? | `context/history/` |
+| Which skill do I run, and when? | `AGENTS.md` |

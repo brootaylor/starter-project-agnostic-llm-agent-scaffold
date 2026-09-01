@@ -37,7 +37,7 @@ the acceptance criteria that must be met for it to be considered complete.
 > As a developer, I want to build and view components in isolation so I can
 > develop and test them without needing the full application running.
 
-- [ ] **AC-01** — Storybook runs locally via `npm run storybook`
+- [ ] **AC-01** — Storybook runs locally via the project's `storybook` script
 - [ ] **AC-02** — Each component has at least one story showing its default state
 - [ ] **AC-03** — Component props / attributes can be adjusted interactively in the Storybook UI
 
@@ -55,7 +55,7 @@ the acceptance criteria that must be met for it to be considered complete.
 > As a stakeholder, I want to browse all components and patterns in one place
 > so I can review the design system without needing access to the codebase.
 
-- [ ] **AC-01** — Storybook can be built as a static site via `npm run build-storybook`
+- [ ] **AC-01** — Storybook can be built as a static site via the project's `build-storybook` script
 - [ ] **AC-02** — The static build can be deployed independently of the main project
 - [ ] **AC-03** — All components are browsable and searchable in the built output
 

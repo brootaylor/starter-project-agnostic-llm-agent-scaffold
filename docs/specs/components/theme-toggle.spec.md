@@ -25,8 +25,8 @@ List anything an agent would need to locate or implement before building this co
 
 | Type | Name | Location |
 |------|------|----------|
-| Asset | `icon-sun.svg` | `src/assets/icon-sun.svg` |
-| Asset | `icon-moon.svg` | `src/assets/icon-moon.svg` |
+| Asset | `icon-sun.svg` | `src/assets/icons/icon-sun.svg` |
+| Asset | `icon-moon.svg` | `src/assets/icons/icon-moon.svg` |
 | Tokens | Colour | `docs/design-tokens.md#colour` |
 | Tokens | Spacing | `docs/design-tokens.md#spacing` |
 

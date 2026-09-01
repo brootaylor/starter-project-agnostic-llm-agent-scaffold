@@ -3,6 +3,8 @@
 **Status:** Draft
 **Last updated:** <!-- e.g. 2025-01-15 -->
 
+> See `docs/project-brief.md` → Spec conventions for the full status key and agent behaviour rules.
+
 ---
 
 ## Overview
@@ -95,3 +97,23 @@ Additional context, constraints, and implementation guidance that the agent shou
 - All colour values must reference CSS custom properties — no hardcoded colours anywhere in the codebase
 - The toggle must be keyboard accessible and meet WCAG 2.1 AA contrast requirements
 - The `color-scheme` localStorage key is defined here and is the single source of truth — component specs must reference this file rather than redefine the key
+
+---
+
+## Draft → Ready checklist
+
+Complete every item before changing the status to `Ready`.
+**Agents must not begin implementation until the status is `Ready`.**
+
+- [x] Overview describes user-visible outcome, not implementation
+- [x] Every user story follows the "As a… I want… so that…" shape
+- [x] Every acceptance criterion is observable in the running application
+- [x] Out of scope section is filled in
+- [x] Every required component is listed, with a spec path
+- [ ] Every required component has reached `Ready`
+- [x] Any value shared across components is fixed in Implementation notes
+- [x] Notes for AI agents are complete
+
+> This spec is `Draft` for exactly one reason: `ThemeToggle` is still `Draft`, so
+> the unchecked row above is the blocker. Promote that component spec first, then
+> this one. `/brief docs/features/dark-mode.md` reports the same thing.

@@ -1,166 +1,380 @@
 # AGENTS.md
 
-AGENTS.md explains how AI coding agents are set up in this project.
-The pattern is agent-agnostic — it works with any capable coding agent.
+Instructions for AI coding agents working in this project. This is the cross-tool
+entry point: Codex, OpenCode, Cursor, GitHub Copilot, Gemini CLI, Aider, Zed,
+Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports this file, so there is a single source of truth.
 
----
+## What this is
 
-## The core idea
+A description of your project and the problem it solves. Replace this paragraph;
+`docs/project-brief.md` is where the full version lives.
 
-All project context that an AI agent needs lives in one place:
+This project is spec-first: a spec defines interface, behaviour, states,
+accessibility, and test cases before any implementation exists, so the spec is
+the contract a human or an agent is held to. Tool choice comes last. The stack
+is selected in `docs/project-brief.md`, not assumed here.
 
-```bash
-docs/project-brief.md
-```
+The build loop is a workflow layer, not an app skeleton. Scaffold the app first
+in an empty folder (create-next-app, Vite, Eleventy, Astro, and so on), then work
+through `WORKFLOW.md`. Never run a framework scaffolder inside a directory that
+already holds these workflow files; it fails because the directory isn't empty.
 
-`project-brief.md` is tech-agnostic. It describes the project, the stack, the coding conventions, and the workflow the agent must follow. It is the single source of truth — nothing is duplicated across agent-specific config files.
+The workflow is defined by the local skills and context files below.
 
----
+## Read these for full context
 
-## How an agent reads this scaffold
+- `context/sessions.md` - the running log of past sessions, and the only context
+  that survives a `/compact` or `/clear`. Gitignored and personal to you, so it
+  will not exist in a fresh clone; create it on first use. Entries are an `H2` of
+  `## YYYY-MM-DD - Title` followed by prose. **See "Keep the session log current"
+  below - it has obligations the other files here do not**
+- `context/current-feature.md` - the work order for the one feature, fix, or
+  rollback being built right now, or the stub when nothing is in flight
+- `context/findings.md` - the review ledger `/audit` writes and `/complete` clears
+- `context/history/` - archived work orders: what was built, in what order, and why
 
-Agents don't run in the background — they only read the project context when you actively invoke them in their respective agent.
+## Keep the session log current
 
-When you fire up an agent, the sequence is:
+**`context/sessions.md` is the only thing that survives a context reset.** A
+`/compact` or `/clear` discards the conversation; the log is what tells the next
+session where the work stands. Anything of substance that exists only in the
+conversation is lost the moment either runs, and nothing warns you - there is no
+error, just a later session that has to rediscover it.
 
-1. You open your agent of choice (e.g. Claude Code, Cursor, Copilot, etc.)
-2. The agent looks for its config file at its hardwired default location. A symlink (or file copy) there points to the real file inside `.agents/<agent-name>/`
-3. That config file tells the agent to read `docs/project-brief.md`
-4. The agent now has the full project context and is ready to work
+**Read it before acting when starting cold.** After a reset, or in any session
+where recent history is not already in context, read the last two or three
+entries first. Each closes with a "Still open" paragraph naming what carries
+forward.
 
-From that point it understands your conventions, your workflow, and where everything lives — without you having to explain any of it each time.
+**Update it as you go, not only at the end.** Append or extend the current
+entry whenever something lands that a future session would need: work completed,
+a decision made and its reasoning, an approach tried and abandoned, a discovered
+constraint, anything deliberately left undone. Do not wait to be asked, and do
+not save it all for a wrap-up that a `/clear` may pre-empt. If the user asks to
+update memory, that always includes this file.
 
----
+**Write it for a reader with no memory of the conversation.** State what changed
+and why it mattered, not just which files moved. Record reversals and rejected
+options too - knowing an approach was tried and dropped is what stops a later
+session repeating it.
 
-## Agent config structure
+The project's own documentation set is authoritative for everything else:
 
-Each supported agent has its own directory inside `.agents/`:
+- `docs/project-brief.md` - **the single source of truth.** Read it in full
+  before doing anything else: stack selection, browser targets, accessibility
+  standard, coding conventions, and agent behaviour rules
+- `docs/modern-platform-guide.md` - read before writing any HTML, CSS, or JS
+- `docs/design-tokens.md` - read before writing any CSS
+- `docs/security.md` - read before generating HTML or deployment config
+- `docs/service-worker.md` and `docs/storybook.md` - optional features, only when
+  marked active in `docs/project-brief.md`
+- `WORKFLOW.md` - the ten-step human guide from setup through to deployment
+
+## Specs are contracts
+
+Specs live in `docs/features/` (user-facing) and `docs/specs/` (components,
+pages, layouts). Each carries a status line:
+
+| Status | Meaning | Who acts |
+|--------|---------|----------|
+| `Draft` | Incomplete - do not implement | Human only |
+| `Ready` | Complete - proceed with implementation | Human + agent |
+| `Complete` | Implemented and tested | Human only |
+
+**The `**Status:**` line is the work queue.** `/feature` builds the next `Ready`
+spec, `/status` reports the queue by status, and `/complete` writes `Complete`
+back when the work is done.
+
+**Agents read specs and never edit them.** Do not implement a `Draft` spec; stop
+and ask. Do not re-implement or overwrite a `Complete` spec; the human resets it
+to `Ready` first.
+
+New specs follow the template for their kind — `docs/features/_feature-template.md`
+for something a user can do, `docs/specs/_component-template.spec.md` for a
+component, page, or layout. A feature spec's Implementation notes table is
+authoritative for any value its components must agree on; component specs
+reference those values and never restate them.
+
+Two edits are the only exceptions in the whole workflow:
+
+- `/complete` sets a finished spec's `**Status:**` and `**Last updated:**` lines,
+  and nothing else.
+- `/feature` may draft a brand-new spec, on explicit approval, and only as
+  `**Status:** Draft`. **Promoting a spec to `Ready` is a human act** - that is
+  the signal the contract is settled, and an agent that grants itself that signal
+  has removed the gate the project is built around.
+
+### Which file wins
+
+| Question | Authority |
+|----------|-----------|
+| Stack, conventions, browser targets, accessibility, agent rules | `docs/project-brief.md` |
+| What one thing must do, and when it is done | its spec in `docs/features/` or `docs/specs/` |
+| What is built, in progress, or not started | the specs' `**Status:**` lines |
+| Build steps for the one thing in flight | `context/current-feature.md` (disposable) |
+| Open review findings | `context/findings.md` (generated) |
+
+Higher rows win. A generated file never overrides a human-owned contract.
+
+## Agent configuration
+
+**Nothing tool-specific is committed to this repository.** `.agents/<agent>/` is
+the only committed home for agent config. Every tool's hardwired location is a
+gitignored pointer created during setup. Before adding or un-ignoring any path,
+ask whether it names a specific tool. If it does, it belongs in `.agents/` with a
+pointer, not in the repo.
+
+That rule is the whole premise: committing one tool's config forces that tool on
+everyone who clones the template.
+
+### Structure
+
+Each supported agent has its own directory:
 
 ```bash
 .agents/
-├── claude/     # ← Claude Code (Anthropic)
-├── cursor/     # ← Cursor
-├── copilot/    # ← GitHub Copilot
-└── ...         # ← add any agent that has a config file convention
+├── claude/     # Claude Code (Anthropic)
+├── cursor/     # Cursor
+├── copilot/    # GitHub Copilot
+├── skills/     # the shared workflow skills, read by any capable agent
+└── ...         # add any agent that has a config file convention
 ```
 
-Every file inside these directories does two things only:
+Every file inside an agent directory does two things only:
 
-1. Tells the agent to read `docs/project-brief.md` first
-2. Adds anything that is genuinely specific to that agent (custom commands, model settings, etc.)
+1. Points the agent at the context files listed above, starting with
+   `docs/project-brief.md`
+2. Adds anything genuinely specific to that agent (custom commands, model
+   settings)
 
-Nothing else belongs in these files.
+Nothing else belongs in them. `.agents/skills/` is shared, not tool-specific:
+Codex, Claude Code, GitHub Copilot, and OpenCode all read the same tree.
 
----
+### How the pointers are wired
 
-## How agent config files are wired up
+Most agents are hardwired to look for their config in a fixed location and offer
+no way to change it. Since the real file lives in `.agents/`, each needs a pointer
+at the location it expects.
 
-Most agents are hardwired to look for their config file in a specific location
-and don't provide a native way to change this. In this project, config files
-live inside `.agents/` instead, so a workaround is needed for each agent.
+| Location | Points to |
+|----------|-----------|
+| `CLAUDE.md` | `.agents/claude/CLAUDE.md` |
+| `.claude/skills` | `../.agents/skills` |
+| `.cursor/rules` | `../.agents/cursor/rules` |
+| `.github/copilot-instructions.md` | `../.agents/copilot/copilot-instructions.md` |
 
-The most common approach is symlinking — creating a pointer from where the agent
-expects its file to where it actually lives. For example, Claude Code expects
-`CLAUDE.md` at the project root, so you would run:
+**macOS and Linux** - symlink. Create only the pointer your agent needs:
 
 ```bash
 ln -s .agents/claude/CLAUDE.md CLAUDE.md
+mkdir -p .claude && ln -s ../.agents/skills .claude/skills
+mkdir -p .cursor && ln -s ../.agents/cursor/rules .cursor/rules
+mkdir -p .github && ln -s ../.agents/copilot/copilot-instructions.md .github/copilot-instructions.md
 ```
 
-This creates a `CLAUDE.md` at the root that points to the real file inside
-`.agents/claude/`.
+> [!IMPORTANT]
+> Every pointer below the project root needs both the `mkdir -p` and the leading
+> `../`, and each guards a different failure. The parent directory is gitignored,
+> so it does not exist in a fresh clone and `ln -s` will not create it. And a
+> symlink's target is resolved relative to the link's own directory, so
+> `.agents/…` without the `../` creates a link pointing at `.cursor/.agents/…` -
+> which `ln` reports as success and `ls -l` displays as if it were correct.
+> `cat` the pointer to prove it resolves; only the root-level `CLAUDE.md` line
+> needs neither.
 
-**macOS / Linux:** symlinking works as shown above.
+**Windows** - `ln -s` needs Developer Mode or an elevated terminal. If neither is
+available, create the directory and copy the file instead, then keep the two in
+sync by hand:
 
-**Windows:** `ln -s` requires either Developer Mode or an elevated terminal
-(run as Administrator). If neither is an option, copy the file instead of
-symlinking it and keep the two in sync manually:
-
-```bash
+```bat
+if not exist .github mkdir .github
 copy .agents\copilot\copilot-instructions.md .github\copilot-instructions.md
 ```
 
-**Git and symlinks:** symlinks are tracked by Git and work correctly on macOS
-and Linux. If your team includes Windows users, consider adding root-level
-symlinks to `.gitignore` and documenting the manual setup step instead, to
-avoid broken links for collaborators who don't have symlink support enabled.
+**Every pointer is gitignored**, so a Windows copy and a macOS symlink never
+collide in git, and no one inherits another developer's agent choice. Symlink
+where you can: a copy drifts from its source, which is how the shared skills tree
+ended up symlinked rather than duplicated per tool.
 
-See each agent's directory for wiring notes specific to that agent.
+### Switching between agents
 
----
+There is no project-level switch. Every agent reads the same
+`docs/project-brief.md` and the same specs, so they always share one
+understanding of the project. To use a different agent, create its pointer and
+open it.
 
-## Switching between agents
+### Adding a new agent
 
-There is no project-level switch to flip. Each agent reads from the same
-`docs/project-brief.md`, so all agents share the same understanding of the
-project at all times.
-
-To use a different agent, open that agent and ensure it has been pointed at its
-config file in `.agents/<agent-name>/`. See each agent's directory for first
-time setup notes.
-
----
-
-## Adding a new agent
-
-1. Create a directory under `.agents/<agent-name>/`
+1. Create `.agents/<agent-name>/`
 2. Create the agent's required config file inside it
-3. In that config file, instruct the agent to read `docs/project-brief.md` first. See `.agents/claude/CLAUDE.md` for a concrete example of how this looks in practice
+3. In that file, tell the agent to read `docs/project-brief.md` first. See
+   `.agents/claude/CLAUDE.md` for a working example
 4. Add any agent-specific config below that instruction
-5. Create a symlink (or file copy) from the agent's expected location to the file you just created — see [How agent config files are wired up](#how-agent-config-files-are-wired-up) above
+5. Create the pointer at the location the agent expects, per the table above
+6. Add that pointer path to `.gitignore`
 
-That's it. All project conventions are already in `docs/project-brief.md`.
+All project conventions are already in `docs/project-brief.md`, so there is
+nothing else to duplicate.
 
----
+### Removing an agent
 
-## Removing an agent
-
-1. Remove the symlink (or file copy) at the project root or wherever the agent expected it:
+Delete the pointer and the directory:
 
 ```bash
 rm CLAUDE.md
+rm -rf .agents/claude
 ```
 
-2. Delete its directory from `.agents/`:
+Nothing else changes.
 
-```bash
-rm -rf .agents/<agent-name>
-```
+### Troubleshooting
 
-Nothing else needs to change.
+**The agent isn't reading `docs/project-brief.md`.** Check the pointer exists
+where the agent expects it. `ls -la` should show an entry like
+`CLAUDE.md -> .agents/claude/CLAUDE.md`. If it's missing, recreate it.
 
----
+**The agent reads its config but ignores the project brief.** Some agents need an
+explicit instruction to read external files; a path alone isn't always enough.
+Check the agent's documentation and copy how the existing configs in `.agents/`
+handle it.
 
-## Updating project conventions
+**The agent produces output that contradicts the project brief.** The brief is
+probably incomplete or ambiguous in that area. Clarify the relevant section and
+re-run. Don't hand-edit the agent's output to paper over a brief that needs
+fixing.
 
-Edit `docs/project-brief.md` only. Every agent picks up the change automatically
-because their config files all point to it.
+**The agent implemented the wrong thing.** Check the spec it built against. The
+spec is the contract, so a wrong result usually means a spec that was promoted to
+`Ready` before it was settled.
 
----
+## Workflow
 
-## Troubleshooting
+Build one feature, fix, or rollback at a time, behind review gates. This is the
+automated form of `WORKFLOW.md` Steps 4-10, not a second workflow: the spec
+`**Status:**` line is still the queue, and Steps 4-6 (writing feature specs,
+component specs, and design tokens) stay human work. Each skill is plain markdown
+any capable agent can read and follow, exposed through tool-specific adapters:
 
-**The agent isn't reading `docs/project-brief.md`.**
+- Codex: `.agents/skills/<skill>/SKILL.md`
+- Claude Code: `.claude/skills/<skill>/SKILL.md`
+- GitHub Copilot: `AGENTS.md` plus `.agents/skills/<skill>/SKILL.md`
+- OpenCode: `AGENTS.md` plus the compatible `.agents/skills/` or
+  `.claude/skills/` tree already installed for the selected tools
 
-Check that the symlink (or file copy) exists at the location the agent expects.
-You can verify a symlink is wired up correctly with:
+Unused adapters can be removed, but **`.agents/` is never one of them.** Those
+adapter paths are gitignored pointers; `.agents/` holds the only real copies of
+both the agent configs and the skills tree. Deleting it leaves every pointer
+dangling - no config and no skills, with `ls -l` still showing links that look
+healthy. What you can remove is the sibling directory for an agent you do not
+use, such as `.agents/cursor/`, along with its pointer.
 
-```bash
-ls -la
-```
+So: Codex, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode can also
+reuse `.claude/` when Claude Code is selected. A project using no Claude Code can
+delete the `CLAUDE.md` pointer, `.claude/`, and `.agents/claude/`, but should
+keep `AGENTS.md`, which every other tool reads. Do not duplicate the same skills
+under `.opencode/skills/`; OpenCode already discovers the compatible trees.
 
-Look for an entry like `CLAUDE.md -> .agents/claude/CLAUDE.md`. If it's missing,
-follow the setup steps in [How agent config files are wired up](#how-agent-config-files-are-wired-up).
+When changing shared workflow behavior, edit
+`.agents/skills/<skill>/SKILL.md` - the one tracked copy. Every tool reaches it
+through its own pointer, so there is nothing to keep in sync and no second tree
+to create.
 
-**The agent reads the config file but ignores the project brief.**
+### The build loop
 
-Some agents require an explicit instruction in the config file to read external
-files — a path alone isn't always enough. Check the agent's documentation and
-review how the existing configs in `.agents/` handle this to use them as a
-reference.
+These run in order, once per spec. Each stops at a review gate rather than
+running on into the next.
 
-**The agent produces output that contradicts the project brief.**
+| Skill | What it does |
+|-------|--------------|
+| `brief` | Read-only briefing on a spec before you build it: what it involves, what it depends on, what would block it |
+| `feature` | Turns the next `Ready` spec into a work order at `context/current-feature.md`, with small reviewable build steps |
+| `implement` | Builds those steps one at a time - diff, plain-English explanation, verification, approval - on the branch you are already on |
+| `check` | Proves each "done when" against the running app and captures the evidence |
+| `audit` | Reviews the code against the project's standards; records findings in `context/findings.md`, where open or fixed P0/P1 findings block `complete` |
+| `try` | Read-only manual walkthrough: what to start, where to click, what to expect |
+| `complete` | Final safety pass, writes `Complete` back to the spec, archives the work order under `context/history/`, makes one work commit |
+| `status` | Read-only: the spec queue, what is in flight, drift warnings, and the exact next action |
 
-The brief may be incomplete or ambiguous in the area the agent is working in.
-Go back to `docs/project-brief.md`, clarify the relevant section, and re-run.
-Do not edit the agent's output directly to paper over a brief that needs updating.
+Outside the loop:
+
+| Skill | What it does |
+|-------|--------------|
+| `discovery` | Optional guided interview that fills in `docs/project-brief.md` and drafts the first feature specs - the conversational form of Steps 2 and 4 |
+| `fix` | Documents an ad-hoc bug or change with no spec of its own, then runs it through the same loop |
+| `rollback` | Plans a safe reversal of a completed feature from its archive and commit, then hands the work order to `implement` |
+| `debug` | Reproduces and isolates a failure without editing code, then hands the evidence to `fix` or `implement` |
+| `prototype` | Pre-build static mockups to lock the look before any spec is built |
+| `tests` | Adds or normalizes unit testing and turns on the test gate |
+| `ci` | Sets up one project-specific `Verify` command and matching automatic GitHub checks |
+| `release` | Render or Vercel deployment readiness: local config, env review, smoke-test planning |
+
+`tests`, `ci`, and `release` detect the project's real stack, so they handle
+runtimes the Stack table in `docs/project-brief.md` does not list - Python, Go,
+Rust, and others. That is deliberate headroom, not a gap in the table: the
+scaffold's specs, design tokens, and platform guide are written for front-end
+web work, while the skills that touch build, test, and deploy tooling are
+written to detect whatever is actually there. Do not narrow them to match the
+table, and do not widen the table to match them.
+
+One more sits above the loop rather than inside it. `autopilot` runs a single
+bounded pass - work order, build steps, verification, gates, checkpoint commits -
+without pausing at each review point, then stops with a review packet for a
+human. It never runs `complete`. It exists for the times you want the agent to
+carry a settled spec the whole way, and it is opt-in only: the step-at-a-time
+path above is the default, and the review between each step is the point of a
+spec-first loop.
+
+In Claude Code, invoke these as slash commands (`/feature`, `/implement`, and so
+on). In Codex, invoke them as skills (`$feature`, `$implement`). In OpenCode or
+other tools without a dedicated invocation syntax, ask the agent to run the
+matching skill or follow its `SKILL.md` manually.
+
+**Two rules hold however a skill is invoked.** No skill promotes a spec to
+`Ready` - that is the human's signal that the contract is settled. And no skill
+creates, switches, merges, or deletes a branch; the loop commits to whatever
+branch is checked out, matching the "commit your work" checkpoints in
+`WORKFLOW.md`.
+
+Deployment is also explicit. `/release` can prepare local Render or Vercel config
+and run readiness checks, but it must stop before deploy, remote service changes,
+push, or publish unless the user gives a separate yes in the current chat.
+
+## Automatic verification
+
+Automatic GitHub checks are a separate explicit setup. Running `/ci` inspects the
+real project and defines one `Verify` command from checks that already exist. Use this order when available: typecheck, tests, then build. Never
+invent a test runner or another check just to fill the command.
+
+For JavaScript and TypeScript projects, prefer a package script such as `verify`
+and use the detected package manager. For other stacks, use the native task
+runner or exact combined command. Record the exact command under Commands below.
+
+The optional `.github/workflows/verify.yml` must run that same command for pull
+requests and pushes to the default branch. Preserve existing workflows, use the
+project's real runtime and install command, and grant only `contents: read` by
+default. This setup does not add local git hooks, coverage, browser tests,
+security scans, or version matrices. Those remain later project choices.
+
+GitHub branch protection or a ruleset can require the check after the repository
+is pushed, but that is a separate remote setting. A project with no automatic
+GitHub checks still works; the loop falls back to the documented build and test
+commands.
+
+## Commands
+
+Fill these in for your stack, from the selections in `docs/project-brief.md`, as
+part of `WORKFLOW.md` Step 3. Delete any row that does not apply, and do not
+invent a command to fill a gap.
+
+- Dev server: `<command>` (http://localhost:<port>)
+- Build: `<command>`
+- Production server: `<command>`
+- Lint: `<command>`
+
+Testing is opt-in. If this project does not already have a unit test runner, run
+`/tests` or `$tests` to add one and update this section with the real test
+commands. The presence of a `test` command here is the single switch that turns
+the testing gate on.
+
+Automatic GitHub checks are a separate opt-in. Run `/ci` or `$ci` to define one
+`Verify` command and the matching workflow.
