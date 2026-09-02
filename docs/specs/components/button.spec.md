@@ -165,8 +165,9 @@ helps the agent avoid building more than is required.
 
 ## Example usage
 
-How this component is implemented depends on the active framework selection in
-`docs/project-brief.md`.
+Only the example for the active framework in `docs/project-brief.md` is live —
+Vanilla, in the scaffold's shipped default. The rest are kept commented out so
+they are there if the stack changes.
 
 **Vanilla:**
 
@@ -174,6 +175,7 @@ How this component is implemented depends on the active framework selection in
 <button class="btn btn--primary" type="button">Save changes</button>
 ```
 
+<!--
 **Astro:**
 
 ```astro
@@ -191,6 +193,9 @@ How this component is implemented depends on the active framework selection in
 ```svelte
 <Button label="Save changes" variant="primary" on:click={handleSave} />
 ```
+-->
+
+
 
 ---
 

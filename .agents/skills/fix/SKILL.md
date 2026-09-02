@@ -50,8 +50,13 @@ Then stop. Tell the user to review the fix spec, then run `/implement` to build 
 
 ## Rules
 
-- Keep it small. If it's really a new feature, write a spec in `docs/features/`
-  or `docs/specs/`, mark it `Ready`, and use `/feature` instead.
+- Keep it small. If it's really a new feature, stop and say so. It needs a spec
+  in `docs/features/` or `docs/specs/`, and that spec has to be promoted to
+  `Ready` by the human before `/feature` will touch it. Drafting one is
+  `/feature`'s no-spec intake, on explicit approval and only ever as `Draft`.
+  **Never mark a spec `Ready` to unblock your own work** - that promotion is the
+  human's signal that the contract is settled, and it is the gate this whole
+  project is built around.
 - Same conventions as everything else (`docs/project-brief.md`).
 
 ## Formatting

@@ -220,3 +220,10 @@ Complete every item before changing the status to `Ready`.
 - [x] Out of scope section is filled in
 - [ ] Example usage matches the active framework
 - [x] Notes for "Ai" implementation are complete
+
+> This spec is `Draft` because of the one unticked row above. Example usage still
+> lists all four frameworks; the active selection in `docs/project-brief.md` is
+> Vanilla, so the other three belong in a comment block the way
+> `button.spec.md` and `main-layout.spec.md` handle them. Deciding the stack and
+> trimming this section is what promotes it — and `docs/features/dark-mode.md` is
+> `Draft` waiting on exactly that.

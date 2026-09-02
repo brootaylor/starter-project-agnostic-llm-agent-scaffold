@@ -175,9 +175,18 @@ run, the repo holds `prototypes/theme.css` (the locked design tokens) and
 relevant mockups from the spec's Design reference section instead of asking for a
 screenshot - they beat a flat image, since they carry the exact tokens. Treat
 `theme.css` as the source of truth for colors, type, and spacing, and make the
-feature's **first build step** port those tokens into the app's global stylesheet
-before building components against the mockups. The mockups are throwaway: once
-the look is built they get discarded at `/complete`.
+feature's **first build step** port those tokens into **both** places before
+building components against the mockups:
+
+1. `docs/design-tokens.md` - the durable token document. Every agent is told to
+   read it before writing any CSS, so a theme that never lands here leaves that
+   instruction pointing at an empty template for the rest of the project.
+2. the app's global stylesheet - `src/styles/tokens.{css|scss}`, where the values
+   actually resolve at runtime.
+
+Write that step's "done when" so it names both files. `/complete` deletes
+`prototypes/` once the look is built, and `theme.css` lives nowhere else until
+this step has run - the mockups are throwaway, the tokens are not.
 
 This is a draft. Don't present it yet - critique it first.
 
@@ -194,7 +203,8 @@ code exists. Run the draft against these questions:
 - **Visual fidelity.** If this is a look-alike or replication feature, is a
   reference image linked in the spec - or are we about to build a design blind
   from prose? If `prototypes/` exists, are the relevant mockups linked as the
-  Design reference and is porting `theme.css` into the app the first build step?
+  Design reference, and does the first build step port `theme.css` into *both*
+  `docs/design-tokens.md` and the app's global stylesheet?
   If a real design exists and nothing is captured, get it before building, not
   after the approximation lands.
 - **Step size.** Would any step's diff be too big to read in one sitting? If so,

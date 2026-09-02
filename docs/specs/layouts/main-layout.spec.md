@@ -154,8 +154,9 @@ this spec and must match the test file exactly.
 
 ## Example usage
 
-How this layout is implemented depends on the active framework selection in
-`docs/project-brief.md`.
+Only the example for the active framework in `docs/project-brief.md` is live —
+Vanilla, in the scaffold's shipped default. The rest are kept commented out so
+they are there if the stack changes.
 
 **Vanilla:**
 
@@ -167,6 +168,7 @@ How this layout is implemented depends on the active framework selection in
 </div>
 ```
 
+<!--
 **Astro:**
 
 ```astro
@@ -190,6 +192,9 @@ How this layout is implemented depends on the active framework selection in
   <p>Page content goes here</p>
 </MainLayout>
 ```
+-->
+
+
 
 ---
 

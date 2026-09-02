@@ -121,8 +121,12 @@ this spec and must match the test file exactly.
 
 ## Example usage
 
-How this page is implemented depends on the active framework selection in
-`docs/project-brief.md`.
+Only the example for the active framework in `docs/project-brief.md` is live —
+Vanilla, in the scaffold's shipped default. The rest are kept commented out so
+they are there if the stack changes. The commented examples use `//` and
+`{/* */}` for their inline notes, never `<!-- -->` — HTML comments do not nest,
+so a stray `-->` would close the wrapper early and spill the rest back onto the
+page.
 
 **Vanilla:**
 
@@ -135,15 +139,16 @@ How this page is implemented depends on the active framework selection in
 </html>
 ```
 
+<!--
 **Astro:**
 
 ```astro
-<!-- src/pages/index.astro -->
 ---
+// src/pages/index.astro
 import MainLayout from '../layouts/MainLayout.astro';
 ---
 <MainLayout pageTitle="Home">
-  <!-- page content -->
+  <slot />
 </MainLayout>
 ```
 
@@ -163,11 +168,16 @@ export function Home() {
 **Svelte:**
 
 ```svelte
-<!-- src/pages/Home.svelte -->
+<script>
+  // src/pages/Home.svelte
+  import MainLayout from '../layouts/MainLayout.svelte';
+</script>
+
 <MainLayout pageTitle="Home">
-  <!-- page content -->
+  <slot />
 </MainLayout>
 ```
+-->
 
 ---
 
