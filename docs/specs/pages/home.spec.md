@@ -121,12 +121,12 @@ this spec and must match the test file exactly.
 
 ## Example usage
 
-Only the example for the active framework in `docs/project-brief.md` is live —
-Vanilla, in the scaffold's shipped default. The rest are kept commented out so
-they are there if the stack changes. The commented examples use `//` and
-`{/* */}` for their inline notes, never `<!-- -->` — HTML comments do not nest,
-so a stray `-->` would close the wrapper early and spill the rest back onto the
-page.
+How this page is implemented depends on the active framework selection in
+`docs/project-brief.md`. This is one of the scaffold's shipped examples, so every
+framework is shown — the stack has not been chosen yet, and the `[active]` marks
+in the brief are a placeholder default, not a recommendation. **In your own specs,
+keep only the example matching your active selection and delete the rest.** That
+is what the Example usage row in the checklist below is asking for.
 
 **Vanilla:**
 
@@ -139,16 +139,15 @@ page.
 </html>
 ```
 
-<!--
 **Astro:**
 
 ```astro
+<!-- src/pages/index.astro -->
 ---
-// src/pages/index.astro
 import MainLayout from '../layouts/MainLayout.astro';
 ---
 <MainLayout pageTitle="Home">
-  <slot />
+  <!-- page content -->
 </MainLayout>
 ```
 
@@ -168,16 +167,11 @@ export function Home() {
 **Svelte:**
 
 ```svelte
-<script>
-  // src/pages/Home.svelte
-  import MainLayout from '../layouts/MainLayout.svelte';
-</script>
-
+<!-- src/pages/Home.svelte -->
 <MainLayout pageTitle="Home">
-  <slot />
+  <!-- page content -->
 </MainLayout>
 ```
--->
 
 ---
 

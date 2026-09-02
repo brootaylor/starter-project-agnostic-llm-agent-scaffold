@@ -165,9 +165,12 @@ helps the agent avoid building more than is required.
 
 ## Example usage
 
-Only the example for the active framework in `docs/project-brief.md` is live —
-Vanilla, in the scaffold's shipped default. The rest are kept commented out so
-they are there if the stack changes.
+How this component is implemented depends on the active framework selection in
+`docs/project-brief.md`. This is one of the scaffold's shipped examples, so every
+framework is shown — the stack has not been chosen yet, and the `[active]` marks
+in the brief are a placeholder default, not a recommendation. **In your own specs,
+keep only the example matching your active selection and delete the rest.** That
+is what the Example usage row in the checklist below is asking for.
 
 **Vanilla:**
 
@@ -175,7 +178,6 @@ they are there if the stack changes.
 <button class="btn btn--primary" type="button">Save changes</button>
 ```
 
-<!--
 **Astro:**
 
 ```astro
@@ -193,9 +195,6 @@ they are there if the stack changes.
 ```svelte
 <Button label="Save changes" variant="primary" on:click={handleSave} />
 ```
--->
-
-
 
 ---
 
