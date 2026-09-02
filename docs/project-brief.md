@@ -3,7 +3,7 @@
 This file is the single source of truth for project context.
 
 It is tech-agnostic — do not add anything here that is specific to any particular
-tool, framework, or AI agent beyond what is selected in the Stack section below.
+tool, framework, or "Ai" agent beyond what is selected in the Stack section below.
 
 Agent-specific configs live in `.agents/`.
 
@@ -13,7 +13,7 @@ Agent-specific configs live in `.agents/`.
 
 ## Your setup checklist
 
-These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any AI agent working on the project.
+These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any "Ai" agent working on the project.
 
 - [ ] **What this project is** — describe the project, who it's for, its goals, and any known constraints
 - [ ] **Stack** — mark one option per category as `[active]`, replacing the defaults the scaffold ships with
@@ -25,7 +25,7 @@ These are the only sections you need to fill in before starting. Everything else
 ## What this project is
 
 > *Fill in each field below. The more specific you are, the more useful this file
-> is as a reference — for you and for any AI agent working on the project.*
+> is as a reference — for you and for any "Ai" agent working on the project.*
 
 **What it is:**
 > One or two sentences describing the product. For example:
@@ -357,7 +357,7 @@ need to be in place.
   and update `.nvmrc` accordingly
 - Refer to your chosen framework's documentation for the exact setup
 
-**If using an AI agent:**
+**If using an "Ai" agent:**
 
 1. Check for the latest stable version of the active framework and use that version when populating `package.json`
 2. Check the active framework's Node.js requirements and use the recommended LTS version of Node
@@ -466,7 +466,7 @@ They apply regardless of which agent is used.
 - **Do not create, switch, merge, or delete branches** — the build loop commits to whatever branch is already checked out. Branch management is the human's decision
 - **Do not delete files without confirmation** — always ask before removing any file that was not created in the current session
 - **Do not install unlisted dependencies** — only install packages directly required by the active stack selections or an explicit spec requirement
-- **Design tokens before styles** — read `docs/design-tokens.md` before writing any CSS. If the file is empty or incomplete, stop and ask the user to fill it in
+- **Design tokens before styles** — read `docs/design-tokens.md` before writing any CSS. If the file is empty or incomplete, stop and ask the user to fill it in. The one exception is a work order whose first build step ports an approved `prototypes/theme.css` into it — that step is how the file gets filled, and it is reviewed like any other
 - **Read security config before generating HTML or deployment config** — read `docs/security.md` before generating `index.html`, `_headers`, `vercel.json`, or any middleware file. The header values and CSP directives defined there are the source of truth
 - **Modern platform before implementation** — read `docs/modern-platform-guide.md` before writing any HTML, CSS, or JavaScript. Use native platform APIs and features unless that file explicitly permits a fallback.
 - **Tests before implementation** — write tests first, then implement until they pass
@@ -604,7 +604,8 @@ docs/
     pages/                                                # ← page / view specs
     layouts/                                              # ← layout specs
 context/                                                  # ← the build loop's working state (generated)
-  sessions.md                                             # ← your session log, read when starting cold (gitignored)
+  sessions.md                                             # ← where things stand + recent entries, read when starting cold (gitignored)
+  sessions-archive.md                                     # ← older entries, verbatim; grepped, not read (gitignored)
   current-feature.md                                      # ← the work order in flight, or a stub when idle
   findings.md                                             # ← review findings ledger, written by /audit
   history/                                                # ← archived work orders: features, fixes, rollbacks
@@ -645,7 +646,8 @@ WORKFLOW.md                                               # ← the ten-step hum
 | How is the service worker configured? | `docs/service-worker.md` |
 | How is Storybook configured? | `docs/storybook.md` |
 | What are the security headers and CSP? | `docs/security.md` |
-| What happened in past sessions? | `context/sessions.md` |
+| Where does the work stand, and what is still open? | `context/sessions.md` → Where things stand |
+| Why was a past decision made that way? | `context/sessions-archive.md` |
 | What is being built right now? | `context/current-feature.md` |
 | What review findings are open? | `context/findings.md` |
 | What has been built already, and in what order? | `context/history/` |

@@ -15,16 +15,19 @@ pnpm-lock.yaml
 .env.local
 .env.*.local
 
-# ── AI tool config ───────────────────────────────────────────────
+# ── "Ai" tool config ─────────────────────────────────────────────
 .claude/
 CLAUDE.md
 .cursor/
 .github/copilot-instructions.md
 
 # ── Personal context ─────────────────────────────────────────────
-# Your own session log. It accumulates a record of your work on your project,
-# so it is yours and is never committed to the scaffold. Created on first use.
+# Your own session log and its archive. They accumulate a record of your work on
+# your project, so they are yours and are never committed to the scaffold. Both
+# are created on first use. The convention travels with the scaffold; the
+# entries do not.
 context/sessions.md
+context/sessions-archive.md
 
 # ── Stack-specific ───────────────────────────────────────────────
 # Add entries here based on your active stack selection in docs/project-brief.md.

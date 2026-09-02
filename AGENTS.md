@@ -1,8 +1,14 @@
 # AGENTS.md
 
-Instructions for AI coding agents working in this project. This is the cross-tool
-entry point: Codex, OpenCode, Cursor, GitHub Copilot, Gemini CLI, Aider, Zed,
-Windsurf, and others read `AGENTS.md`. Claude Code reads `CLAUDE.md`, which imports this file, so there is a single source of truth.
+Instructions for "Ai" coding agents working in this project. `AGENTS.md` is a
+cross-tool convention that most coding agents read directly, so this is the
+entry point for any of them. Claude Code reads `CLAUDE.md`, which imports this
+file, so there is a single source of truth either way.
+
+Ready-made configs ship for three agents - Claude Code, Cursor, and GitHub
+Copilot - under `.agents/`. An agent that reads `AGENTS.md` natively needs no
+config of its own and works as soon as it opens the project. For one that expects
+its own config file, see "Adding a new agent" below.
 
 ## What this is
 
@@ -23,11 +29,14 @@ The workflow is defined by the local skills and context files below.
 
 ## Read these for full context
 
-- `context/sessions.md` - the running log of past sessions, and the only context
-  that survives a `/compact` or `/clear`. Gitignored and personal to you, so it
-  will not exist in a fresh clone; create it on first use. Entries are an `H2` of
-  `## YYYY-MM-DD - Title` followed by prose. **See "Keep the session log current"
-  below - it has obligations the other files here do not**
+- `context/sessions.md` - where the work stands, and the only context that
+  survives a `/compact` or `/clear`. Opens with a **Where things stand** block -
+  the cold-start brief - followed by the most recent entries, newest first, as an
+  `H2` of `## YYYY-MM-DD - Title` and prose. Gitignored and personal to you, so
+  it will not exist in a fresh clone; create it on first use. **See "Keep the
+  session log current" below - it has obligations the other files here do not**
+- `context/sessions-archive.md` - older entries, verbatim. Not part of a cold
+  start; grep it when a past decision needs its reasoning
 - `context/current-feature.md` - the work order for the one feature, fix, or
   rollback being built right now, or the stub when nothing is in flight
 - `context/findings.md` - the review ledger `/audit` writes and `/complete` clears
@@ -41,10 +50,28 @@ session where the work stands. Anything of substance that exists only in the
 conversation is lost the moment either runs, and nothing warns you - there is no
 error, just a later session that has to rediscover it.
 
-**Read it before acting when starting cold.** After a reset, or in any session
-where recent history is not already in context, read the last two or three
-entries first. Each closes with a "Still open" paragraph naming what carries
-forward.
+**Read the "Where things stand" block before acting when starting cold.** That
+block is the whole cold-start brief - current state, open decisions, carried
+findings, next action - and it is deliberately short enough to read every time.
+The entries below it are optional depth for when you need how something came to
+be. `context/sessions-archive.md` is not part of a cold start at all; grep it
+when a settled decision needs its reasoning.
+
+**Keep the log cheap to read.** It has two jobs that pull against each other:
+telling the next session where to pick up, and recording why things are the way
+they are. The head block does the first, the entries do the second, and the
+second must never crowd out the first. Keep two or three entries in
+`sessions.md` and move older ones to `context/sessions-archive.md` whole - never
+condensed, since the value of an old entry is its reasoning and a summary of a
+reversal does not stop the reversal being repeated.
+
+> [!IMPORTANT]
+> **Rewrite the "Where things stand" block wholesale; never append to it.**
+> Appending turns it into a second changelog, and a cold start then reads a
+> confident account of a state that stopped being true some sessions ago.
+> Nothing detects this - the block still parses, still looks current, and the
+> stale line is indistinguishable from the fresh ones. Replace it as the last
+> thing before wrapping up, then add the session's entry below it.
 
 **Update it as you go, not only at the end.** Append or extend the current
 entry whenever something lands that a future session would need: work completed,
@@ -148,7 +175,7 @@ Every file inside an agent directory does two things only:
    settings)
 
 Nothing else belongs in them. `.agents/skills/` is shared, not tool-specific:
-Codex, Claude Code, GitHub Copilot, and OpenCode all read the same tree.
+Codex, Claude Code, Cursor, GitHub Copilot, and OpenCode all read the same tree.
 
 ### How the pointers are wired
 
@@ -257,6 +284,7 @@ any capable agent can read and follow, exposed through tool-specific adapters:
 
 - Codex: `.agents/skills/<skill>/SKILL.md`
 - Claude Code: `.claude/skills/<skill>/SKILL.md`
+- Cursor: `.cursor/rules` plus `.agents/skills/<skill>/SKILL.md`
 - GitHub Copilot: `AGENTS.md` plus `.agents/skills/<skill>/SKILL.md`
 - OpenCode: `AGENTS.md` plus the compatible `.agents/skills/` or
   `.claude/skills/` tree already installed for the selected tools
@@ -268,10 +296,10 @@ dangling - no config and no skills, with `ls -l` still showing links that look
 healthy. What you can remove is the sibling directory for an agent you do not
 use, such as `.agents/cursor/`, along with its pointer.
 
-So: Codex, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode can also
-reuse `.claude/` when Claude Code is selected. A project using no Claude Code can
-delete the `CLAUDE.md` pointer, `.claude/`, and `.agents/claude/`, but should
-keep `AGENTS.md`, which every other tool reads. Do not duplicate the same skills
+So: Codex, Cursor, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode
+can also reuse `.claude/` when Claude Code is selected. A project using no
+Claude Code can delete the `CLAUDE.md` pointer, `.claude/`, and
+`.agents/claude/`, but should keep `AGENTS.md`, which every other tool reads. Do not duplicate the same skills
 under `.opencode/skills/`; OpenCode already discovers the compatible trees.
 
 When changing shared workflow behavior, edit
@@ -325,9 +353,10 @@ path above is the default, and the review between each step is the point of a
 spec-first loop.
 
 In Claude Code, invoke these as slash commands (`/feature`, `/implement`, and so
-on). In Codex, invoke them as skills (`$feature`, `$implement`). In OpenCode or
-other tools without a dedicated invocation syntax, ask the agent to run the
-matching skill or follow its `SKILL.md` manually.
+on). In Codex, invoke them as skills (`$feature`, `$implement`). In Cursor,
+GitHub Copilot, OpenCode, and any other tool with no dedicated syntax for these,
+name the skill and ask the agent to follow its `SKILL.md` - the gates are in the
+file, so a skill followed manually behaves the same as one invoked.
 
 **Two rules hold however a skill is invoked.** No skill promotes a spec to
 `Ready` - that is the human's signal that the contract is settled. And no skill

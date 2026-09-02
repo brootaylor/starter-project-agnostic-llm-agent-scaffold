@@ -422,7 +422,7 @@ do not add a `_headers` file and expect it to work with a custom server.
 
 ---
 
-## Notes for AI agents
+## Notes for "Ai" agents
 
 - Read the active security selection in `docs/project-brief.md` before implementing — do not add any security config if the selection is `None`
 - The header values defined in the Security headers section of this file are the single source of truth — do not invent or modify values without updating this file first

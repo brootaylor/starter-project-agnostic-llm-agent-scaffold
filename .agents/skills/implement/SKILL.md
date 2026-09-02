@@ -1,18 +1,25 @@
 ---
 name: implement
-description: "Build the feature, fix, or rollback spec'd in context/current-feature.md, one small reviewable step at a time. Implements each step, shows the diff and explains it in plain English, tests, and iterates until it works. Type: Rollback specs use a guarded reverse patch that preserves the loop's own history. After each approved step it offers an optional commit checkpoint; the work-level commit and logging are /complete's job. Use when the user runs /implement, or asks to build, implement, or start the current feature, fix, or rollback once its spec is ready."
+description: "Build the feature, fix, or rollback described by the work order in context/current-feature.md, one small reviewable step at a time. Implements each step, shows the diff and explains it in plain English, tests, and iterates until it works. A Type: Rollback work order uses a guarded reverse patch that preserves the loop's own history. After each approved step it offers an optional commit checkpoint; the work-level commit and logging are /complete's job. Use when the user runs /implement, or asks to build, implement, or start the current feature, fix, or rollback once its work order is ready."
 ---
 
-# implement - build the current spec, one reviewed step at a time
+# implement - build the current work order, one reviewed step at a time
 
 Where this sits in the workflow:
 
     /feature, /fix, or /rollback  ->  [implement]  ->  /complete  ->  next
-    (the spec)                         (build it,       (commit + log)
+    (the work order)                   (build it,       (commit + log)
                                         reviewed)
 
-`/feature`, `/fix`, or `/rollback` wrote the spec to
-`context/current-feature.md` and stopped. This skill turns that spec into code,
+**Two documents, and this skill must never confuse them.** The **work order** is
+`context/current-feature.md` - generated, disposable, and where the build steps
+live. The **spec** is the human-owned contract in `docs/features/` or
+`docs/specs/`, named on the work order's `Spec:` line. Throughout this file,
+"the spec" always means that second file, and it is never where progress gets
+recorded.
+
+`/feature`, `/fix`, or `/rollback` wrote the work order to
+`context/current-feature.md` and stopped. This skill turns that work order into code,
 without vibe coding: small steps, a visible diff plus a plain-English explanation
 for each, testing, and iteration until it works. It commits on the branch you are
 already on - this loop does not create or switch branches. The work-level commit
@@ -41,13 +48,21 @@ ad-hoc bug or change), or `/rollback` (for a completed feature reversal) first.
 Pull the conventions, active stack, browser targets, and accessibility standard
 from `docs/project-brief.md` so the code matches them.
 
-If the spec's Design reference points at `prototypes/*.html`, those mockups are
-the visual target - build components to match them, and treat `prototypes/theme.css`
-as the token source (the spec's first step ports it into the app's global
-stylesheet before the components are built).
+If the work order's Design reference points at `prototypes/*.html`, those mockups
+are the visual target - build components to match them, and treat
+`prototypes/theme.css` as the token source. The work order's first step ports it
+into `docs/design-tokens.md` **and** the app's global stylesheet before any
+component is built. Both halves are required: `/complete` deletes `prototypes/`
+afterwards, and a theme that only reached the stylesheet leaves
+`docs/design-tokens.md` - the file every agent is told to read before writing
+CSS - an empty template for the rest of the project.
 
-**Resuming?** If the spec already has some build steps checked off (`- [x]`), this
-feature was started earlier and interrupted (often a cleared context). The spec and
+**Resuming?** If the **work order** already has some build steps checked off
+(`- [x]`), this feature was started earlier and interrupted (often a cleared
+context). Read the boxes in `context/current-feature.md` and nowhere else: a spec
+carries `- [x]` boxes of its own, in its test cases and its `Draft -> Ready`
+checklist, and reading those as build progress will skip work that was never
+done. The work order and
 its ticked steps are files, so pick up where it left off: read which steps are done,
 check `git status` and the log to see what is committed and what is still
 in the working tree, then continue from the **first unchecked step** instead of
@@ -69,14 +84,14 @@ before running `/implement`.
 
 ### Type: Rollback safeguard
 
-For a rollback spec, do not hand-delete the old feature and do not run a whole
+For a rollback work order, do not hand-delete the old feature and do not run a whole
 commit `git revert`. Completed feature commits also contain loop history and
 plan bookkeeping, while `current-feature.md` now contains the active rollback
-spec. Reversing the whole commit would damage that state.
+work order. Reversing the whole commit would damage that state.
 
 Before the first rollback build step:
 
-1. Read the approved spec's `Target commit` and `Target parent` fields. Stop
+1. Read the approved work order's `Target commit` and `Target parent` fields. Stop
    unless both values match `^[0-9a-f]{40}$`. Do not accept abbreviated,
    uppercase, or otherwise malformed SHAs.
 2. Resolve the archive's introducing commit and verify it has exactly one parent.
@@ -84,11 +99,11 @@ Before the first rollback build step:
    Confirm the resolved commit exactly equals `Target commit` and the resolved
    parent exactly equals `Target parent`. Stop on any mismatch.
 3. Confirm the resolved target is an ancestor of `HEAD` and the only dirty path
-   before applying the patch is the approved rollback spec. Stop on drift.
+   before applying the patch is the approved rollback work order. Stop on drift.
 4. Preview the resolved target's product diff while excluding `.agents/**`,
    `.claude/**`, `context/**`, `docs/**`, `AGENTS.md`, `CLAUDE.md`, and
    `prototypes/**`. Confirm the preview is non-empty and matches the Product
-   paths in the spec.
+   paths in the work order.
 5. Apply that resolved product diff in reverse with three-way conflict detection
    and stage it. Use only the resolved full SHA values before running:
 
@@ -107,7 +122,7 @@ Before the first rollback build step:
 If the reverse patch conflicts, stop and report the exact paths and later commit
 that appears involved. Do not auto-resolve, discard, stash, reset, or switch to a
 broad checkout. Ask whether to resolve only the conflict allowed by the approved
-spec or abandon the attempt. A cascade into another completed feature needs a
+work order or abandon the attempt. A cascade into another completed feature needs a
 new rollback plan.
 
 ## Step 2 - build one step, review, iterate, checkpoint
@@ -122,8 +137,8 @@ the spec stays `Ready` throughout, only `/complete` ever writes to it, and
 `Complete` is the only value it may write. A spec set to `in progress` corrupts
 the queue `/status` and `/feature` read.
 
-Work through the spec's build steps in order, one at a time, using the review and
-approval gate below after every step.
+Work through the work order's build steps in order, one at a time, using the
+review and approval gate below after every step.
 
 1. Implement just that step: the smallest change that satisfies its "done when."
 2. Show the **diff**, not whole files.
@@ -137,15 +152,19 @@ approval gate below after every step.
    command as the automated gate. It is only an umbrella for checks the project
    actually has, so do not invent tests or other checks to satisfy it. If no
    `Verify` command exists, run the documented build command, and the test
-   command when the project declares one. The Unit testing selection in
-   `docs/project-brief.md` is the switch: when a runner is active, a step that
-   adds logic must ship a passing test in the same diff and the suite must be
-   green before the step is approved; when it is `None`, say so plainly rather
-   than claiming the step is tested. UI and integration-only steps ride on
+   command when the project declares one. **A real `test` command under Commands
+   in `AGENTS.md` is the switch**, and `/tests` is what adds one: while one is
+   declared, a step that adds logic must ship a passing test in the same diff and
+   the suite must be green before the step is approved; while none is declared,
+   say so plainly rather than claiming the step is tested. The Unit testing
+   selection in `docs/project-brief.md` records the human's intent, not the
+   gate - a runner marked `[active]` there with no command in `AGENTS.md` means
+   the setup has not been run, so point at `/tests` rather than installing one
+   mid-step. UI and integration-only steps ride on
    screenshot plus build evidence. Run a focused test separately when it gives
    faster feedback, then use `Verify` as the final automated gate. Create focused
    test files next to the source they cover. Never install a runner mid-step
-   unless the current spec is explicitly the unit-testing setup itself (for
+   unless the current work order is explicitly the unit-testing setup itself (for
    example `/fix "add unit testing"`); point at `/tests` instead. If a step
    surfaces non-trivial logic the spec did not foresee, add a focused test then,
    or note why not. Run `/check` when a "done when" needs observed runtime
@@ -214,7 +233,7 @@ still `open` or `fixed` there means `/complete` will refuse to finish, so close
 the loop now:
 
 - Repair each `open` P0 or P1 as an extra reviewed step. First append it to the
-  spec's build steps in `current-feature.md` (`- [ ] Repair F-03 - <title>`) so
+  work order's build steps in `current-feature.md` (`- [ ] Repair F-03 - <title>`) so
   the repair is on the record and survives a context clear, then run the same
   loop as Step 2: smallest change, diff, plain-English explanation, evidence.
   Check the step off and mark the finding `fixed` together.

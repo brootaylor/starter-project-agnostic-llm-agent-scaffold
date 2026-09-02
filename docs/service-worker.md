@@ -797,7 +797,7 @@ options as shown in the Vanilla + Vite section above. Only the plugin wiring dif
 
 ---
 
-## Notes for AI agents
+## Notes for "Ai" agents
 
 - Read the active caching strategy selection in `docs/project-brief.md` before implementing — do not default to a strategy if none is marked active
 - For any manual `sw.js`, implement the three-bucket cache architecture (static, pages, images) and all five helper functions from the Helper functions section — do not use a single cache or omit the helpers

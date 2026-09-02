@@ -35,8 +35,10 @@ state.
 1. **The spec queue** - the `**Status:**` line of every spec in `docs/features/`
    and `docs/specs/`. **This is the project's real progress tracker.** Count them
    by status and name the next `Ready` spec, the same target `/feature` would
-   pick. Skip `docs/specs/_component-template.spec.md`; it is the template, not a
-   work item.
+   pick. **Skip both templates** - `docs/features/_feature-template.md` and
+   `docs/specs/_component-template.spec.md`. Each carries a `**Status:** Draft`
+   line of its own, so counting them reports phantom work and names a template as
+   something a human has to promote.
    Call out a `Ready` feature spec blocked by a `Draft` dependency, since
    `/feature` will refuse it.
 2. **Current work** - `context/current-feature.md`. Is something in

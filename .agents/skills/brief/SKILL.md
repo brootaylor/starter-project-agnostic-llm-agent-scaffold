@@ -41,9 +41,13 @@ Unlike `/feature`, this skill reads a spec at **any** status. Briefing a `Draft`
 is one of its most useful jobs. Always state the status up front, and for a
 `Draft` say what would have to change for it to be promoted.
 
-If no spec exists yet, or every spec is a bare copy of
-`docs/specs/_component-template.spec.md`, say so plainly and point at writing one
-rather than inventing a briefing.
+`docs/features/_feature-template.md` and `docs/specs/_component-template.spec.md`
+are not briefable targets. Both carry a `**Status:** Draft` line of their own, and
+neither is a work item - skip them when picking a target, and say so if one is
+named directly.
+
+If no spec exists yet, or every spec is a bare copy of one of those templates, say
+so plainly and point at writing one rather than inventing a briefing.
 
 ## What it reads
 
@@ -73,20 +77,25 @@ A short, scannable briefing, not a wall of text. Aim for something like:
     Status: Draft - /feature will refuse this until it is promoted to Ready.
     What: users switch between light and dark themes; the choice persists and
       respects the OS setting on first visit.
-    Depends on: theme-toggle.spec.md (Draft) and main-layout.spec.md (Draft).
-      Both are contracts this feature rests on, so three specs need finishing,
-      not one.
+    Depends on: theme-toggle.spec.md (Draft) - the one component in its
+      Components required table. Two specs need promoting, not one.
     Unblocks: nothing else currently specced.
-    Touches: design tokens (a second palette in tokens.css), the layout wrapper,
-      a toggle component, and a small persistence helper.
-    Size: medium - one reviewable cycle once the component specs are settled.
-    Reference: docs/design-tokens.md has light values only; the dark palette is
-      undefined.
-    Missing before Ready: no acceptance criteria for the OS-preference case, no
-      test cases, and the dark token values do not exist yet.
+    Touches: the dark palette in tokens.css, a toggle component in the header,
+      and localStorage under the color-scheme key.
+    Size: medium - one reviewable cycle once theme-toggle is settled.
+    Reference: docs/design-tokens.md already defines both palettes, so the token
+      values exist; the toggle only swaps data-theme and defines no colours.
+    Missing before Ready: one unticked row in the Draft -> Ready checklist -
+      "Every required component has reached Ready".
 
-    Next: fill in the dark palette in docs/design-tokens.md, finish the three
-    specs, then /feature.
+    Next: finish and promote docs/specs/components/theme-toggle.spec.md, then
+    this one, then /feature.
+
+Note what the shape of that briefing is doing: it traces every line back to a
+file. The dependency list comes from the spec's own Components required table,
+not from guessing which components a feature sounds like it needs, and the
+"Missing before Ready" line quotes the spec's checklist rather than paraphrasing
+what looks unfinished.
 
 Adapt the lines to the spec; drop any that don't apply. Always end with a single
 **Next** action - usually `/feature <spec>` to build it, but "finish and promote

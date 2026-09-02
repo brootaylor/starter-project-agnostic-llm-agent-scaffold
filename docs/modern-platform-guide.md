@@ -125,7 +125,7 @@ behaviour rules in `docs/project-brief.md`.
 
 ---
 
-## Notes for AI agents
+## Notes for "Ai" agents
 
 - **Check browser support first** — cross-reference `docs/project-brief.md` →
   Browser support before using any API. If support is insufficient for the project

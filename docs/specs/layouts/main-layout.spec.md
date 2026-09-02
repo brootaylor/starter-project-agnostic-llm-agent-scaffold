@@ -155,7 +155,11 @@ this spec and must match the test file exactly.
 ## Example usage
 
 How this layout is implemented depends on the active framework selection in
-`docs/project-brief.md`.
+`docs/project-brief.md`. This is one of the scaffold's shipped examples, so every
+framework is shown — the stack has not been chosen yet, and the `[active]` marks
+in the brief are a placeholder default, not a recommendation. **In your own specs,
+keep only the example matching your active selection and delete the rest.** That
+is what the Example usage row in the checklist below is asking for.
 
 **Vanilla:**
 
@@ -193,7 +197,7 @@ How this layout is implemented depends on the active framework selection in
 
 ---
 
-## Notes for AI implementation
+## Notes for "Ai" implementation
 
 Additional context, constraints, and implementation guidance that the agent
 should be aware of before writing any code.
@@ -219,4 +223,4 @@ Complete every item before changing the status to `Ready`.
 - [x] At least one test case exists per behaviour and state
 - [x] Out of scope section is filled in
 - [x] Example usage matches the active framework
-- [x] Notes for AI implementation are complete
+- [x] Notes for "Ai" implementation are complete
