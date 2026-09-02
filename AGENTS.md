@@ -29,11 +29,14 @@ The workflow is defined by the local skills and context files below.
 
 ## Read these for full context
 
-- `context/sessions.md` - the running log of past sessions, and the only context
-  that survives a `/compact` or `/clear`. Gitignored and personal to you, so it
-  will not exist in a fresh clone; create it on first use. Entries are an `H2` of
-  `## YYYY-MM-DD - Title` followed by prose. **See "Keep the session log current"
-  below - it has obligations the other files here do not**
+- `context/sessions.md` - where the work stands, and the only context that
+  survives a `/compact` or `/clear`. Opens with a **Where things stand** block -
+  the cold-start brief - followed by the most recent entries, newest first, as an
+  `H2` of `## YYYY-MM-DD - Title` and prose. Gitignored and personal to you, so
+  it will not exist in a fresh clone; create it on first use. **See "Keep the
+  session log current" below - it has obligations the other files here do not**
+- `context/sessions-archive.md` - older entries, verbatim. Not part of a cold
+  start; grep it when a past decision needs its reasoning
 - `context/current-feature.md` - the work order for the one feature, fix, or
   rollback being built right now, or the stub when nothing is in flight
 - `context/findings.md` - the review ledger `/audit` writes and `/complete` clears
@@ -47,10 +50,28 @@ session where the work stands. Anything of substance that exists only in the
 conversation is lost the moment either runs, and nothing warns you - there is no
 error, just a later session that has to rediscover it.
 
-**Read it before acting when starting cold.** After a reset, or in any session
-where recent history is not already in context, read the last two or three
-entries first. Each closes with a "Still open" paragraph naming what carries
-forward.
+**Read the "Where things stand" block before acting when starting cold.** That
+block is the whole cold-start brief - current state, open decisions, carried
+findings, next action - and it is deliberately short enough to read every time.
+The entries below it are optional depth for when you need how something came to
+be. `context/sessions-archive.md` is not part of a cold start at all; grep it
+when a settled decision needs its reasoning.
+
+**Keep the log cheap to read.** It has two jobs that pull against each other:
+telling the next session where to pick up, and recording why things are the way
+they are. The head block does the first, the entries do the second, and the
+second must never crowd out the first. Keep two or three entries in
+`sessions.md` and move older ones to `context/sessions-archive.md` whole - never
+condensed, since the value of an old entry is its reasoning and a summary of a
+reversal does not stop the reversal being repeated.
+
+> [!IMPORTANT]
+> **Rewrite the "Where things stand" block wholesale; never append to it.**
+> Appending turns it into a second changelog, and a cold start then reads a
+> confident account of a state that stopped being true some sessions ago.
+> Nothing detects this - the block still parses, still looks current, and the
+> stale line is indistinguishable from the fresh ones. Replace it as the last
+> thing before wrapping up, then add the session's entry below it.
 
 **Update it as you go, not only at the end.** Append or extend the current
 entry whenever something lands that a future session would need: work completed,

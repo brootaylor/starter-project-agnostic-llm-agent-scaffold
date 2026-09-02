@@ -604,7 +604,8 @@ docs/
     pages/                                                # ← page / view specs
     layouts/                                              # ← layout specs
 context/                                                  # ← the build loop's working state (generated)
-  sessions.md                                             # ← your session log, read when starting cold (gitignored)
+  sessions.md                                             # ← where things stand + recent entries, read when starting cold (gitignored)
+  sessions-archive.md                                     # ← older entries, verbatim; grepped, not read (gitignored)
   current-feature.md                                      # ← the work order in flight, or a stub when idle
   findings.md                                             # ← review findings ledger, written by /audit
   history/                                                # ← archived work orders: features, fixes, rollbacks
@@ -645,7 +646,8 @@ WORKFLOW.md                                               # ← the ten-step hum
 | How is the service worker configured? | `docs/service-worker.md` |
 | How is Storybook configured? | `docs/storybook.md` |
 | What are the security headers and CSP? | `docs/security.md` |
-| What happened in past sessions? | `context/sessions.md` |
+| Where does the work stand, and what is still open? | `context/sessions.md` → Where things stand |
+| Why was a past decision made that way? | `context/sessions-archive.md` |
 | What is being built right now? | `context/current-feature.md` |
 | What review findings are open? | `context/findings.md` |
 | What has been built already, and in what order? | `context/history/` |
