@@ -218,7 +218,7 @@ for the active selection.
 
 ---
 
-## Notes for AI implementation
+## Notes for "Ai" implementation
 
 Additional context, constraints, and implementation guidance that the agent
 should be aware of before writing any code.
@@ -244,4 +244,4 @@ Complete every item before changing the status to `Ready`.
 - [ ] At least one test case exists per behaviour and state
 - [ ] Out of scope section is filled in
 - [ ] Example usage matches the active framework
-- [ ] Notes for AI implementation are complete
+- [ ] Notes for "Ai" implementation are complete

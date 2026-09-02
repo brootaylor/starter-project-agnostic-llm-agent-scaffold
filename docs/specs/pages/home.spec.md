@@ -171,7 +171,7 @@ export function Home() {
 
 ---
 
-## Notes for AI implementation
+## Notes for "Ai" implementation
 
 Additional context, constraints, and implementation guidance that the agent
 should be aware of before writing any code.
@@ -198,4 +198,4 @@ Complete every item before changing the status to `Ready`.
 - [x] At least one test case exists per behaviour and state
 - [x] Out of scope section is filled in
 - [x] Example usage matches the active framework
-- [ ] Notes for AI implementation are complete — blocked until component specs are written
+- [ ] Notes for "Ai" implementation are complete — blocked until component specs are written

@@ -113,7 +113,7 @@ event names.
 
 ---
 
-## Notes for AI agents
+## Notes for "Ai" agents
 
 Additional context, constraints, and guidance the agent should be aware of
 before writing any code.
@@ -136,4 +136,4 @@ Complete every item before changing the status to `Ready`.
 - [ ] Every required component is listed, with a spec path
 - [ ] Every required component has reached `Ready`
 - [ ] Any value shared across components is fixed in Implementation notes
-- [ ] Notes for AI agents are complete
+- [ ] Notes for "Ai" agents are complete

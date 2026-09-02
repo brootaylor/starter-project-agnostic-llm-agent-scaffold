@@ -40,7 +40,7 @@ when the feature has no visual target.
 Build one step at a time, never the whole feature at once.
 
 1. Plan mode lays out the step before any code.
-2. The AI implements just that step.
+2. The "Ai" implements just that step.
 3. It shows the diff (not full files); you read it and understand it.
 4. You approve, then choose whether to commit a checkpoint or roll straight on.
    Checkpoints are optional; `/complete` makes the real feature-level commit at the end.
@@ -74,6 +74,6 @@ session reads which boxes are ticked and resumes from the first unchecked step.
   testing gate is on only when `AGENTS.md` lists a real `test` command under
   Commands; `/tests` adds one.
 
-## Notes for the AI
+## Notes for the "Ai"
 
 - Conventions and constraints to respect (e.g. client vs server, filter user-scoped queries by the authenticated user's id, match an existing data shape).

@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Instructions for AI coding agents working in this project. `AGENTS.md` is a
+Instructions for "Ai" coding agents working in this project. `AGENTS.md` is a
 cross-tool convention that most coding agents read directly, so this is the
 entry point for any of them. Claude Code reads `CLAUDE.md`, which imports this
 file, so there is a single source of truth either way.

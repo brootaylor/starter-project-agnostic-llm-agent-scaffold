@@ -145,7 +145,7 @@ For the one spec being built now, write a work order to
 `reference/feature-spec-template.md`. Fill every section: goal, in/out of scope,
 the build loop, small build steps as a checklist (`- [ ]`, each with an observable
 "done when" - `/implement` ticks them off and resumes from the first unchecked
-one), files/areas, data/contracts, testing, and notes for the AI.
+one), files/areas, data/contracts, testing, and notes for the "Ai".
 
 **Record the source spec at the top of the work order**, as a `Spec:` line with
 its path. `/implement` reads it as the contract, `/check` proves the work against

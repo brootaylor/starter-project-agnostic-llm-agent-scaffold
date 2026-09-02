@@ -53,7 +53,7 @@ clear: a fresh session resumes from the first unchecked step.
   before it and passes after. The testing gate is on only when `AGENTS.md` lists
   a real `test` command under Commands.
 
-## Notes for the AI
+## Notes for the "Ai"
 
 - Conventions and constraints to respect, and anything about this area of the
   codebase worth knowing before touching it.

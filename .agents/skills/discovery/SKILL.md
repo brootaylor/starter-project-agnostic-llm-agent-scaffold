@@ -23,7 +23,7 @@ stops there. Component specs are Step 5, written one at a time against a settled
 feature spec, and design tokens are Step 6.
 
 An unfilled brief never requires this skill. A user who fills it in manually,
-has another AI conversation, or arrives with finished specs continues straight to
+has another "Ai" conversation, or arrives with finished specs continues straight to
 Step 5 exactly as before.
 
 ## Step 1 - establish the starting point

@@ -89,7 +89,7 @@ These are authoritative decisions that component specs and implementation code m
 
 ---
 
-## Notes for AI agents
+## Notes for "Ai" agents
 
 Additional context, constraints, and implementation guidance that the agent should be aware of before writing any code.
 
@@ -112,7 +112,7 @@ Complete every item before changing the status to `Ready`.
 - [x] Every required component is listed, with a spec path
 - [ ] Every required component has reached `Ready`
 - [x] Any value shared across components is fixed in Implementation notes
-- [x] Notes for AI agents are complete
+- [x] Notes for "Ai" agents are complete
 
 > This spec is `Draft` for exactly one reason: `ThemeToggle` is still `Draft`, so
 > the unchecked row above is the blocker. Promote that component spec first, then

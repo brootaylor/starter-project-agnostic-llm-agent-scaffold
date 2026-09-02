@@ -3,7 +3,7 @@
 This file is the single source of truth for project context.
 
 It is tech-agnostic — do not add anything here that is specific to any particular
-tool, framework, or AI agent beyond what is selected in the Stack section below.
+tool, framework, or "Ai" agent beyond what is selected in the Stack section below.
 
 Agent-specific configs live in `.agents/`.
 
@@ -13,7 +13,7 @@ Agent-specific configs live in `.agents/`.
 
 ## Your setup checklist
 
-These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any AI agent working on the project.
+These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any "Ai" agent working on the project.
 
 - [ ] **What this project is** — describe the project, who it's for, its goals, and any known constraints
 - [ ] **Stack** — mark one option per category as `[active]`, replacing the defaults the scaffold ships with
@@ -25,7 +25,7 @@ These are the only sections you need to fill in before starting. Everything else
 ## What this project is
 
 > *Fill in each field below. The more specific you are, the more useful this file
-> is as a reference — for you and for any AI agent working on the project.*
+> is as a reference — for you and for any "Ai" agent working on the project.*
 
 **What it is:**
 > One or two sentences describing the product. For example:
@@ -357,7 +357,7 @@ need to be in place.
   and update `.nvmrc` accordingly
 - Refer to your chosen framework's documentation for the exact setup
 
-**If using an AI agent:**
+**If using an "Ai" agent:**
 
 1. Check for the latest stable version of the active framework and use that version when populating `package.json`
 2. Check the active framework's Node.js requirements and use the recommended LTS version of Node

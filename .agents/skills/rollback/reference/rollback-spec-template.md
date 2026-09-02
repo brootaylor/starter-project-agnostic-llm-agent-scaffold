@@ -74,7 +74,7 @@ preserving the project's history and compatible work added afterward.
 - Removed behaviour: `<route, UI action, CLI output, API, or public call that must no longer exist>`
 - Regression path: `<small unaffected flow that must still work>`
 
-## Notes for the AI
+## Notes for the "Ai"
 
 - Stop on patch conflicts or evidence of an unplanned dependency.
 - Do not delete the original feature archive.

@@ -234,7 +234,7 @@ each other.
 
 ---
 
-## Notes for AI agents
+## Notes for "Ai" agents
 
 - Run `npx storybook@latest init` and let Storybook auto-detect the active framework
 - If auto-detection fails, pass the `--type` flag manually based on the active framework
