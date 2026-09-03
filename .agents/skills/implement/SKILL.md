@@ -42,7 +42,7 @@ adjust a criterion you found inconvenient. If the spec is wrong or ambiguous,
 stop and ask the human to change it. Only `/complete` writes to a spec, and only
 its `**Status:**` and `**Last updated:**` lines.
 
-If it has no real work order (still the stub, or its status is already complete),
+If it has no real work order (still the reset stub),
 stop and tell the user to run `/feature` (for a planned feature), `/fix` (for an
 ad-hoc bug or change), or `/rollback` (for a completed feature reversal) first.
 Pull the conventions, active stack, browser targets, and accessibility standard
@@ -178,7 +178,11 @@ review and approval gate below after every step.
    `context/current-feature.md` so progress survives a context
    clear. If the step repaired a finding tracked in
    `context/findings.md`, set that finding's status to `fixed` now too
-   and note the repair in its **Resolution** line. Never set `closed`: a repair
+   and note the repair in its **Resolution** line. **Read the work order's
+   `Fixes:` line to find which finding that is** - `/fix F-03` stamps the ID
+   there precisely so the link survives a context clear. Fall back to matching
+   the repair against the ledger only when the line is absent, and say you did.
+   Never set `closed`: a repair
    is re-reviewed by `/audit` before it clears, because a fix can introduce a
    worse defect than the one it removed. Then offer a short choice, noting that
    checkpoints are optional since `/complete` makes the real work-level

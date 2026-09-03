@@ -44,7 +44,17 @@ state.
 2. **Current work** - `context/current-feature.md`. Is something in
    progress, or is it the reset stub? If a work order is present, report its type
    and name, the source spec named on its `Spec:` line, which build steps are
-   checked, and the first unchecked step where `/implement` resumes.
+   checked, the first unchecked step where `/implement` resumes, and its
+   `**Work status:**` line.
+
+   **That line is the only record of whether the work was ever proved.**
+   `/implement` and `/complete` write `verified` to it, and `/check` writes
+   `verification failed` or `verification incomplete` when it could not. None of
+   that is visible in the checkboxes: every step can be ticked on a work order
+   whose last `/check` failed. Report the value, and never infer verification
+   from checked boxes alone. It is the work order's own field - the spec's
+   `**Status:**` line is a different thing in a different file, and this skill
+   reads both and writes neither.
 3. **Findings** - `context/findings.md`. Count findings by status and
    report open and fixed counts next to the spec queue. Call out any P0 or
    P1 still `open` or `fixed` by ID, since those block `/complete`. A missing
@@ -65,7 +75,8 @@ A short, scannable summary, not a wall of text. Aim for something like:
 
     Status: Building docs/specs/components/button.spec.md
     Specs: 1 Complete, 1 Ready, 4 Draft. Next Ready: theme-toggle.
-    Current work: Step 2 of 3 done. Next step: focus and hover states.
+    Current work: Step 2 of 3 done, work status "in progress". Next step:
+                  focus and hover states.
     Findings: 1 open P2 (F-04), 1 fixed P1 awaiting re-review (F-02).
     Git: 3 uncommitted files, last commit "feat: base button".
     Watch: dark-mode.md is Ready but theme-toggle.spec.md is still Draft, so
@@ -76,11 +87,14 @@ A short, scannable summary, not a wall of text. Aim for something like:
 End with a single suggested next action, chosen in this order:
 
 - A work order is in progress with unchecked steps -> `/implement` and name the step.
-- A work order is in progress and all implementation steps are checked -> `/check` if
-  proof is not recorded, `/try` if the user wants a manual review path,
+- A work order is in progress and all implementation steps are checked -> read
+  `**Work status:**` to choose. `verification failed` or `verification
+  incomplete` -> `/implement` to repair, naming what `/check` could not prove.
+  Anything short of `verified` -> `/check`, since nothing has recorded proof.
   `/implement` when a P0 or P1 finding is still `open` (the repair is an extra
   reviewed step), `/audit` when one is `fixed` and awaiting re-review (both
-  block `/complete`), otherwise `/complete`.
+  block `/complete`). `/try` if the user wants a manual review path. Otherwise
+  `/complete`.
 - `current-feature.md` is the reset stub and a P0 or P1 finding is `open` ->
   `/fix <finding id>`; when one is `fixed`, `/audit` to re-review and close it.
 - `current-feature.md` is the reset stub and a spec is `Ready` -> `/feature` and

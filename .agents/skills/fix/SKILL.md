@@ -34,7 +34,7 @@ now, feature or fix), following `reference/fix-spec-template.md`. Keep it
 lighter than a feature spec: the problem, the fix, build steps, files, and how
 to verify.
 
-Three fields in that header are load-bearing, and each fails quietly if you get
+Four fields in that header are load-bearing, and each fails quietly if you get
 it wrong:
 
 - **`Type: Fix`** - what `/complete` reads to log this to
@@ -45,6 +45,12 @@ it wrong:
 - **No `Spec:` line at all.** A fix has no source spec, and both `/implement`
   and `/complete` treat its absence as correct. `Spec: none` is worse than
   omitting it - it reads as a path that will not resolve.
+- **`Fixes:`** - the finding ID, whenever the input was one (`/fix F-03`).
+  `/implement` reads it to know which ledger entry to mark `fixed` when the
+  repairing step lands. Without it the link survives only in the conversation,
+  and a context clear breaks it: the repair ships, the finding stays `open`, and
+  `/complete` refuses to finish for a defect that was already fixed. Delete the
+  line entirely for a fix that came from a bug report rather than the ledger.
 
 Then stop. Tell the user to review the fix spec, then run `/implement` to build it.
 

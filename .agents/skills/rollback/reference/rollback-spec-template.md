@@ -15,6 +15,10 @@
 >
 > `Target commit` and `Target parent` must both be full 40-character SHAs.
 > `/implement` refuses abbreviated or malformed values.
+>
+> `Work status:` tracks this work order only. It is not the spec's `**Status:**`
+> line and must never be confused with it. `AGENTS.md` lists its five values
+> under "The work order's own status"; nothing else is a valid value.
 
 ## Goal
 

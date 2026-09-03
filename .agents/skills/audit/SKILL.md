@@ -20,10 +20,12 @@ dependencies, commits, merges, pushes, or starts product work. Its one write is
 the findings ledger at `context/findings.md` (Step 4), the durable
 record of findings and their status.
 
-`/implement` and `/complete` invoke this skill automatically only for work that
+`/complete` and `/autopilot` invoke this skill automatically only for work that
 touches a security boundary - authentication, authorization, payments, secrets,
-personal data, migrations, or destructive operations. An explicit `/audit` or
-`$audit` request always runs it, whatever the work touches.
+personal data, migrations, or destructive operations. `/implement` calls it for
+one narrower reason: to re-review a repair it marked `fixed`, since a repair
+never closes itself. An explicit `/audit` or `$audit` request always runs it,
+whatever the work touches.
 
 ## Input
 

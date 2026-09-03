@@ -116,6 +116,27 @@ Two edits are the only exceptions in the whole workflow:
   the signal the contract is settled, and an agent that grants itself that signal
   has removed the gate the project is built around.
 
+### The work order's own status
+
+A work order in `context/current-feature.md` carries a `**Work status:**` line.
+**It is a different field, in a different file, from the spec `**Status:**` line
+above**, and confusing the two writes to a human-owned contract. These are its
+only values:
+
+| Work status | Meaning | Who writes it |
+|-------------|---------|---------------|
+| `not started` | Work order written, no code yet | `/feature`, `/fix`, `/rollback` |
+| `in progress` | Building; any earlier proof is now stale | `/implement` |
+| `verified` | Every done-when proven with evidence | `/implement`, `/check`, `/complete` |
+| `verification failed` | `/check` disproved a done-when | `/check` |
+| `verification incomplete` | `/check` could not prove one either way | `/check` |
+
+> [!IMPORTANT]
+> Checked build steps are not proof. Every step can be ticked on a work order
+> whose last `/check` failed, so this line is the only record of whether the work
+> was ever proven. `/status` reports it, and `/complete` runs its own final pass
+> regardless of what it says.
+
 ### Which file wins
 
 | Question | Authority |

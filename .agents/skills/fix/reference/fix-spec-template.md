@@ -14,7 +14,8 @@
 > before the first product edit; `/audit` uses it to find what this work changed.
 >
 > `Work status:` tracks this work order only. It is not a spec's `**Status:**`
-> line and must never be confused with it.
+> line and must never be confused with it. `AGENTS.md` lists its five values
+> under "The work order's own status"; nothing else is a valid value.
 >
 > `Fixes:` is only for a fix that repairs a `context/findings.md` entry. The
 > stamp makes the repair traceable: `/implement` marks that finding `fixed` when

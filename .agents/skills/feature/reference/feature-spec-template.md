@@ -14,7 +14,8 @@
 > before the first product edit; `/audit` uses it to find what this work changed.
 >
 > `Work status:` tracks this work order only. It is not the spec's `**Status:**`
-> line and must never be confused with it.
+> line and must never be confused with it. `AGENTS.md` lists its five values
+> under "The work order's own status"; nothing else is a valid value.
 
 ## Goal
 
