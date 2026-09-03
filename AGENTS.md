@@ -49,6 +49,13 @@ The workflow is defined by the local skills and context files below.
 `/compact` or `/clear` discards the conversation, and nothing warns you - there
 is no error, just a later session that has to rediscover what was known.
 
+**Read both files before acting when starting cold**, and after any `/clear` or
+`/compact`. Neither is loaded automatically - `CLAUDE.md` imports `AGENTS.md`,
+`docs/project-brief.md`, `context/current-feature.md` and `context/findings.md`,
+but not these - so they have to be opened deliberately. `sessions.md` is short by
+design; read it every time. Read `decisions.md` when a choice looks settled and
+you are about to revisit it.
+
 **Rewrite it wholesale, every session; never append to it.** It is a snapshot of
 now, not a changelog. Appending leaves a confident account of a state that
 stopped being true some sessions ago, and nothing detects that - the stale line
