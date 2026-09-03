@@ -35,7 +35,9 @@ Read enough to identify the real project setup:
 
 - `AGENTS.md`, especially Commands and any documented `Verify` command
 - package or language manifests and task-runner files
-- lockfiles and the package manager they imply
+- lockfiles and the package manager they imply — confirm the lockfile is
+  tracked by git, not merely present on disk. A lockfile-safe install fails
+  in continuous integration when the lockfile was never committed.
 - existing typecheck, test, build, lint, and other quality commands
 - test configuration and actual test files
 - runtime version files such as `.nvmrc`, `.node-version`, `.python-version`,

@@ -6,9 +6,9 @@ Thumbs.db
 node_modules/
 
 # ── Lock files ───────────────────────────────────────────────────
-package-lock.json
-yarn.lock
-pnpm-lock.yaml
+# Do not add lockfiles here. Once you install a stack, commit the
+# `package-lock.json`, `yarn.lock` or `pnpm-lock.yaml` your package manager
+# generates: `/ci` writes an install step that needs it.
 
 # ── Environment ──────────────────────────────────────────────────
 .env
