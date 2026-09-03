@@ -166,8 +166,8 @@ my-project/
 │   ├── assets/
 │   └── scripts/
 ├── context/                                ← the build loop's working state
-│   ├── sessions.md                         ← where things stand + recent entries (gitignored)
-│   ├── sessions-archive.md                 ← older entries, kept for reference (gitignored)
+│   ├── sessions.md                         ← where things stand, rewritten each session (gitignored)
+│   ├── decisions.md                        ← why choices were made, append-only (gitignored)
 │   ├── current-feature.md                  ← the work order in flight
 │   ├── findings.md                         ← review findings ledger
 │   └── history/                            ← archived work orders

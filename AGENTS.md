@@ -30,60 +30,38 @@ The workflow is defined by the local skills and context files below.
 ## Read these for full context
 
 - `context/sessions.md` - where the work stands, and the only context that
-  survives a `/compact` or `/clear`. Opens with a **Where things stand** block -
-  the cold-start brief - followed by the most recent entries, newest first, as an
-  `H2` of `## YYYY-MM-DD - Title` and prose. Gitignored and personal to you, so
-  it will not exist in a fresh clone; create it on first use. **See "Keep the
-  session log current" below - it has obligations the other files here do not**
-- `context/sessions-archive.md` - older entries, verbatim. Not part of a cold
-  start; grep it when a past decision needs its reasoning
+  survives a `/compact` or `/clear`. One **Where things stand** block and nothing
+  else: queue, branches, what is open, the next action. Gitignored and personal
+  to you, so it will not exist in a fresh clone; create it on first use. **See
+  "Keep the state file current" below**
+- `context/decisions.md` - why a choice was made and what was rejected, newest
+  first. Append-only, and one entry per decision rather than per session. The
+  only thing here that git history cannot reconstruct. Gitignored and personal
+  to you as well; create it on first use
 - `context/current-feature.md` - the work order for the one feature, fix, or
   rollback being built right now, or the stub when nothing is in flight
 - `context/findings.md` - the review ledger `/audit` writes and `/complete` clears
 - `context/history/` - archived work orders: what was built, in what order, and why
 
-## Keep the session log current
+## Keep the state file current
 
 **`context/sessions.md` is the only thing that survives a context reset.** A
-`/compact` or `/clear` discards the conversation; the log is what tells the next
-session where the work stands. Anything of substance that exists only in the
-conversation is lost the moment either runs, and nothing warns you - there is no
-error, just a later session that has to rediscover it.
+`/compact` or `/clear` discards the conversation, and nothing warns you - there
+is no error, just a later session that has to rediscover what was known.
 
-**Read the "Where things stand" block before acting when starting cold.** That
-block is the whole cold-start brief - current state, open decisions, carried
-findings, next action - and it is deliberately short enough to read every time.
-The entries below it are optional depth for when you need how something came to
-be. `context/sessions-archive.md` is not part of a cold start at all; grep it
-when a settled decision needs its reasoning.
+**Rewrite it wholesale, every session; never append to it.** It is a snapshot of
+now, not a changelog. Appending leaves a confident account of a state that
+stopped being true some sessions ago, and nothing detects that - the stale line
+is indistinguishable from the fresh ones. **Twenty lines is the budget.** If
+something will not fit, it belongs in `context/decisions.md`, or nowhere.
 
-**Keep the log cheap to read.** It has two jobs that pull against each other:
-telling the next session where to pick up, and recording why things are the way
-they are. The head block does the first, the entries do the second, and the
-second must never crowd out the first. Keep two or three entries in
-`sessions.md` and move older ones to `context/sessions-archive.md` whole - never
-condensed, since the value of an old entry is its reasoning and a summary of a
-reversal does not stop the reversal being repeated.
+**Write a decision down when you make one**, in `context/decisions.md`: what was
+chosen, and what was rejected and why. Most sessions add nothing there, and that
+is correct - it records decisions, not activity. Knowing an approach was tried
+and dropped is what stops a later session repeating it.
 
-> [!IMPORTANT]
-> **Rewrite the "Where things stand" block wholesale; never append to it.**
-> Appending turns it into a second changelog, and a cold start then reads a
-> confident account of a state that stopped being true some sessions ago.
-> Nothing detects this - the block still parses, still looks current, and the
-> stale line is indistinguishable from the fresh ones. Replace it as the last
-> thing before wrapping up, then add the session's entry below it.
-
-**Update it as you go, not only at the end.** Append or extend the current
-entry whenever something lands that a future session would need: work completed,
-a decision made and its reasoning, an approach tried and abandoned, a discovered
-constraint, anything deliberately left undone. Do not wait to be asked, and do
-not save it all for a wrap-up that a `/clear` may pre-empt. If the user asks to
-update memory, that always includes this file.
-
-**Write it for a reader with no memory of the conversation.** State what changed
-and why it mattered, not just which files moved. Record reversals and rejected
-options too - knowing an approach was tried and dropped is what stops a later
-session repeating it.
+**Do not narrate the work.** Git history already holds what changed. If the user
+asks to update memory, that always includes both files.
 
 The project's own documentation set is authoritative for everything else:
 
