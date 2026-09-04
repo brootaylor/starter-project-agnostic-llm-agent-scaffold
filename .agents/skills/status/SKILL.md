@@ -63,7 +63,21 @@ state.
    changes, roughly how many files changed, last commit subject, and whether the
    branch is ahead of its remote. If the directory is not a git repo, say so and
    skip this part rather than failing.
-5. **Progress drift** - flag all steps checked but not completed, a `Spec:` line
+5. **Where things stand** - `context/sessions.md`, when it exists. Items 1-4 can
+   be rederived from disk at any time; this one cannot. Read its **Where things
+   stand** block for the open items and the next action it recorded, and carry
+   anything still true into this report. **A missing file is normal, not a
+   gap** - it is gitignored, so a fresh clone has none and `AGENTS.md` tells the
+   user to create it on first use. Say nothing about it in that case.
+
+   Then check it against what items 1-4 actually found. It is written by hand at
+   the end of a session and nothing updates it afterwards, so it is the one input
+   here that can be confidently wrong: a queue that has moved on, a branch line
+   from before the last commit, an open item already closed. **Where it disagrees
+   with the files, the files win.** Put the disagreement on the `Watch:` line and
+   carry on - a stale state file is drift like any other, and this skill reads it
+   without ever writing it back.
+6. **Progress drift** - flag all steps checked but not completed, a `Spec:` line
    pointing at a spec that no longer exists, a spec marked `Complete` with
    nothing implemented, or a spec still `Ready` after its work was completed. A
    rollback legitimately targets a `Complete` spec until `/complete` resets it,
