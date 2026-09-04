@@ -550,6 +550,16 @@ than specs:
 |------|----------|-----------|
 | Services / API | `docs/services.md` | How the frontend communicates with the backend |
 | Design tokens | `docs/design-tokens.md` | Colours, spacing, typography, and other design constants |
+| Service worker | `docs/service-worker.md` | Caching strategy and offline behaviour |
+| Storybook | `docs/storybook.md` | Storybook setup and configuration |
+| Security | `docs/security.md` | Security headers, CSP, and secure coding rules |
+
+The last three are written in the shape of a spec — user stories, acceptance
+criteria, out of scope — because that shape is a good way to pin down what a
+configuration has to achieve. **They are still reference docs, not specs.**
+They carry no `**Status:**` line, they are never promoted to `Ready`, and
+`/status` does not count them: what turns each one on is its `[active]` mark in
+the Stack section above, not a status line of its own.
 
 ---
 
@@ -596,6 +606,7 @@ docs/
   service-worker.md                                       # ← service worker configuration
   storybook.md                                            # ← storybook configuration
   security.md                                             # ← security headers and CSP configuration
+  adopting-an-existing-project.md                         # ← setup guide for a codebase that already exists
   features/                                               # ← user-facing feature specs
     _feature-template.md                                  # ← feature spec template
   specs/
@@ -636,6 +647,7 @@ WORKFLOW.md                                               # ← the ten-step hum
 | Question | File |
 |----------|------|
 | Which kind of spec do I write? | `docs/project-brief.md` → Features and components |
+| Which platform APIs and CSS features should I use? | `docs/modern-platform-guide.md` |
 | How do I write a feature spec? | `docs/features/_feature-template.md` |
 | How do I write a component, page, or layout spec? | `docs/specs/_component-template.spec.md` |
 | What does a feature need to do? | `docs/features/<feature>.md` |

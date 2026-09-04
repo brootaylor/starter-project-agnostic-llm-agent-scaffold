@@ -124,7 +124,7 @@ Make sure your agent has what it needs:
 
 | Agent | Prerequisites |
 |-------|--------------|
-| Claude Code | Node.js + an [Anthropic API key](https://console.anthropic.com) |
+| Claude Code | Node.js, plus either a [Claude](https://claude.ai) Pro or Max subscription to sign in with, or an [Anthropic API key](https://console.anthropic.com) |
 | Cursor | The [Cursor app](https://cursor.sh) |
 | GitHub Copilot | A GitHub account with [Copilot access](https://github.com/features/copilot) + the relevant IDE extension |
 
@@ -303,7 +303,7 @@ Generated code appears in `src/` under the relevant directory (see the table in 
 /try       get a step-by-step manual walkthrough to click through yourself
 ```
 
-**If something is wrong**, there are two likely causes:
+**If something is wrong**, there are three likely causes:
 
 - **The spec is ambiguous** — update the spec first, then ask the agent to fix the implementation
 - **You can't tell why it's failing** — `/debug` reproduces the symptom, isolates the failing path, and hands the evidence to `/fix` or `/implement`. It edits nothing itself

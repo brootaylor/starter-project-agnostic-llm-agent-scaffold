@@ -16,7 +16,7 @@ This page is the sequence, not the execution. Each step names the skill that car
 
 Steps A and B are human work. Everything from C onward is agent-driven, with a human review at each gate.
 
-That split is structural, not a preference. **Step A cannot be agent work, because the agent does not exist in that project until Step A finishes** — `.claude/skills` and the `CLAUDE.md` pointer are created at A5, and until then a session opened there has no skills and no project conventions loaded. It is the bootstrap, so it is done by hand.
+That split is structural, not a preference. **Step A cannot be agent work, because the agent does not exist in that project until Step A finishes** — `.claude/skills` and the `CLAUDE.md` pointer are created at A6, and until then a session opened there has no skills and no project conventions loaded. It is the bootstrap, so it is done by hand.
 
 | Step | Who acts | Why |
 |------|----------|-----|
@@ -35,7 +35,7 @@ That split is structural, not a preference. **Step A cannot be agent work, becau
 ```
 SETUP  ·  once  ·  A by hand, B drafted by agent and approved by you
 
-  ├─  Step A   merge the scaffold in ····  six substeps; copy by name, never wholesale
+  ├─  Step A   merge the scaffold in ····  seven substeps; copy by name, never wholesale
   └─  Step B   /survey ·················  drafts the brief; the yardstick for all of C–G
       │
       ▼
@@ -121,6 +121,8 @@ Look before merging into `docs/`. The scaffold's filenames are distinctive, but 
 ```bash
 find "$PROJECT/docs" -type f 2>/dev/null
 ```
+
+If any of the scaffold's filenames appear in that listing — `project-brief.md`, `design-tokens.md`, `security.md`, `service-worker.md`, `storybook.md`, `modern-platform-guide.md`, `adopting-an-existing-project.md` — rename the project's copy before you run the commands below, because `cp -R` overwrites silently and the project's version is the one that holds real content. `git mv docs/security.md docs/security-original.md` keeps it in history and out of the way; fold anything worth keeping into the scaffold's version at Step B, then delete it.
 
 Then copy the workflow layer across:
 
@@ -247,14 +249,15 @@ Where they differ, `/survey` says so. That gap is worth raising with whoever own
 /audit full
 ```
 
-This is the deliverable the rest of the engagement is scoped from. It reviews every project-owned source, test, and configuration file through four lenses — quality, security, performance, and tests — grades each finding `P0` to `P3`, and writes them to `context/findings.md` with stable identifiers.
+This is the deliverable the rest of the engagement is scoped from. It reviews every project-owned source, test, and configuration file through five lenses — quality, security, performance, accessibility, and tests — grades each finding `P0` to `P3`, and writes them to `context/findings.md` with stable identifiers.
 
-On a large or unfamiliar codebase, run it by area instead of all at once (`/audit src/api security`, then `/audit src/api quality`, and so on). One pass over a whole application through four lenses is a lot to hold at once, and a focused pass reports what it did not cover.
+On a large or unfamiliar codebase, run it by area instead of all at once (`/audit src/api security`, then `/audit src/api quality`, and so on). One pass over a whole application through five lenses is a lot to hold at once, and a focused pass reports what it did not cover.
 
-Two things `/audit` deliberately does not do, so plan for them separately:
+Three things `/audit` deliberately does not do, so plan for them separately:
 
 - **It does not scan dependencies for known vulnerabilities.** It is forbidden from running network-backed tools without your explicit approval, and from implying that reading a manifest is a real scan. Run `npm audit`, or whatever the project's ecosystem provides, alongside it.
 - **It does not tell you what the application does.** Nothing in the scaffold reverse-engineers behaviour from code. If the client needs a written account of the system they already own, that is analysis you do by hand, and it is worth quoting for separately.
+- **It reviews accessibility statically, not in a browser.** The accessibility lens reads markup, styles and tokens, and computes contrast where the values are readable. Focus order, screen-reader output and anything that only appears once the app is running are `/check`'s job, and `/audit` hands them over by name rather than guessing. On an engagement where accessibility is contractual, budget for that pass as well as this one.
 
 `context/findings.md` survives a context reset; a report in the chat does not. Everything from here on is worked out of that ledger.
 

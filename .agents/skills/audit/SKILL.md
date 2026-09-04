@@ -1,6 +1,6 @@
 ---
 name: audit
-description: Read-only code audit for a spec-first project, except for the findings ledger it maintains at context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review.
+description: Read-only code audit for a spec-first project, except for the findings ledger it maintains at context/findings.md. Reviews the active feature, changed files, a selected path, or the full project through all concerns or a focused quality, security, performance, accessibility, or tests lens. Use when the user runs /audit, invokes $audit, asks for a code or quality audit, security review, performance review, accessibility or WCAG review, test quality review, dead-code or duplication check, vibe-coded project cleanup, or standards review.
 ---
 
 # audit - review code quality against the project standards
@@ -13,7 +13,7 @@ Where this sits in the workflow:
 
 `/check` proves behavior against the spec. This skill checks the code itself,
 through either a broad review or one focused lens: quality, security,
-performance, or tests.
+performance, accessibility, or tests.
 
 It reviews code without changing it: it never edits source files, installs
 dependencies, commits, merges, pushes, or starts product work. Its one write is
@@ -47,13 +47,15 @@ Optional scope:
 
 Optional lens:
 
-- no lens: review all four lenses
+- no lens: review all five lenses
 - `quality`: maintainability, duplication, dead code, consistency, complexity,
   and standards drift
 - `security`: authorization, input trust, injection, data exposure, secret
   handling, and unsafe configuration
 - `performance`: query, network, rendering, memory, payload, concurrency, and
   unbounded-work risks
+- `accessibility`: the standard set in `docs/project-brief.md` - semantics,
+  keyboard operability, focus, names and roles, and colour contrast
 - `tests`: missing coverage for important logic, weak assertions, skipped or
   focused tests, poor isolation, brittle mocks, and likely flakiness
 
@@ -105,9 +107,13 @@ Run or inspect only the signals relevant to the selected lens and scope:
 - build command when the selected lens needs compilation or bundle evidence
 - existing security command for the security lens, when declared and locally runnable
 - existing performance command for the performance lens, when declared and locally runnable
+- existing accessibility linter or checker for the accessibility lens, when
+  declared and locally runnable. Do not install one; a project without one is a
+  gap to report, and static review still applies
 - targeted lightweight searches for the chosen lens, such as unused exports and
   copied logic for quality, unsafe trust boundaries for security, repeated or
-  unbounded work for performance, and skipped or weak tests for tests
+  unbounded work for performance, non-semantic elements and missing names for
+  accessibility, and skipped or weak tests for tests
 
 Do not run broad checks unrelated to a focused lens. If a useful command is
 missing, report that as a gap. Do not invent a pass or claim that a focused
@@ -130,6 +136,17 @@ expectations. Apply only the selected lens or lenses:
   rendering, blocking work on hot paths, unbounded loops or collections, memory
   growth, oversized payloads, missing pagination, and unsafe concurrency. Mark
   hypotheses as unverified when runtime or profiling evidence is missing.
+- **Accessibility:** measured against the standard named in
+  `docs/project-brief.md`, which applies project-wide whether or not a spec
+  restates it. Generic elements carrying behaviour a native element provides,
+  interactive controls that are not keyboard operable, focus that is removed
+  without replacement or lost after a state change, missing or wrong accessible
+  names, state conveyed by colour or icon alone, ARIA that contradicts or
+  duplicates native semantics, text and non-text contrast below the standard's
+  minimums, and animation that ignores `prefers-reduced-motion`. Where token
+  values are readable, compute contrast rather than estimating it; where a
+  judgement needs the running app, say so and hand it to `/check` rather than
+  guessing.
 - **Tests:** important logic without coverage when a test command exists, weak
   assertions, tests that only mirror implementation, excessive mocking, shared
   state, time or order dependence, skipped or focused tests, placeholder tests,
@@ -252,6 +269,8 @@ Then include:
 - applicable standards checked
 - browser or runtime evidence inspected, when relevant
 - skipped, focused, or placeholder tests found, when the tests lens was selected
+- accessibility findings that need the running app to settle, when the
+  accessibility lens was selected, named as work for `/check`
 - checks that were unavailable or could not run
 - suggested repair order
 

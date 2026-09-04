@@ -1,5 +1,10 @@
 # Storybook
 
+> **This is a configuration reference, not a spec.** It uses user stories and
+> acceptance criteria to pin down what the configuration has to achieve, but it
+> carries no `**Status:**` line and is never promoted to `Ready`. What turns it
+> on is its `[active]` mark in `docs/project-brief.md` → Stack.
+
 ---
 
 ## Overview
@@ -8,7 +13,7 @@ Add Storybook to the project to develop, document, and showcase UI components
 in isolation. This makes it easier to build and review components independently
 of the full application, and provides a living style guide for the design system.
 
-> **Note:** This spec covers React, Svelte, and plain JavaScript as worked examples.
+> **Note:** This document covers React, Svelte, and plain JavaScript as worked examples.
 > Storybook supports other frameworks too — and a handcrafted Storybook instance
 > can be configured to suit any project's specific needs. See the
 > [Storybook documentation](https://storybook.js.org/docs) for the full list of

@@ -29,9 +29,16 @@ Run these before logging or committing:
 
 - **Check** - run `/check` when any "done when" needs observed runtime behaviour:
   a click, request, CLI command, download, background job, or multi-screen flow.
+  Also run it whenever the work rendered or changed user interface, whatever the
+  "done when" criteria happen to say. Keyboard operability, focus and accessible
+  names are observable behaviour that no build step and no static diff proves,
+  and `docs/project-brief.md` applies its accessibility standard project-wide
+  whether or not the spec restates it.
 - **Audit** - run `/audit current` when the work touched a security boundary:
   authentication, authorization, payments, secrets, personal or user data,
-  migrations, destructive operations, or external side effects.
+  migrations, destructive operations, or external side effects. Run
+  `/audit current accessibility` when the work added or changed markup, styles,
+  or design tokens - that lens is where contrast and semantics get measured.
 - **Try guide** - run `/try` when the change affects UI, navigation, copy, a
   public API or CLI, output, or another workflow a person uses directly.
 
@@ -53,6 +60,11 @@ Before logging or committing, run a short safety pass and report blockers only:
   declared test command and the change touched logic
 - every gate named above that applied to this work has evidence, and there is a
   clear manual try path
+- when the work rendered or changed user interface, the spec's accessibility
+  requirements **and** the project-wide standard in `docs/project-brief.md` both
+  have evidence. That file forbids treating a component as complete until both
+  are satisfied, so an untested accessibility requirement is a blocker here, not
+  a note for later
 - when the project declares a test runner, logic changes have passing focused
   tests; when it does not, say so rather than implying the logic is tested
 - if workflow files changed, they were edited in the tracked `.agents/` tree

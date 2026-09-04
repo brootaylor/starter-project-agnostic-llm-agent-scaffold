@@ -310,8 +310,9 @@ use, such as `.agents/cursor/`, along with its pointer.
 So: Codex, Cursor, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode
 can also reuse `.claude/` when Claude Code is selected. A project using no
 Claude Code can delete the `CLAUDE.md` pointer, `.claude/`, and
-`.agents/claude/`, but should keep `AGENTS.md`, which every other tool reads. Do not duplicate the same skills
-under `.opencode/skills/`; OpenCode already discovers the compatible trees.
+`.agents/claude/`, but should keep `AGENTS.md`, which every other tool reads.
+Do not duplicate the same skills under `.opencode/skills/`; OpenCode already
+discovers the compatible trees.
 
 When changing shared workflow behavior, edit
 `.agents/skills/<skill>/SKILL.md` - the one tracked copy. Every tool reaches it
@@ -383,8 +384,9 @@ push, or publish unless the user gives a separate yes in the current chat.
 ## Automatic verification
 
 Automatic GitHub checks are a separate explicit setup. Running `/ci` inspects the
-real project and defines one `Verify` command from checks that already exist. Use this order when available: typecheck, tests, then build. Never
-invent a test runner or another check just to fill the command.
+real project and defines one `Verify` command from checks that already exist.
+Use this order when available: typecheck, tests, then build. Never invent a test
+runner or another check just to fill the command.
 
 For JavaScript and TypeScript projects, prefer a package script such as `verify`
 and use the detected package manager. For other stacks, use the native task

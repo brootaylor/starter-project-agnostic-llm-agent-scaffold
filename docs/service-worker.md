@@ -1,5 +1,10 @@
 # Service Worker
 
+> **This is a configuration reference, not a spec.** It uses user stories and
+> acceptance criteria to pin down what the configuration has to achieve, but it
+> carries no `**Status:**` line and is never promoted to `Ready`. What turns it
+> on is its `[active]` mark in `docs/project-brief.md` → Stack.
+
 ---
 
 ## Overview

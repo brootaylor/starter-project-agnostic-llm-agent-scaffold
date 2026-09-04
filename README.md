@@ -54,7 +54,7 @@ Both paths follow the same workflow and use the same specs.
 - **Spec-first workflow** — specs are written before any code is produced; the spec is the source of truth for humans and agents alike
 - **Tech-agnostic** — currently supports 'Vanilla', Astro, Eleventy, React, and Svelte. More tech stack options can be added if needed.
 - **Agent-agnostic** — currently includes config for Claude Code, Cursor, and GitHub Copilot, with a clear pattern for adding others
-- **A build loop with review gates** — 17 shared workflow skills take a `Ready` spec through work order, implementation, verification, audit, and completion, stopping for human review at each step. They're plain markdown shared by every agent, not one tool's feature
+- **A build loop with review gates** — 18 shared workflow skills take a `Ready` spec through work order, implementation, verification, audit, and completion, stopping for human review at each step. They're plain markdown shared by every agent, not one tool's feature
 - **Modern platform guide** — a reference for humans and agents for which web platform APIs and features to use, and when a fallback is acceptable.
 - **Optional: service worker** — offline and caching support with a strategy selector and framework-specific guidance
 - **Optional: Storybook** — component development and documentation environment for React, Svelte, and plain JavaScript (aka, 'Vanilla')
@@ -142,7 +142,7 @@ If you're building with an agent, the workflow is a set of shared skills in `.ag
 | `/complete` | Write `Complete` back to the spec, archive the work, make one commit |
 | `/status` | See the queue, what's in flight, and the exact next action |
 
-Others sit outside the loop — `/discovery`, `/fix`, `/rollback`, `/debug`, `/prototype`, `/tests`, `/ci`, and `/release` — plus `/autopilot`, which carries a settled spec the whole way instead of stopping at each gate.
+Others sit outside the loop — `/discovery`, `/survey`, `/fix`, `/rollback`, `/debug`, `/prototype`, `/tests`, `/ci`, and `/release` — plus `/autopilot`, which carries a settled spec the whole way instead of stopping at each gate.
 
 > [!IMPORTANT]
 > Two rules hold however a skill is invoked: **no skill promotes a spec to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.
@@ -160,6 +160,7 @@ my-project/
 │   ├── service-worker.md
 │   ├── storybook.md
 │   ├── security.md
+│   ├── adopting-an-existing-project.md     ← setup route for an existing codebase
 │   ├── features/                           ← user-facing feature specs
 │   │   └── _feature-template.md
 │   └── specs/                              ← technical specs for components, pages, layouts
