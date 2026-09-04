@@ -31,17 +31,17 @@ most important content or actions.
 Layouts, components, utilities, or design token categories this page relies on.
 List anything an agent would need to locate or implement before building this page.
 
-| Type | Name | Location |
-|------|------|----------|
-| Layout | `MainLayout` | `src/layouts/MainLayout/` — spec at `docs/specs/layouts/main-layout.spec.md` *(Draft)* |
-| Component | `SiteNav` | `src/components/SiteNav/` — spec at `docs/specs/components/site-nav.spec.md` *(spec not yet written)* |
-| Component | `Hero` | `src/components/Hero/` — spec at `docs/specs/components/hero.spec.md` *(spec not yet written)* |
-| Component | `ComponentGrid` | `src/components/ComponentGrid/` — spec at `docs/specs/components/component-grid.spec.md` *(spec not yet written)* |
-| Component | `SiteFooter` | `src/components/SiteFooter/` — spec at `docs/specs/components/site-footer.spec.md` *(spec not yet written)* |
-| Tokens | Colour | `docs/design-tokens.md#colour` |
-| Tokens | Spacing | `docs/design-tokens.md#spacing` |
+| Type | Name | Location | Status |
+|------|------|----------|--------|
+| Layout | `MainLayout` | `src/layouts/MainLayout/` — spec at `docs/specs/layouts/main-layout.spec.md` | Draft — must be `Ready` first |
+| Component | `SiteNav` | `src/components/SiteNav/` — spec at `docs/specs/components/site-nav.spec.md` | Spec not yet written |
+| Component | `Hero` | `src/components/Hero/` — spec at `docs/specs/components/hero.spec.md` | Spec not yet written |
+| Component | `ComponentGrid` | `src/components/ComponentGrid/` — spec at `docs/specs/components/component-grid.spec.md` | Spec not yet written |
+| Component | `SiteFooter` | `src/components/SiteFooter/` — spec at `docs/specs/components/site-footer.spec.md` | Spec not yet written |
+| Tokens | Colour | `docs/design-tokens.md#colour` | n/a |
+| Tokens | Spacing | `docs/design-tokens.md#spacing` | n/a |
 
-> **Blocked** — all four component specs must be written and set to `Ready` before this page can be implemented.
+> **Blocked** — the layout spec and all four component specs must reach `Ready` before this page can be implemented.
 
 ---
 
@@ -201,5 +201,6 @@ Complete every item before changing the status to `Ready`.
 - [x] Accessibility requirements are specific, not generic
 - [x] At least one test case exists per behaviour and state
 - [x] Out of scope section is filled in
+- [ ] Every dependency that has a spec of its own has reached `Ready` — `MainLayout` is `Draft`, four component specs are unwritten
 - [x] Example usage matches the active framework
 - [ ] Notes for "Ai" implementation are complete — blocked until component specs are written

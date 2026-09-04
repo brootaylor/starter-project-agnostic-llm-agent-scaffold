@@ -23,12 +23,12 @@ concern themselves with their own content.
 Components, utilities, assets, or design token categories this layout relies on.
 List anything an agent would need to locate or implement before building this layout.
 
-| Type | Name | Location |
-|------|------|----------|
-| Component | `ThemeToggle` | `src/components/ThemeToggle/` — spec at `docs/specs/components/theme-toggle.spec.md` *(Draft — must be Ready before this layout can be implemented)* |
-| Tokens | Colour | `docs/design-tokens.md#colour` |
-| Tokens | Spacing | `docs/design-tokens.md#spacing` |
-| Tokens | Typography | `docs/design-tokens.md#typography` |
+| Type | Name | Location | Status |
+|------|------|----------|--------|
+| Component | `ThemeToggle` | `src/components/ThemeToggle/` — spec at `docs/specs/components/theme-toggle.spec.md` | Draft — must be `Ready` first |
+| Tokens | Colour | `docs/design-tokens.md#colour` | n/a |
+| Tokens | Spacing | `docs/design-tokens.md#spacing` | n/a |
+| Tokens | Typography | `docs/design-tokens.md#typography` | n/a |
 
 ---
 
@@ -222,5 +222,6 @@ Complete every item before changing the status to `Ready`.
 - [x] Accessibility requirements are specific, not generic
 - [x] At least one test case exists per behaviour and state
 - [x] Out of scope section is filled in
+- [ ] Every dependency that has a spec of its own has reached `Ready` — `ThemeToggle` is still `Draft`
 - [x] Example usage matches the active framework
 - [x] Notes for "Ai" implementation are complete

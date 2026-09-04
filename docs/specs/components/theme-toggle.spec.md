@@ -23,12 +23,12 @@ activated. Used in the main navigation so it is accessible from every page.
 Components, utilities, assets, or design token categories this component relies on.
 List anything an agent would need to locate or implement before building this component.
 
-| Type | Name | Location |
-|------|------|----------|
-| Asset | `icon-sun.svg` | `src/assets/icons/icon-sun.svg` |
-| Asset | `icon-moon.svg` | `src/assets/icons/icon-moon.svg` |
-| Tokens | Colour | `docs/design-tokens.md#colour` |
-| Tokens | Spacing | `docs/design-tokens.md#spacing` |
+| Type | Name | Location | Status |
+|------|------|----------|--------|
+| Asset | `icon-sun.svg` | `src/assets/icons/icon-sun.svg` | n/a |
+| Asset | `icon-moon.svg` | `src/assets/icons/icon-moon.svg` | n/a |
+| Tokens | Colour | `docs/design-tokens.md#colour` | n/a |
+| Tokens | Spacing | `docs/design-tokens.md#spacing` | n/a |
 
 > The icon assets above are placeholders — replace with the actual filenames once chosen. Both must be inlined, not referenced via `<img>`.
 
@@ -222,6 +222,7 @@ Complete every item before changing the status to `Ready`.
 - [x] Accessibility requirements are specific, not generic
 - [x] At least one test case exists per behaviour and state
 - [x] Out of scope section is filled in
+- [x] Every dependency that has a spec of its own has reached `Ready` — none of these have specs
 - [x] Example usage matches the active framework
 - [x] Notes for "Ai" implementation are complete
 

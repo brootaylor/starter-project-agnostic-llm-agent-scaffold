@@ -39,8 +39,11 @@ state.
    `docs/specs/_component-template.spec.md`. Each carries a `**Status:** Draft`
    line of its own, so counting them reports phantom work and names a template as
    something a human has to promote.
-   Call out a `Ready` feature spec blocked by a `Draft` dependency, since
-   `/feature` will refuse it.
+   Call out any `Ready` spec blocked by a `Draft` dependency, since `/feature`
+   will refuse it. Check every spec type, not just features - a page can be
+   blocked by a `Draft` layout, and a component by another `Draft` component.
+   Dependencies come from the spec's own table: **Components required** in a
+   feature spec, **Dependencies** in a component, page, or layout spec.
 2. **Current work** - `context/current-feature.md`. Is something in
    progress, or is it the reset stub? If a work order is present, report its type
    and name, the source spec named on its `Spec:` line, which build steps are

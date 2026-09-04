@@ -42,13 +42,19 @@ _Replace this with your component's purpose._
 Components, utilities, assets, or design token categories this component relies on.
 List anything an agent would need to locate or implement before building this component.
 
-| Type | Name | Location |
-|------|------|----------|
-| Component | `[ComponentName]` | `src/components/[ComponentName]/` |
-| Utility | `[helperName]` | `src/lib/[helperName].js` |
-| Asset | `[filename]` | `src/assets/[filename]` |
-| Tokens | Colour | `docs/design-tokens.md#colour` |
-| Tokens | Spacing | `docs/design-tokens.md#spacing` |
+Every dependency that has a spec of its own must reach `Ready` before this
+component can be implemented — a contract cannot be built on an unfinished
+contract. Record each one's status in the Status column so the blocker is visible
+without opening the other file. Dependencies with no spec (assets, tokens,
+third-party utilities) take `n/a`.
+
+| Type | Name | Location | Status |
+|------|------|----------|--------|
+| Component | `[ComponentName]` | `src/components/[ComponentName]/` — spec at `docs/specs/components/[name].spec.md` | Draft — must be `Ready` first |
+| Utility | `[helperName]` | `src/lib/[helperName].js` | n/a |
+| Asset | `[filename]` | `src/assets/[filename]` | n/a |
+| Tokens | Colour | `docs/design-tokens.md#colour` | n/a |
+| Tokens | Spacing | `docs/design-tokens.md#spacing` | n/a |
 
 > _Remove any rows that don't apply. Add rows as needed._
 
@@ -243,5 +249,6 @@ Complete every item before changing the status to `Ready`.
 - [ ] Accessibility requirements are specific, not generic
 - [ ] At least one test case exists per behaviour and state
 - [ ] Out of scope section is filled in
+- [ ] Every dependency that has a spec of its own has reached `Ready`
 - [ ] Example usage matches the active framework
 - [ ] Notes for "Ai" implementation are complete

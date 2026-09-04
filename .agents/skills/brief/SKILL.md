@@ -54,11 +54,12 @@ so plainly and point at writing one rather than inventing a briefing.
 Gather these, then synthesize. Don't dump file contents; explain.
 
 1. **The target spec** - in full: its status, interface, behaviour, states,
-   accessibility requirements, and test cases. For a feature spec, the components
-   it lists as dependencies.
+   accessibility requirements, and test cases, plus the specs it lists as
+   dependencies.
 2. **Dependency statuses** - the `**Status:**` line of every spec this one depends
-   on. A `Ready` feature resting on a `Draft` component is the single most useful
-   thing this briefing can surface.
+   on, whatever its type. A `Ready` spec resting on a `Draft` one - a feature on a
+   component, a page on a layout, a component on another component - is the single
+   most useful thing this briefing can surface.
 3. **Project context** - `docs/project-brief.md` for stack, conventions, browser
    targets, and accessibility standard; the parent feature spec in
    `docs/features/` for product context when the target is a component spec.
@@ -92,8 +93,9 @@ A short, scannable briefing, not a wall of text. Aim for something like:
     this one, then /feature.
 
 Note what the shape of that briefing is doing: it traces every line back to a
-file. The dependency list comes from the spec's own Components required table,
-not from guessing which components a feature sounds like it needs, and the
+file. The dependency list comes from the spec's own table - **Components
+required** in a feature spec, **Dependencies** in a component, page, or layout
+spec - not from guessing what the spec sounds like it needs, and the
 "Missing before Ready" line quotes the spec's checklist rather than paraphrasing
 what looks unfinished.
 

@@ -56,8 +56,16 @@ This is not advisory. It is the project's core rule, stated in
 | `Ready` | Proceed. |
 | `Complete` | **Stop.** Do not re-implement or overwrite. Tell the user the human must update the spec and reset it to `Ready` first. |
 
-If a `Ready` feature spec depends on a component spec that is still `Draft`, stop
-and say which one blocks it. A feature cannot be built on an unfinished contract.
+If the target spec depends on another spec that is still `Draft`, stop and say
+which one blocks it. This applies to every spec type, not just features: a page
+resting on a `Draft` layout, or a component resting on a `Draft` component, is as
+blocked as a feature resting on a `Draft` component. Nothing can be built on an
+unfinished contract.
+
+Read the dependencies from the target's own table — **Components required** in a
+feature spec, **Dependencies** in a component, page, or layout spec — and check
+the `**Status:**` line of each spec named there. Rows with no spec of their own
+(assets, tokens, third-party utilities) don't gate anything.
 
 If no spec is `Ready` anywhere, say so and point at the `Draft` specs that are
 closest to done, rather than inventing work.
@@ -109,7 +117,8 @@ roadmap line ever would. Then pull surrounding context:
 - the parent feature spec in `docs/features/`, when the target is a component,
   page, or layout spec - for product context, and for the Implementation notes
   table that fixes any value the components must agree on
-- any component specs the feature spec names as dependencies
+- any specs the target names as dependencies - the **Components required** table
+  in a feature spec, the **Dependencies** table in a component, page, or layout spec
 
 Decide how big the work is:
 
