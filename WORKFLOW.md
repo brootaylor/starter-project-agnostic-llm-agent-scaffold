@@ -25,7 +25,10 @@ SPEC  ·  per feature, and always human work
       ├─  Step 5   component specs ····  docs/specs/**/<name>.spec.md
       └─  Step 6   design tokens ······  docs/design-tokens.md
       │
-      │           every one of them written as   Status: Draft
+      │           Steps 4 and 5 are written as   Status: Draft
+      │           Step 6 has no status and skips the gate below —
+      │           it is not a spec, it just has to be done before
+      │           any styles are written
       ▼
   ┌────────────────────────────────────────────────────────────┐
   │ HUMAN GATE     you promote   Draft ──▶ Ready               │

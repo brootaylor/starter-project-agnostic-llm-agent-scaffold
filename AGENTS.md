@@ -20,13 +20,24 @@ accessibility, and test cases before any implementation exists, so the spec is
 the contract a human or an agent is held to. Tool choice comes last. The stack
 is selected in `docs/project-brief.md`, not assumed here.
 
-The build loop is a workflow layer, not an app skeleton. Scaffold the app first
-in an empty folder (create-next-app, Vite, Eleventy, Astro, and so on), then work
-through `WORKFLOW.md`. Never run a framework scaffolder inside a directory that
-already holds these workflow files; it fails because the directory isn't empty.
+The build loop is a workflow layer, not an app skeleton. The workflow files come
+first: the scaffold is cloned into an empty folder, and the stack is then set up
+*inside* that clone at `WORKFLOW.md` Step 3 - `package.json` populated and the
+framework's config files written from the Stack selections in
+`docs/project-brief.md`.
 
-For a codebase that already exists, the install runs the other way round and the
-early steps differ: see `docs/adopting-an-existing-project.md`.
+> [!IMPORTANT]
+> Do not run a framework scaffolder (`create-next-app`, `npm create vite`,
+> `npm create astro`, and so on) inside the clone. Those tools expect an empty
+> directory, and this one already holds `package.json`, `README.md`,
+> `.gitignore`, and `src/index.html` - every one a name they write. Depending on
+> the tool you either get a refusal or a silent overwrite of the scaffold's own
+> files. Step 3 writes that configuration directly instead, which is why it is a
+> step rather than a command.
+
+For a codebase that already exists, the order is reversed - the code is there
+first and the scaffold merges in on top - and the early steps differ: see
+`docs/adopting-an-existing-project.md`.
 
 The workflow is defined by the local skills and context files below.
 

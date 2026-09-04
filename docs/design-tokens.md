@@ -1,5 +1,10 @@
 # Design Tokens
 
+> **This is a design reference, not a spec.** It defines the values every
+> component references, but it carries no `**Status:**` line and is never
+> promoted to `Ready`. Nothing gates it: it simply has to be filled in before any
+> styles are written (`WORKFLOW.md` Step 6).
+
 Design tokens are the named values that define the visual language of this project.
 They are defined once and referenced everywhere — in components, pages, and layouts.
 

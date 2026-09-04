@@ -6,7 +6,7 @@ Bringing a codebase that already exists under the build loop — a prototype tha
 
 This page is the sequence, not the execution. Each step names the skill that carries it — `/survey`, `/audit`, `/tests`, `/fix` — and holds what no individual skill can know: the order they run in, why one must precede another, and which route a given problem takes. It stands to those skills as `WORKFLOW.md` stands to `/feature` and `/implement`.
 
-`WORKFLOW.md` assumes an empty folder: scaffold the app, then add the workflow files on top. This path is the inverse, and the difference is not only the install. A greenfield project writes a spec and then builds to it. Here the code came first, so the early work is finding out what is there, establishing a standard to measure it against, and building a safety net before changing anything.
+`WORKFLOW.md` assumes an empty folder: the scaffold is cloned into it first, and the app is then built inside it. This path is the inverse — the code is already there and the scaffold merges in on top — and the difference is not only the install. A greenfield project writes a spec and then builds to it. Here the code came first, so the early work is finding out what is there, establishing a standard to measure it against, and building a safety net before changing anything.
 
 ---
 
@@ -305,7 +305,7 @@ Findings the client decides not to fix are `accepted`, with their reason recorde
 
 So the usual answer to "there are no specs" is: correct, and none are needed yet.
 
-When you do write one, follow `WORKFLOW.md` Steps 4 to 6 as written: a feature spec in `docs/features/`, component specs in `docs/specs/`, design tokens if the visual layer is in scope. Promote to `Ready` yourself, then run the normal loop.
+When you do write one, follow `WORKFLOW.md` Steps 4 to 6 as written: a feature spec in `docs/features/`, component specs in `docs/specs/`, and design tokens if the visual layer is in scope. Promote the specs to `Ready` yourself — the tokens document carries no status and is never promoted — then run the normal loop.
 
 ### Where the intent comes from
 

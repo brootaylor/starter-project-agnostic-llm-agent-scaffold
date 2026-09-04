@@ -112,6 +112,12 @@ The core framework for this project. Pick one.
 
 ### E2E testing
 
+Optional. Defaults to `None`. **Unlike every other category here, nothing in the
+scaffold wires this one up** - `/tests` sets up unit testing only, and there is
+no configuration document for it. Marking Playwright active records the intent
+and nothing more; installing and configuring it is yours to do by hand. `/check`
+will use it if it finds it already installed.
+
 | Tool | Active |
 |------|--------|
 | Playwright | |
@@ -469,7 +475,7 @@ They apply regardless of which agent is used.
 - **Design tokens before styles** — read `docs/design-tokens.md` before writing any CSS. If the file is empty or incomplete, stop and ask the user to fill it in. The one exception is a work order whose first build step ports an approved `prototypes/theme.css` into it — that step is how the file gets filled, and it is reviewed like any other
 - **Read security config before generating HTML or deployment config** — read `docs/security.md` before generating `index.html`, `_headers`, `vercel.json`, or any middleware file. The header values and CSP directives defined there are the source of truth
 - **Modern platform before implementation** — read `docs/modern-platform-guide.md` before writing any HTML, CSS, or JavaScript. Use native platform APIs and features unless that file explicitly permits a fallback.
-- **Tests before implementation** — write tests first, then implement until they pass
+- **Tests before implementation, when the project has a test runner** — a real `test` command under Commands in `AGENTS.md` is the switch. While one is declared, write the test first and implement until it passes. Unit testing ships as `None`, so on a fresh clone there is nothing to write tests with: point the human at `/tests` rather than installing a runner yourself or claiming a step was tested
 - **One spec at a time** — unless explicitly asked to scaffold multiple specs at once, implement one spec per session and confirm before moving to the next
 - **Confirm the stack before setup** — the `[active]` marks in the Stack section ship pre-filled with the scaffold's default, and nothing distinguishes a default left untouched from a decision the human made. Before running initial project setup, or generating any config file or dependency list from those marks, count the marks in every category, then state the active selections back to the human and confirm they are this project's actual choices. **A category with two or more `[active]` marks, or with none, is unresolved — stop and ask which one applies rather than picking one.** Two marks usually means a shipped default was never cleared, so do not assume the newer or lower entry is the intended one
 - **Read compatibility notes before setup** — before generating any config file, check the Stack compatibility notes section above for the active stack combination and follow any instructions there

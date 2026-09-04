@@ -163,18 +163,23 @@ my-project/
 │   ├── adopting-an-existing-project.md     ← setup route for an existing codebase
 │   ├── features/                           ← user-facing feature specs
 │   │   └── _feature-template.md
-│   └── specs/                              ← technical specs for components, pages, layouts
-│       ├── _component-template.spec.md
-│       ├── components/
-│       ├── pages/
-│       └── layouts/
+│   ├── specs/                              ← technical specs for components, pages, layouts
+│   │   ├── _component-template.spec.md
+│   │   ├── components/
+│   │   ├── pages/
+│   │   ├── layouts/
+│   │   └── hooks/                          ← reusable-logic specs, only if you need them
+│   └── reference/                          ← reference images a spec points at
 ├── src/
 │   ├── components/
 │   ├── pages/
 │   ├── layouts/
 │   ├── styles/
 │   ├── assets/
-│   └── scripts/
+│   ├── scripts/
+│   ├── lib/                                ← shared utilities
+│   └── types/                              ← global types (TypeScript only)
+├── prototypes/                             ← throwaway mockups from /prototype, deleted by /complete
 ├── context/                                ← the build loop's working state
 │   ├── sessions.md                         ← where things stand, rewritten each session (gitignored)
 │   ├── decisions.md                        ← why choices were made, append-only (gitignored)
