@@ -34,13 +34,20 @@ See `docs/features/dark-mode.md` for theming implementation details.
 
 Tokens live in `src/styles/tokens.{css|scss}` and are imported by
 `src/styles/main.{css|scss}`, which is loaded once at the top level of the project.
-Neither file is pre-created in the scaffold — they are generated at setup time based
-on the active Styles selection in `docs/project-brief.md`.
+Neither file is pre-created in the scaffold. They are created at **Step 6 of
+`WORKFLOW.md`**, not during initial project setup — this document has to be filled
+in first, since its values are what the files implement. The file extension follows
+the active Styles selection in `docs/project-brief.md`.
 
-**If using an agent:** the files will be created during initial project setup.
+**If using an agent:** ask it to read this document and create the token and main
+style files. It will stop and ask you to fill this document in if it is still empty.
 
 **If building by hand:** create both files before writing any styles. The token file
 should follow the structure in this document.
+
+Either way, the files must exist before an agent writes any styles — Step 6 can
+happen any time before that, and can be re-run as the project's visual language
+evolves.
 
 Reference tokens in any stylesheet like this:
 

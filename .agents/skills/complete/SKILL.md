@@ -104,6 +104,10 @@ spec in `docs/features/` or `docs/specs/`, then:
 
 - Set `**Status:**` to `Complete` (or back to `Ready` for a rollback).
 - Set `**Last updated:**` to today's date, in the format the file already uses.
+  On a spec's first completion the line is still the template's placeholder
+  comment, so there is no format to match — write ISO 8601 (`YYYY-MM-DD`),
+  which is what that comment shows and what every spec in the project uses.
+  Replace the whole comment; don't leave it beside the date.
 
 Change nothing else. Not the interface, not the behaviour, not the test cases,
 not a typo you noticed. The spec's body is a human-owned contract, and an agent
