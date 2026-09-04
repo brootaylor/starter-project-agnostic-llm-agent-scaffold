@@ -25,6 +25,9 @@ in an empty folder (create-next-app, Vite, Eleventy, Astro, and so on), then wor
 through `WORKFLOW.md`. Never run a framework scaffolder inside a directory that
 already holds these workflow files; it fails because the directory isn't empty.
 
+For a codebase that already exists, the install runs the other way round and the
+early steps differ: see `docs/adopting-an-existing-project.md`.
+
 The workflow is defined by the local skills and context files below.
 
 ## Read these for full context
@@ -81,6 +84,8 @@ The project's own documentation set is authoritative for everything else:
 - `docs/service-worker.md` and `docs/storybook.md` - optional features, only when
   marked active in `docs/project-brief.md`
 - `WORKFLOW.md` - the ten-step human guide from setup through to deployment
+- `docs/adopting-an-existing-project.md` - the setup half of that guide for a
+  project that already has code; it rejoins `WORKFLOW.md` at Step 4
 
 ## Specs are contracts
 
@@ -334,6 +339,7 @@ Outside the loop:
 | Skill | What it does |
 |-------|--------------|
 | `discovery` | Optional guided interview that fills in `docs/project-brief.md` and drafts the first feature specs - the conversational form of Steps 2 and 4 |
+| `survey` | Reads a codebase that already exists and drafts `docs/project-brief.md` from the evidence in it, marking what is proven, what is inferred, and what cannot be determined from code. `/discovery`'s counterpart for a project that was not started here |
 | `fix` | Documents an ad-hoc bug or change with no spec of its own, then runs it through the same loop |
 | `rollback` | Plans a safe reversal of a completed feature from its archive and commit, then hands the work order to `implement` |
 | `debug` | Reproduces and isolates a failure without editing code, then hands the evidence to `fix` or `implement` |

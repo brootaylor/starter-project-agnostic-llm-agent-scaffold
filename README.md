@@ -14,7 +14,16 @@ git clone https://github.com/brootaylor/tech-agnostic-spec-first-dev-scaffold.gi
 cd my-project
 ```
 
-Then follow [WORKFLOW.md](./WORKFLOW.md) for the full setup guide. If you have a GitHub account, use the **"Use this template"** button to start from a clean copy of the repo.
+Then take whichever route matches what you have:
+
+| You have | Start here |
+|----------|-----------|
+| An empty folder | [WORKFLOW.md](./WORKFLOW.md) — the ten-step guide |
+| A codebase that already exists | [docs/adopting-an-existing-project.md](./docs/adopting-an-existing-project.md) — merge the scaffold in, audit it, then rejoin WORKFLOW.md at Step 4 |
+
+Only the setup differs. Both routes reach the same specs, the same build loop, and the same gates.
+
+If you have a GitHub account, use the **"Use this template"** button to start from a clean copy of the repo.
 
 ---
 
