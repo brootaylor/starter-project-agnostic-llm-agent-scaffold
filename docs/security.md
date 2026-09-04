@@ -229,22 +229,41 @@ automatically on every file save and in CI.
 npm install --save-dev eslint eslint-plugin-security eslint-plugin-no-secrets
 ```
 
-**`.eslintrc` — minimum config:**
+**`eslint.config.mjs` — minimum config:**
 
-```json
-{
-  "plugins": ["security", "no-secrets"],
-  "extends": ["plugin:security/recommended"],
-  "rules": {
-    "no-secrets/no-secrets": "error",
-    "no-eval": "error"
-  }
-}
+```js
+import pluginSecurity from 'eslint-plugin-security';
+import noSecrets from 'eslint-plugin-no-secrets';
+
+export default [
+  pluginSecurity.configs.recommended,
+  {
+    files: ['**/*.js'],
+    plugins: { 'no-secrets': noSecrets },
+    rules: {
+      'no-secrets/no-secrets': 'error',
+      'no-eval': 'error',
+    },
+  },
+];
 ```
 
-> Add framework-specific extends (e.g. `plugin:svelte/recommended`,
-> `plugin:react/recommended`) below the security extend. The security rules
-> apply regardless of framework and must always be present.
+> [!IMPORTANT]
+> **This must be flat config, and the file must not be named `.eslintrc`.**
+> [ESLint v10 removed eslintrc support outright](https://eslint.org/docs/latest/use/migrate-to-10.0.0) —
+> "the old configuration format is no longer supported", and `ESLINT_USE_FLAT_CONFIG`
+> is no longer honoured. `npm install --save-dev eslint` installs v10, so an
+> `.eslintrc` file is simply not read: ESLint reports no config rather than
+> failing loudly, and the security rules never run. The eslintrc config name also
+> changed — `plugin:security/recommended` is now
+> `plugin:security/recommended-legacy` — so an old config that *is* read still
+> errors on the extend. The `.mjs` extension avoids depending on whether
+> `package.json` sets `"type": "module"`. ESLint v10 requires Node.js v20.19+;
+> pin Node in `.nvmrc` accordingly.
+
+> Add framework-specific configs (e.g. `eslint-plugin-svelte`,
+> `eslint-plugin-react`) as further array entries after the security config. The
+> security rules apply regardless of framework and must always be present.
 
 Add a lint script to `package.json`:
 
@@ -265,7 +284,7 @@ and helps the agent avoid building more than is required.
 - Server-side input validation and sanitisation
 - CORS configuration (defined separately where a backend exists)
 - Dependency vulnerability scanning (use `npm audit` or a dedicated tool)
-- `Strict-Transport-Security` — set automatically by most deployment platforms (Netlify, Vercel, Cloudflare). Do not add it to project config files
+- `Strict-Transport-Security` — automatic on Netlify and Vercel, but **not on Cloudflare**; see the note under Notes for "Ai" agents before deciding whether to set it
 - Rate limiting and DDoS protection — handled at the infrastructure layer
 
 ---
@@ -388,8 +407,13 @@ export function handle({ event, resolve }) {
 For Astro projects in static output mode (`output: 'static'`), use the deployment
 platform approach above.
 
-For Astro projects in SSR mode (`output: 'server'` or `'hybrid'`), set headers
-in middleware:
+For Astro projects in SSR mode (`output: 'server'`), set headers in middleware:
+
+> `output: 'hybrid'` was [removed in Astro 5](https://docs.astro.build/en/guides/upgrade-to/v5/)
+> and merged into `'static'`, which now covers the old hybrid behaviour: routes
+> opt out of prerendering individually with `export const prerender = false`. If a
+> static-output project has any such route, it is server-rendered and needs this
+> middleware too.
 
 **Create `src/middleware.js`:**
 
@@ -434,6 +458,17 @@ do not add a `_headers` file and expect it to work with a custom server.
 - When adding security headers, apply them to all responses (`/*` or equivalent) unless a specific path restriction is documented in the Exceptions table
 - Never add `'unsafe-eval'` or `'unsafe-inline'` to a CSP directive without first checking the Exceptions table and confirming it is documented there
 - If a component spec lists an external resource in its Dependencies table, update the Exceptions table in this file before marking the component `Complete`
-- Do not add `Strict-Transport-Security` to any project config file — it is handled by the deployment platform
+- **`Strict-Transport-Security` depends on the platform — do not apply one blanket rule.**
+  [Netlify](https://docs.netlify.com/manage/domains/secure-domains-with-https/https-ssl/) sends
+  `max-age=31536000` by default, and [Vercel](https://vercel.com/docs/cdn-security/encryption)
+  sends `max-age=63072000; includeSubDomains; preload` on `.vercel.app` domains
+  and HSTS on custom domains, so on those two do not add it to project config —
+  you would only duplicate the header. **Cloudflare does not**:
+  [HSTS is off until you explicitly enable it](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)
+  under SSL/TLS → Edge Certificates. A Cloudflare Pages site following a blanket
+  "never set it" rule ships with no HSTS at all, and nothing reports that. Enable
+  it in the dashboard there rather than in `_headers`, so the header is not sent
+  twice. Adding `includeSubDomains` or `preload` on a custom domain needs
+  configuration on every platform
 - For static output frameworks (Vanilla, React, Eleventy, Astro static mode), prefer the deployment platform approach over a meta tag — response headers cannot be overridden by the page, whereas a `<meta http-equiv>` CSP tag can be stripped by an injected script
 - If using a `<meta http-equiv="Content-Security-Policy">` tag as a fallback (e.g. no deployment platform config is possible), note that `frame-ancestors` is not supported in meta tags — it must be set as a response header to be effective

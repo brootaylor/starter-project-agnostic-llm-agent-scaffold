@@ -125,15 +125,14 @@ The spec and feature files are illustrative examples — replace or modify them 
 
 Make sure your agent has what it needs:
 
-| Agent | Prerequisites |
-|-------|--------------|
-| Claude Code | Node.js, plus either a [Claude](https://claude.ai) Pro or Max subscription to sign in with, or an [Anthropic API key](https://console.anthropic.com) |
-| Cursor | The [Cursor app](https://cursor.sh) |
-| GitHub Copilot | A GitHub account with [Copilot access](https://github.com/features/copilot) + the relevant IDE extension |
+| Agent | Prerequisites | Setup |
+|-------|--------------|-------|
+| Codex, Cursor, GitHub Copilot, Gemini CLI, Jules, Aider, Zed, Windsurf, Devin, OpenCode | Whatever the tool itself needs to run | **None.** They read `AGENTS.md` from the project root, which points them at the workflow skills — you invoke those by name (Step 7) |
+| Claude Code | Node.js, plus either a [Claude](https://claude.ai) Pro or Max subscription to sign in with, or an [Anthropic API key](https://console.anthropic.com) | The two links below |
 
-Every agent is hardwired to look for its configuration file at one fixed filename — `CLAUDE.md` in the project root for Claude Code, `.cursor/rules` for Cursor, `.github/copilot-instructions.md` for Copilot — and most give you no way to change it.
+`AGENTS.md` is an open convention that most coding agents now read directly from the project root, so for them there is nothing to set up at all. Claude Code is the exception: [it reads `CLAUDE.md`, not `AGENTS.md`](https://code.claude.com/docs/en/memory), and gives you no way to change that filename. The scaffold's `CLAUDE.md` imports `AGENTS.md`, which is the approach Anthropic's own documentation recommends, so Claude Code ends up reading the same instructions as everything else — it just needs a pointer to reach them.
 
-This scaffold keeps the real configuration files in `.agents/` instead, so cloning it never forces one developer's tool on everybody else. Your one setup task is to create a link at the filename your agent expects, pointing back into `.agents/`. For Claude Code:
+This scaffold keeps that configuration in `.agents/` instead, so cloning it never forces one developer's tool on everybody else. If you're using Claude Code, your one setup task is to create links at the filenames it expects, pointing back into `.agents/`:
 
 ```bash
 ln -s .agents/claude/CLAUDE.md CLAUDE.md
@@ -146,9 +145,9 @@ mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 > - `.claude/` is gitignored, so it does not exist in a fresh clone. Without the `mkdir -p`, that second command fails with `No such file or directory` and none of the workflow skills are available to you.
 > - **Do not run Claude Code's built-in `/init`.** It generates a `CLAUDE.md` by analysing the codebase, but here that filename is a symlink into `.agents/`. Running it either writes straight through the link and overwrites the tracked original, or replaces your pointer with a regular file that shadows it and drifts from it silently. If you have already run it: delete the root `CLAUDE.md`, then run `git status`. If it reports `.agents/claude/CLAUDE.md` as modified, the original was overwritten — restore it with `git restore .agents/claude/CLAUDE.md`. Then recreate the link. Deleting the root file alone does not undo the overwrite: the link will resolve happily to the generated content, so check `git status` before assuming you have recovered.
 
-Every one of those links is gitignored, so your choice of agent never travels with the repository. On Windows, where `ln -s` needs Developer Mode or an elevated terminal, copy the file instead and keep the two in sync by hand.
+Both links are gitignored, so your choice of agent never travels with the repository. On Windows, where `ln -s` needs Developer Mode or an elevated terminal, copy the files instead and keep them in sync by hand.
 
-See `AGENTS.md` for the full table of filenames each agent expects, and the notes on adding an agent that isn't listed here.
+See `AGENTS.md` for the pointer table and the notes on adding an agent that expects a config file of its own.
 
 ---
 
@@ -286,7 +285,7 @@ If the agent stops to ask a question, the spec is likely ambiguous in that area.
 
 > **`/autopilot`** runs that whole pass — work order, build steps, verification, gates, checkpoint commits — without pausing at each review point, then stops with a review packet for you. It never runs `/complete`, pushes, or deploys. It's opt-in only: the step-at-a-time path above is the default, because the review between steps is the point of a spec-first loop.
 
-> These commands live in `.agents/skills/` and work the same in Claude Code, Cursor, and Copilot. Prefer them to freehand prompts — they encode the review gates.
+> These commands live in `.agents/skills/` and work the same in any agent. Prefer them to freehand prompts — they encode the review gates.
 
 ---
 

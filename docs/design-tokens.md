@@ -292,9 +292,29 @@ rather than raw values, so motion can be tuned globally.
 | `--easing-out` | `cubic-bezier(0, 0, 0.2, 1)` | Elements entering the screen |
 | `--easing-in` | `cubic-bezier(0.4, 0, 1, 1)` | Elements leaving the screen |
 
-> All animated components must respect `prefers-reduced-motion`. The recommended
-> approach is to set all durations to `0ms` inside a `@media (prefers-reduced-motion: reduce)`
-> block in `tokens.css` rather than scattering the media query across component files.
+> All animated components must respect `prefers-reduced-motion`. Override the
+> duration tokens inside a single `@media (prefers-reduced-motion: reduce)` block in
+> `tokens.css` rather than scattering the media query across component files.
+
+> [!IMPORTANT]
+> **Set the reduced-motion durations to `0.01ms`, not `0ms`.** Per MDN, if
+> transition duration and delay are both zero
+> [there is no transition and none of the transition events fire](https://developer.mozilla.org/en-US/docs/Web/API/Element/transitionend_event) —
+> not `transitionrun`, `transitionstart`, `transitionend` or `transitioncancel`.
+> Any component that removes an element, restores focus, or advances state in a
+> `transitionend` handler therefore stalls forever, and only for users who asked
+> for reduced motion, who are the least likely to be in anyone's test matrix.
+> `0.01ms` is imperceptible and still fires the events.
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0.01ms;
+    --duration-base: 0.01ms;
+    --duration-slow: 0.01ms;
+  }
+}
+```
 
 ---
 

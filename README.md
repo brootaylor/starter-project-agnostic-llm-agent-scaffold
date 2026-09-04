@@ -53,7 +53,7 @@ Both paths follow the same workflow and use the same specs.
 
 - **Spec-first workflow** — specs are written before any code is produced; the spec is the source of truth for humans and agents alike
 - **Tech-agnostic** — currently supports 'Vanilla', Astro, Eleventy, React, and Svelte. More tech stack options can be added if needed.
-- **Agent-agnostic** — currently includes config for Claude Code, Cursor, and GitHub Copilot, with a clear pattern for adding others
+- **Agent-agnostic** — any tool that reads the `AGENTS.md` convention works with no setup at all; Claude Code reads a `CLAUDE.md` that imports the same file, so every agent gets one source of truth, and there's a clear pattern for adding any other
 - **A build loop with review gates** — 18 shared workflow skills take a `Ready` spec through work order, implementation, verification, audit, and completion, stopping for human review at each step. They're plain markdown shared by every agent, not one tool's feature
 - **Modern platform guide** — a reference for humans and agents for which web platform APIs and features to use, and when a fallback is acceptable.
 - **Optional: service worker** — offline and caching support with a strategy selector and framework-specific guidance
@@ -187,9 +187,7 @@ my-project/
 │   ├── findings.md                         ← review findings ledger
 │   └── history/                            ← archived work orders
 └── .agents/
-    ├── claude/
-    ├── cursor/
-    ├── copilot/
+    ├── claude/                             ← the one agent needing its own config
     └── skills/                             ← shared workflow skills, read by any agent
 ```
 

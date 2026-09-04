@@ -23,7 +23,7 @@ silently polyfilling or falling back.**
 | Disclosure / accordion | `<details>` + `<summary>` | `<div>` with a click handler toggling `display` or `height` |
 | Lazy-load images | `<img loading="lazy">` | Intersection Observer scroll hack, JS lazy-load libraries |
 | Form validation | Constraint Validation API (`required`, `pattern`, `min`, `max`, `setCustomValidity`) | Manual JS validation re-implementing what the browser already provides |
-| Popovers / tooltips | `popover` attribute + `popovertarget` | Custom JS-positioned `<div>` overlays with manual show/hide logic |
+| Popovers / tooltips | `popover` attribute + `popovertarget` — Baseline 2025, see below | Custom JS-positioned `<div>` overlays with manual show/hide logic |
 | Inline SVG icons | Inline `<svg>` directly in the component | `<img src="icon.svg">` or CSS `background-image` for icons |
 | Progress indicators | `<progress value="" max="">` | `<div>` with a `width` style or animation |
 | Meter / gauge values | `<meter value="" min="" max="">` | Custom `<div>` bars with inline width calculations |
@@ -32,6 +32,8 @@ silently polyfilling or falling back.**
 | Toggle / switch | `<input type="checkbox">` styled with CSS | Custom `<div role="switch">` with manual ARIA state management |
 | Image with fallback | `<picture>` + `<source>` | JS-based format detection or `onerror` swapping |
 | Responsive images | `srcset` and `sizes` attributes | JS that swaps `src` on resize |
+
+**Two caveats on this table.** `popover` is [Baseline 2025 - newly available](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API), a lower support tier than everything else here, so check it against the project's browser targets rather than treating it as settled. Popovers are always non-modal; anything needing modal behaviour is `<dialog>`. And `<dialog>` only becomes modal - inert background, focus constrained, `aria-modal="true"` - when opened with `.showModal()`. A dialog opened with `.show()` constrains nothing.
 
 ---
 
@@ -50,12 +52,22 @@ silently polyfilling or falling back.**
 | Subgrid alignment | CSS Subgrid (`grid-template-columns: subgrid`) | Nested grids with duplicated and manually synchronised track definitions |
 | Component-level breakpoints | Container queries (`@container`) | Viewport `@media` queries used for component-level layout decisions |
 | Parent state selectors | `:has()` | JS that walks the DOM to add a class to a parent element |
-| CSS nesting | Native CSS nesting | Sass or PostCSS nesting plugins used solely to work around lack of native support |
+| CSS nesting | Native CSS nesting — see the callout below before migrating from Sass | Sass or PostCSS nesting plugins used solely to work around lack of native support |
 | Logical / directional properties | `margin-inline`, `padding-block`, `inset-inline-start`, etc. | Physical properties (`margin-left`, `padding-top`) for layouts that need to support RTL |
 | Smooth scrolling | `scroll-behavior: smooth` | JS animation loop incrementing `scrollTop` |
 | Text truncation (single line) | `text-overflow: ellipsis` with `overflow: hidden; white-space: nowrap` | JS that measures text and truncates the string |
 | Custom focus ring | `outline` styled via CSS (never `outline: none` without a replacement) | Removing the outline and relying on a `:hover` state as a substitute |
 | Colour functions | `oklch()` or `color-mix()` where targets support it | JS colour manipulation libraries for static colour derivations |
+
+> [!IMPORTANT]
+> **Native CSS nesting is not a drop-in replacement for Sass nesting, and both
+> differences fail quietly.** A browser without
+> [`CSSNestedDeclarations`](https://developer.mozilla.org/en-US/docs/Web/API/CSSNestedDeclarations)
+> parses nested rules *in the wrong order* rather than failing to parse them, so
+> the stylesheet loads and the cascade is silently wrong. And native nesting does
+> no string concatenation: Sass's `&__child` BEM idiom does not produce
+> `.block__child`, it is invalid. Convert BEM selectors by hand, and verify the
+> computed cascade rather than assuming a visual match.
 
 ---
 
@@ -75,14 +87,29 @@ silently polyfilling or falling back.**
 | Concurrent async (partial failure OK) | `Promise.allSettled()` | `Promise.all()` when partial failure should not abort everything |
 | Concurrent async (all must succeed) | `Promise.all()` | Sequential `await` when operations are independent |
 | URL construction | `URL` and `URLSearchParams` APIs | String concatenation or manual encoding for query parameters |
-| Clipboard write | `navigator.clipboard.writeText()` | `document.execCommand('copy')` — deprecated and unreliable |
+| Clipboard write | `navigator.clipboard.writeText()` — secure context only | `document.execCommand('copy')` — deprecated and unreliable |
 | Smooth scroll to element | `element.scrollIntoView({ behavior: 'smooth' })` | JS animation loop incrementing `scrollTop` |
-| Unique IDs | `crypto.randomUUID()` | `Math.random()` string constructions for IDs that need to be unique |
+| Unique IDs | `crypto.randomUUID()` — secure context only | `Math.random()` string constructions for IDs that need to be unique |
 | Type checking at runtime | `instanceof`, `typeof`, or `Array.isArray()` | String comparisons against `Object.prototype.toString` unless targeting older runtimes |
 | Object immutability | `Object.freeze()` | Naming conventions or comments to signal "do not mutate" |
 | Event delegation | Single listener on a parent with `event.target.closest()` | Attaching individual listeners to every child element in a list |
-| Scheduling non-urgent work | `requestIdleCallback()` | `setTimeout(fn, 0)` for deferring low-priority work |
+| Scheduling non-urgent work | `requestIdleCallback()` with a `setTimeout` fallback — see below | `setTimeout(fn, 0)` as the default path for deferring low-priority work |
 | Animation frame sync | `requestAnimationFrame()` | `setInterval` or `setTimeout` for visual updates |
+
+> [!IMPORTANT]
+> **Three rows above fail silently rather than throwing where you would see it.**
+>
+> - [`requestIdleCallback()` is not Baseline](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback).
+>   Safari has it disabled by default (13.1 through 26.6; Technology Preview
+>   only), so on Safari the callback simply never runs and the deferred work is
+>   dropped with no error. Always pass the `timeout` option, and keep a
+>   `setTimeout` fallback for work that must eventually happen.
+> - [`navigator.clipboard.writeText()`](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText)
+>   and [`crypto.randomUUID()`](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID)
+>   are **secure-context only**. Over plain HTTP, `navigator.clipboard` and
+>   `crypto.randomUUID` are `undefined`, so the call throws a `TypeError` at the
+>   point of use rather than at load. `localhost` counts as secure; a LAN address
+>   used for device testing does not.
 
 ---
 
@@ -94,15 +121,24 @@ Reach for a CSS or HTML solution before a JavaScript one. JS is appropriate for
 behaviour that cannot be expressed in markup or styles — not as a default.
 
 **Example:** a disclosure widget should be `<details>` + `<summary>`, not a `<div>`
-with a click handler and toggled class. The browser handles keyboard interaction,
-ARIA state, and animation for free.
+with a click handler and toggled class. The browser handles keyboard interaction
+and ARIA state for free. Animation is *not* free - MDN is explicit that
+[there is no built-in way to animate the open/closed transition](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details);
+it takes `::details-content`, `interpolate-size` and `transition-behavior`. That
+is still less code than a custom disclosure, but budget for it rather than
+expecting it to work by default.
 
 ### Avoid re-implementing what the browser provides
 
 Check whether the platform already solves the problem before writing custom logic.
 Common areas where agents drift toward unnecessary custom code:
 
-- **Focus trapping** — `<dialog>` traps focus natively; do not write a focus trap for a `<dialog>`
+- **Focus trapping** — a `<dialog>` opened with `.showModal()` makes the rest of the
+  document inert and constrains focus to the dialog; do not write a focus trap for
+  it. This does **not** apply to `.show()`, which opens a non-modal dialog and
+  constrains nothing. Two things the browser still leaves to you: set initial
+  focus with `autofocus`, and provide an explicit close control — Esc alone is not
+  a sufficient close mechanism
 - **Form validation** — the Constraint Validation API covers required fields, patterns,
   min/max ranges, and custom messages via `setCustomValidity`; do not re-validate
   fields the browser already validates

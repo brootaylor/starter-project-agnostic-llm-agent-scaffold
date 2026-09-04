@@ -87,7 +87,7 @@ Eleventy, or any other framework, refer to the
 ### React
 
 ```bash
-npx storybook@latest init
+npm create storybook@latest
 ```
 
 Storybook detects React automatically. Stories use `.stories.jsx` or `.stories.tsx`.
@@ -110,7 +110,7 @@ export const Primary = {
 ### Svelte
 
 ```bash
-npx storybook@latest init
+npm create storybook@latest
 ```
 
 Storybook detects Svelte automatically. Stories use `.stories.js` or `.stories.svelte`.
@@ -133,7 +133,7 @@ export const Primary = {
 ### Plain JavaScript
 
 ```bash
-npx storybook@latest init --type html
+npm create storybook@latest --type html
 ```
 
 Stories use `.stories.js` and use a `render` function to map args to an HTML string or
@@ -166,8 +166,18 @@ export const Primary = {
 ## Storybook configuration
 
 Storybook's config lives in a `.storybook/` directory at the project root. The two
-files that always need attention are `main.js` and `preview.js`. The `init` command
+files that always need attention are `main.js` and `preview.js`. The setup command
 generates both — the notes below cover what to add to each after setup.
+
+> [!IMPORTANT]
+> `npm create storybook@latest` installs **Storybook 10**, which changes two things
+> that will not announce themselves. `.storybook/main.js` and any preset
+> [must be valid ESM](https://storybook.js.org/docs/releases/migration-guide) —
+> a `module.exports` in either, copied from an older guide or generated from
+> training data, fails at start-up rather than at install. And Storybook 10
+> requires **Node 20.19+ or 22.12+**; check `.nvmrc` before running setup. The
+> older `npx storybook@latest init` form is documented as the pre-8.3 approach —
+> `npm create` is current.
 
 ### `main.js`
 
@@ -241,7 +251,7 @@ each other.
 
 ## Notes for "Ai" agents
 
-- Run `npx storybook@latest init` and let Storybook auto-detect the active framework
+- Run `npm create storybook@latest` and let Storybook auto-detect the active framework
 - If auto-detection fails, pass the `--type` flag manually based on the active framework
   selection in `docs/project-brief.md`:
 

@@ -149,8 +149,6 @@ cat >> .gitignore <<'EOF'
 # ── "Ai" tool config ──────────────────────────────────
 .claude/
 CLAUDE.md
-.cursor/
-.github/copilot-instructions.md
 
 # ── Personal context ──────────────────────────────────
 context/sessions.md
@@ -158,12 +156,15 @@ context/decisions.md
 EOF
 ```
 
-An ignore rule does not untrack a file that is already tracked. If the project already commits a `CLAUDE.md` or a `.cursor/` directory, git keeps carrying it and your new rule has no effect. Check, and untrack anything it finds:
+An ignore rule does not untrack a file that is already tracked. If the project already commits a `CLAUDE.md` or a `.claude/` directory, git keeps carrying it and your new rule has no effect. Check, and untrack anything it finds:
 
 ```bash
-git ls-files | grep -E 'CLAUDE\.md|^\.claude/|^\.cursor/|copilot-instructions'
+git ls-files | grep -E 'CLAUDE\.md|^\.claude/'
 git rm --cached <each path listed>
 ```
+
+> [!IMPORTANT]
+> That grep names only the two paths the block above ignores. Do not widen it to `.cursor/`, `copilot-instructions` or any other tool's config: the scaffold takes no position on those, and a project that deliberately commits them for its team is entitled to keep doing so. `git rm --cached` on one of those untracks a file nobody asked you to remove.
 
 ### A6 — Create the agent pointer
 

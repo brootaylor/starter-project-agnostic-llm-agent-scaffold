@@ -400,6 +400,17 @@ fallback to cache. For all other requests, uses a cache-first strategy. Caches
 images at runtime and returns an inline SVG placeholder if an image cannot be
 fetched while offline.
 
+> [!IMPORTANT]
+> **Guard the `Accept` header before calling a string method on it.**
+> [`Headers.get()` returns `null`](https://developer.mozilla.org/en-US/docs/Web/API/Headers/get)
+> when a header is absent, so the common `request.headers.get('Accept').includes(...)`
+> shorthand throws a `TypeError` on any request that carries no `Accept` header.
+> The throw happens before `respondWith()`, so the request silently falls through
+> to the network: caching stops working for that request with nothing but a console
+> error to show for it. The `?? ''` below is the guard. If you only care about page
+> navigations, `request.mode === 'navigate'` is a more direct test than sniffing
+> `Accept` at all.
+
 ```js
 const timeout = 3000; // ms before falling back to cache for slow HTML requests
 
@@ -409,7 +420,8 @@ self.addEventListener('fetch', event => {
   if (request.method !== 'GET') return;
 
   // HTML — network first, timeout fallback to cache, then offline page
-  if (request.headers.get('Accept').includes('text/html')) {
+  const accept = request.headers.get('Accept') ?? '';
+  if (accept.includes('text/html')) {
     event.respondWith(new Promise(resolve => {
       const cached = caches.match(request);
 

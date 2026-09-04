@@ -5,10 +5,11 @@ cross-tool convention that most coding agents read directly, so this is the
 entry point for any of them. Claude Code reads `CLAUDE.md`, which imports this
 file, so there is a single source of truth either way.
 
-Ready-made configs ship for three agents - Claude Code, Cursor, and GitHub
-Copilot - under `.agents/`. An agent that reads `AGENTS.md` natively needs no
-config of its own and works as soon as it opens the project. For one that expects
-its own config file, see "Adding a new agent" below.
+Most agents read this file natively - Codex, Cursor, GitHub Copilot, Gemini CLI,
+Jules, Aider, Zed, Windsurf, Devin and OpenCode among them - and need no config of
+their own, so they work as soon as they open the project. Claude Code is the
+notable holdout, and the single ready-made config under `.agents/` is its. For any
+other agent that expects a config file of its own, see "Adding a new agent" below.
 
 ## What this is
 
@@ -178,13 +179,11 @@ everyone who clones the template.
 
 ### Structure
 
-Each supported agent has its own directory:
+Any agent that needs a config of its own gets a directory:
 
 ```bash
 .agents/
-├── claude/     # Claude Code (Anthropic)
-├── cursor/     # Cursor
-├── copilot/    # GitHub Copilot
+├── claude/     # Claude Code
 ├── skills/     # the shared workflow skills, read by any capable agent
 └── ...         # add any agent that has a config file convention
 ```
@@ -197,47 +196,44 @@ Every file inside an agent directory does two things only:
    settings)
 
 Nothing else belongs in them. `.agents/skills/` is shared, not tool-specific:
-Codex, Claude Code, Cursor, GitHub Copilot, and OpenCode all read the same tree.
+every agent works from the same tree, whether it discovers it through a pointer
+or is sent there by `AGENTS.md`.
 
 ### How the pointers are wired
 
-Most agents are hardwired to look for their config in a fixed location and offer
-no way to change it. Since the real file lives in `.agents/`, each needs a pointer
-at the location it expects.
+An agent that reads `AGENTS.md` needs no pointer at all - this file is already at
+the project root. Claude Code is hardwired to look for its config at one fixed
+location and offers no way to change it, and since the real files live in
+`.agents/`, it needs a pointer at each location it expects.
 
 | Location | Points to |
 |----------|-----------|
 | `CLAUDE.md` | `.agents/claude/CLAUDE.md` |
 | `.claude/skills` | `../.agents/skills` |
-| `.cursor/rules` | `../.agents/cursor/rules` |
-| `.github/copilot-instructions.md` | `../.agents/copilot/copilot-instructions.md` |
 
-**macOS and Linux** - symlink. Create only the pointer your agent needs:
+**macOS and Linux** - symlink:
 
 ```bash
 ln -s .agents/claude/CLAUDE.md CLAUDE.md
 mkdir -p .claude && ln -s ../.agents/skills .claude/skills
-mkdir -p .cursor && ln -s ../.agents/cursor/rules .cursor/rules
-mkdir -p .github && ln -s ../.agents/copilot/copilot-instructions.md .github/copilot-instructions.md
 ```
 
 > [!IMPORTANT]
-> Every pointer below the project root needs both the `mkdir -p` and the leading
-> `../`, and each guards a different failure. The parent directory is gitignored,
-> so it does not exist in a fresh clone and `ln -s` will not create it. And a
-> symlink's target is resolved relative to the link's own directory, so
-> `.agents/…` without the `../` creates a link pointing at `.cursor/.agents/…` -
-> which `ln` reports as success and `ls -l` displays as if it were correct.
-> `cat` the pointer to prove it resolves; only the root-level `CLAUDE.md` line
-> needs neither.
+> The `.claude/skills` pointer needs both the `mkdir -p` and the leading `../`,
+> and each guards a different failure. `.claude/` is gitignored, so it does not
+> exist in a fresh clone and `ln -s` will not create it. And a symlink's target is
+> resolved relative to the link's own directory, so `.agents/…` without the `../`
+> creates a link pointing at `.claude/.agents/…` - which `ln` reports as success
+> and `ls -l` displays as if it were correct. `ls .claude/skills` is what proves
+> it resolves. Only the root-level `CLAUDE.md` line needs neither guard.
 
 **Windows** - `ln -s` needs Developer Mode or an elevated terminal. If neither is
-available, create the directory and copy the file instead, then keep the two in
-sync by hand:
+available, copy instead, then keep the copies in sync by hand:
 
 ```bat
-if not exist .github mkdir .github
-copy .agents\copilot\copilot-instructions.md .github\copilot-instructions.md
+copy .agents\claude\CLAUDE.md CLAUDE.md
+if not exist .claude mkdir .claude
+xcopy /E /I .agents\skills .claude\skills
 ```
 
 **Every pointer is gitignored**, so a Windows copy and a macOS symlink never
@@ -249,10 +245,13 @@ ended up symlinked rather than duplicated per tool.
 
 There is no project-level switch. Every agent reads the same
 `docs/project-brief.md` and the same specs, so they always share one
-understanding of the project. To use a different agent, create its pointer and
-open it.
+understanding of the project. For most agents there is nothing to do but open the
+project; for one that needs a pointer, create it first.
 
 ### Adding a new agent
+
+First check whether the agent reads `AGENTS.md` - most now do, and those need
+none of the steps below. For one that insists on a config file of its own:
 
 1. Create `.agents/<agent-name>/`
 2. Create the agent's required config file inside it
@@ -302,28 +301,31 @@ Build one feature, fix, or rollback at a time, behind review gates. This is the
 automated form of `WORKFLOW.md` Steps 4-10, not a second workflow: the spec
 `**Status:**` line is still the queue, and Steps 4-6 (writing feature specs,
 component specs, and design tokens) stay human work. Each skill is plain markdown
-any capable agent can read and follow, exposed through tool-specific adapters:
+any capable agent can read and follow. Where each tool finds them:
 
-- Codex: `.agents/skills/<skill>/SKILL.md`
-- Claude Code: `.claude/skills/<skill>/SKILL.md`
-- Cursor: `.cursor/rules` plus `.agents/skills/<skill>/SKILL.md`
-- GitHub Copilot: `AGENTS.md` plus `.agents/skills/<skill>/SKILL.md`
-- OpenCode: `AGENTS.md` plus the compatible `.agents/skills/` or
-  `.claude/skills/` tree already installed for the selected tools
+- Claude Code: discovers `.claude/skills/<skill>/SKILL.md` on its own, and
+  invokes them as `/feature`, `/implement` and so on
+- Every other agent: `AGENTS.md` names the path,
+  `.agents/skills/<skill>/SKILL.md`, and you name the skill in your prompt
 
-Unused adapters can be removed, but **`.agents/` is never one of them.** Those
-adapter paths are gitignored pointers; `.agents/` holds the only real copies of
-both the agent configs and the skills tree. Deleting it leaves every pointer
+> [!IMPORTANT]
+> Only Claude Code loads this tree by itself. For every other agent the path is
+> written down where the agent will read it, and **naming the skill is what runs
+> it** - there is no auto-discovery to rely on. A tool that has its own skills
+> convention will not find these at `.agents/skills/`. The review gates are in the
+> `SKILL.md`, so a skill followed this way behaves the same as one invoked.
+
+Unused pointers can be removed, but **`.agents/` is never one of them.** Those
+pointer paths are gitignored; `.agents/` holds the only real copies of
+both the agent config and the skills tree. Deleting it leaves every pointer
 dangling - no config and no skills, with `ls -l` still showing links that look
-healthy. What you can remove is the sibling directory for an agent you do not
-use, such as `.agents/cursor/`, along with its pointer.
+healthy.
 
-So: Codex, Cursor, GitHub Copilot, and OpenCode share `.agents/`, and OpenCode
-can also reuse `.claude/` when Claude Code is selected. A project using no
-Claude Code can delete the `CLAUDE.md` pointer, `.claude/`, and
-`.agents/claude/`, but should keep `AGENTS.md`, which every other tool reads.
-Do not duplicate the same skills under `.opencode/skills/`; OpenCode already
-discovers the compatible trees.
+A project using no Claude Code can delete the `CLAUDE.md` pointer, `.claude/` and
+`.agents/claude/`, but must keep `AGENTS.md` and `.agents/skills/` - the first is
+what every other tool reads, the second is where the skills actually live. Do not
+duplicate the skills under `.cursor/`, `.opencode/skills/` or any other tool's
+tree; each of those discovers a compatible tree already.
 
 When changing shared workflow behavior, edit
 `.agents/skills/<skill>/SKILL.md` - the one tracked copy. Every tool reaches it
