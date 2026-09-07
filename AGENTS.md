@@ -30,11 +30,14 @@ framework's config files written from the Stack selections in
 > [!IMPORTANT]
 > Do not run a framework scaffolder (`create-next-app`, `npm create vite`,
 > `npm create astro`, and so on) inside the clone. Those tools expect an empty
-> directory, and this one already holds `package.json`, `README.md`,
-> `.gitignore`, and `src/index.html` - every one a name they write. Depending on
-> the tool you either get a refusal or a silent overwrite of the scaffold's own
-> files. Step 3 writes that configuration directly instead, which is why it is a
-> step rather than a command.
+> directory, and this one already holds `package.json`, `README.md` and
+> `.gitignore` - every one a name they write. `create-next-app` also writes
+> `AGENTS.md` and `CLAUDE.md` by default, and `CLAUDE.md` here is a pointer, so
+> that write follows the link and replaces the tracked `.agents/claude/CLAUDE.md`
+> rather than the pointer. Nor does a scaffolder reliably refuse: `create-vite`
+> prompts, and one of the three choices it offers is "Remove existing files and
+> continue". Step 3 writes that configuration directly instead, which is why it
+> is a step rather than a command.
 
 For a codebase that already exists, the order is reversed - the code is there
 first and the scaffold merges in on top - and the early steps differ: see
@@ -44,11 +47,11 @@ The workflow is defined by the local skills and context files below.
 
 ## Read these for full context
 
-- `context/sessions.md` - where the work stands, and the only context that
-  survives a `/compact` or `/clear`. One **Where things stand** block and nothing
-  else: queue, branches, what is open, the next action. Gitignored and personal
-  to you, so it will not exist in a fresh clone; create it on first use. **See
-  "Keep the state file current" below**
+- `context/sessions.md` - where the work stands. With `decisions.md` below, one of
+  the only two files that survive a `/compact` or `/clear`. One **Where things
+  stand** block and nothing else: queue, branches, what is open, the next action.
+  Gitignored and personal to you, so it will not exist in a fresh clone; create it
+  on first use. **See "Keep the state file current" below**
 - `context/decisions.md` - why a choice was made and what was rejected, newest
   first. Append-only, and one entry per decision rather than per session. The
   only thing here that git history cannot reconstruct. Gitignored and personal
@@ -60,9 +63,10 @@ The workflow is defined by the local skills and context files below.
 
 ## Keep the state file current
 
-**`context/sessions.md` is the only thing that survives a context reset.** A
-`/compact` or `/clear` discards the conversation, and nothing warns you - there
-is no error, just a later session that has to rediscover what was known.
+**`context/sessions.md` and `context/decisions.md` are the only things that
+survive a context reset.** A `/compact` or `/clear` discards the conversation,
+and nothing warns you - there is no error, just a later session that has to
+rediscover what was known.
 
 **Read both files before acting when starting cold**, and after any `/clear` or
 `/compact`. Neither is loaded automatically - `CLAUDE.md` imports `AGENTS.md`,
@@ -202,9 +206,10 @@ or is sent there by `AGENTS.md`.
 ### How the pointers are wired
 
 An agent that reads `AGENTS.md` needs no pointer at all - this file is already at
-the project root. Claude Code is hardwired to look for its config at one fixed
-location and offers no way to change it, and since the real files live in
-`.agents/`, it needs a pointer at each location it expects.
+the project root. Claude Code looks for project config at `./CLAUDE.md` or
+`./.claude/CLAUDE.md`, with no setting that repoints it at `.agents/` - and
+`.claude/` is gitignored here, so anything put there stays personal to one
+machine. It therefore needs a pointer at each location it expects.
 
 | Location | Points to |
 |----------|-----------|
@@ -426,11 +431,17 @@ invent a command to fill a gap.
 - Build: `<command>`
 - Production server: `<command>`
 - Lint: `<command>`
+- Test: `<command>` - written by `/tests`; leave absent until then
+- Verify: `<command>` - written by `/ci`; leave absent until then
+
+Those last two labels are read, not just written. Keep them exactly as spelled:
+`/implement` looks for a `Test` command to decide whether the testing gate is on,
+and `/implement`, `/complete` and `/autopilot` all run the `Verify` command when
+one is documented.
 
 Testing is opt-in. If this project does not already have a unit test runner, run
-`/tests` or `$tests` to add one and update this section with the real test
-commands. The presence of a `test` command here is the single switch that turns
-the testing gate on.
+`/tests` or `$tests` to add one and fill in the `Test` row. The presence of a
+real test command there is the single switch that turns the testing gate on.
 
 Automatic GitHub checks are a separate opt-in. Run `/ci` or `$ci` to define one
 `Verify` command and the matching workflow.
