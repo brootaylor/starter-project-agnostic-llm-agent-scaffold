@@ -58,7 +58,7 @@ Both paths follow the same workflow and use the same specs.
 - **Modern platform guide** — a reference for humans and agents for which web platform APIs and features to use, and when a fallback is acceptable.
 - **Optional: service worker** — offline and caching support with a strategy selector and framework-specific guidance
 - **Optional: Storybook** — component development and documentation environment for React, Svelte, and plain JavaScript (aka, 'Vanilla')
-- **Optional: security** — HTTP security headers, CSP configuration, and secure coding guidelines with framework-specific notes
+- **Optional: security** — HTTP security headers, Content Security Policy (CSP) configuration, and secure coding guidelines with framework-specific notes
 - **Living documentation** — specs double as project documentation; keep them up to date and the whole project stays coherent
 
 ---

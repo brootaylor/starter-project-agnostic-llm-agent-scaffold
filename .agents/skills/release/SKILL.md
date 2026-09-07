@@ -53,8 +53,8 @@ Read:
 
 Identify:
 
-- app type: static frontend, SSR app, API service, worker, CLI, monorepo, or
-  hybrid
+- app type: static frontend, server-side rendered app, API service, worker,
+  command-line tool, monorepo, or hybrid
 - build command, start command, dev command, test command, output directory, and
   package manager
 - runtime needs: Node version, Python version, Docker, database, cache, object

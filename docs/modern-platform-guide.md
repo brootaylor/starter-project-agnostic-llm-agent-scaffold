@@ -25,12 +25,12 @@ silently polyfilling or falling back.**
 | Image alternative text | `alt` on every `<img>` — empty for decorative, descriptive otherwise, full stop at the end — see below | Omitting `alt`; `alt="image"` or the filename; describing an image the surrounding text already describes |
 | Form validation | Constraint Validation API (`required`, `pattern`, `min`, `max`, `setCustomValidity`) | Manual JS validation re-implementing what the browser already provides |
 | Popovers / tooltips | `popover` attribute + `popovertarget` — Baseline 2025, see below | Custom JS-positioned `<div>` overlays with manual show/hide logic |
-| Inline SVG icons | Inline `<svg>`, with `aria-hidden="true"` when decorative or `role="img"` plus a `<title>` when it carries meaning | `<img src="icon.svg">` or CSS `background-image` for icons; an unlabelled `<svg>` as the only content of a control |
+| Inline Scalable Vector Graphics (SVG) icons | Inline `<svg>`, with `aria-hidden="true"` when decorative or `role="img"` plus a `<title>` when it carries meaning | `<img src="icon.svg">` or CSS `background-image` for icons; an unlabelled `<svg>` as the only content of a control |
 | Progress indicators | `<progress value="" max="">` | `<div>` with a `width` style or animation |
 | Meter / gauge values | `<meter value="" min="" max="">` | Custom `<div>` bars with inline width calculations |
 | Native date / time input | `<input type="date">`, `<input type="time">` | Third-party date picker libraries for standard date entry |
 | Colour input | `<input type="color">` | Custom colour picker libraries for basic colour selection |
-| Toggle / switch | `<input type="checkbox">` styled with CSS | Custom `<div role="switch">` with manual ARIA state management |
+| Toggle / switch | `<input type="checkbox">` styled with CSS | Custom `<div role="switch">` with manual Accessible Rich Internet Applications (ARIA) state management |
 | Image with fallback | `<picture>` + `<source>` | JS-based format detection or `onerror` swapping |
 | Responsive images | `srcset` and `sizes` attributes | JS that swaps `src` on resize |
 
@@ -81,7 +81,7 @@ the viewport never loads at all.
 | Scroll snapping | `scroll-snap-type` / `scroll-snap-align` | JS scroll hijacking or animation loops |
 | Subgrid alignment | CSS Subgrid (`grid-template-columns: subgrid`) | Nested grids with duplicated and manually synchronised track definitions |
 | Component-level breakpoints | Container queries (`@container`) | Viewport `@media` queries used for component-level layout decisions |
-| Parent state selectors | `:has()` | JS that walks the DOM to add a class to a parent element |
+| Parent state selectors | `:has()` | JS that walks the Document Object Model (DOM) to add a class to a parent element |
 | CSS nesting | Native CSS nesting — see the callout below before migrating from Sass | Sass or PostCSS nesting plugins used solely to work around lack of native support |
 | Logical / directional properties | `margin-inline`, `padding-block`, `inset-inline-start`, etc. | Physical properties (`margin-left`, `padding-top`) for layouts that need to support RTL |
 | Smooth scrolling | `scroll-behavior: smooth`, guarded by `prefers-reduced-motion` — see below | Unguarded smooth scrolling; JS animation loop incrementing `scrollTop` |
@@ -95,8 +95,8 @@ the viewport never loads at all.
 > [`CSSNestedDeclarations`](https://developer.mozilla.org/en-US/docs/Web/API/CSSNestedDeclarations)
 > parses nested rules *in the wrong order* rather than failing to parse them, so
 > the stylesheet loads and the cascade is silently wrong. And native nesting does
-> no string concatenation: Sass's `&__child` BEM idiom does not produce
-> `.block__child`, it is invalid. Convert BEM selectors by hand, and verify the
+> no string concatenation: Sass's `&__child` Block-Element-Modifier (BEM) idiom
+> does not produce `.block__child`, it is invalid. Convert BEM selectors by hand, and verify the
 > computed cascade rather than assuming a visual match.
 
 > [!IMPORTANT]
@@ -173,7 +173,8 @@ behaviour that cannot be expressed in markup or styles — not as a default.
 
 **Example:** a disclosure widget should be `<details>` + `<summary>`, not a `<div>`
 with a click handler and toggled class. The browser handles keyboard interaction
-and ARIA state for free. Animation is *not* free - MDN is explicit that
+and ARIA state for free. Animation is *not* free - the Mozilla Developer Network
+(MDN) is explicit that
 [there is no built-in way to animate the open/closed transition](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/details);
 it takes `::details-content`, `interpolate-size` and `transition-behavior`. That
 is still less code than a custom disclosure, but budget for it rather than

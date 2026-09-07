@@ -10,8 +10,9 @@
 ## Overview
 
 Add HTTP security headers and a Content Security Policy (CSP) to the project to
-protect users against common web vulnerabilities — clickjacking, MIME sniffing,
-cross-site scripting, and unwanted data leakage.
+protect users against common web vulnerabilities — clickjacking, Multipurpose
+Internet Mail Extensions (MIME) sniffing, cross-site scripting, and unwanted
+data leakage.
 
 This doc covers the headers to set, what each one does, and how to apply them
 across the supported frameworks and deployment targets. It is the single source
@@ -298,7 +299,7 @@ target:
   Works for any framework producing static output. No code change required.
 - **Framework middleware / server hooks** — headers are set programmatically
   in server-side code. Required for frameworks with a server component (e.g.
-  SvelteKit in SSR mode, Astro SSR).
+  SvelteKit in server-side rendering (SSR) mode, Astro SSR).
 
 For purely static projects the deployment platform approach is preferred — it
 keeps security config out of application code and applies to all responses
@@ -462,8 +463,8 @@ do not add a `_headers` file and expect it to work with a custom server.
   [Netlify](https://docs.netlify.com/manage/domains/secure-domains-with-https/https-ssl/) sends
   `max-age=31536000` by default, and [Vercel](https://vercel.com/docs/cdn-security/encryption)
   sends `max-age=63072000; includeSubDomains; preload` on `.vercel.app` domains
-  and HSTS on custom domains, so on those two do not add it to project config —
-  you would only duplicate the header. **Cloudflare does not**:
+  and HTTP Strict Transport Security (HSTS) on custom domains, so on those two
+  do not add it to project config — you would only duplicate the header. **Cloudflare does not**:
   [HSTS is off until you explicitly enable it](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)
   under SSL/TLS → Edge Certificates. A Cloudflare Pages site following a blanket
   "never set it" rule ships with no HSTS at all, and nothing reports that. Enable

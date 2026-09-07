@@ -77,7 +77,7 @@ A short, scannable briefing, not a wall of text. Aim for something like:
     docs/features/dark-mode.md - Dark mode
     Status: Draft - /feature will refuse this until it is promoted to Ready.
     What: users switch between light and dark themes; the choice persists and
-      respects the OS setting on first visit.
+      respects the operating system setting on first visit.
     Depends on: theme-toggle.spec.md (Draft) - the one component in its
       Components required table. Two specs need promoting, not one.
     Unblocks: nothing else currently specced.

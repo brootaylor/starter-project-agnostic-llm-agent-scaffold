@@ -160,7 +160,8 @@ table above is filled in.
 | `--color-feedback-warning-bg` | `--color-slate-700` | Same pattern as error-bg |
 
 > **Checking contrast:** before marking any component spec `Complete`, verify that
-> text/background token pairs in both themes meet the WCAG 2.1 AA minimums —
+> text/background token pairs in both themes meet the Web Content Accessibility
+> Guidelines (WCAG) 2.1 AA minimums —
 > **4.5:1** for body text, **3:1** for large text and UI components.
 > [Colour Contrast Checker](https://webaim.org/resources/contrastchecker/) is a
 > quick way to do this.
@@ -297,8 +298,8 @@ rather than raw values, so motion can be tuned globally.
 > `tokens.css` rather than scattering the media query across component files.
 
 > [!IMPORTANT]
-> **Set the reduced-motion durations to `0.01ms`, not `0ms`.** Per MDN, if
-> transition duration and delay are both zero
+> **Set the reduced-motion durations to `0.01ms`, not `0ms`.** Per the Mozilla
+> Developer Network (MDN), if transition duration and delay are both zero
 > [there is no transition and none of the transition events fire](https://developer.mozilla.org/en-US/docs/Web/API/Element/transitionend_event) —
 > not `transitionrun`, `transitionstart`, `transitionend` or `transitioncancel`.
 > Any component that removes an element, restores focus, or advances state in a

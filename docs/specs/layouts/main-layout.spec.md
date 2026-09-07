@@ -111,7 +111,7 @@ Token categories and CSS patterns specific to this layout.
 The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — colour (header/footer backgrounds), spacing (padding, gaps), typography (base font settings)
-- **CSS patterns** — BEM: `.layout` (block), `.layout__header`, `.layout__main`, `.layout__footer`, `.layout__skip-link` (elements)
+- **CSS patterns** — Block-Element-Modifier (BEM): `.layout` (block), `.layout__header`, `.layout__main`, `.layout__footer`, `.layout__skip-link` (elements)
 - **Dark mode** — background and text colours for header and footer must reference CSS custom properties scoped to `[data-theme]`; no hardcoded values
 
 ---

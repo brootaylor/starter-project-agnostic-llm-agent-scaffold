@@ -182,8 +182,9 @@ review and approval gate below after every step.
    example `/fix "add unit testing"`); point at `/tests` instead. If a step
    surfaces non-trivial logic the spec did not foresee, add a focused test then,
    or note why not. Run `/check` when a "done when" needs observed runtime
-   behaviour - a click, download, request, CLI command, background job, or flow
-   across screens - and prove it against the real app rather than eyeballing it.
+   behaviour - a click, download, request, command-line command, background job,
+   or flow across screens - and prove it against the real app rather than
+   eyeballing it.
 5. **Iterate until it works.** If it fails or the user wants changes, revise the
    step (re-prompt or hand-edit the code), show the updated diff, and re-test.
    Repeat until the user approves.

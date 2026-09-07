@@ -97,7 +97,7 @@ consider the component complete until all of these are satisfied.
 - Must use a native `<button>` element — never a `<div>` or `<span>`
 - `disabled`: set both the HTML attribute AND `aria-disabled="true"`
 - `loading`: set `aria-busy="true"`
-- Focus ring: minimum 3:1 contrast (WCAG 2.1 AA)
+- Focus ring: minimum 3:1 contrast — Web Content Accessibility Guidelines (WCAG) 2.1 AA
 - Spinner: `aria-hidden="true"`
 
 ---
@@ -117,7 +117,7 @@ Token categories and CSS patterns specific to this component.
 The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — colour, spacing, typography
-- **CSS patterns** — BEM: `.btn` (block), `.btn--primary` / `.btn--secondary` / `.btn--danger` / `.btn--ghost` (variant modifiers), `.btn--sm` / `.btn--lg` (size modifiers), `.btn--loading` (state modifier)
+- **CSS patterns** — Block-Element-Modifier (BEM): `.btn` (block), `.btn--primary` / `.btn--secondary` / `.btn--danger` / `.btn--ghost` (variant modifiers), `.btn--sm` / `.btn--lg` (size modifiers), `.btn--loading` (state modifier)
 - **Dark mode** — button colours must reference CSS custom properties scoped to `[data-theme]` — no hardcoded values
 
 ---

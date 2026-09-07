@@ -20,12 +20,15 @@ dependencies, commits, merges, pushes, or starts product work. Its one write is
 the findings ledger at `context/findings.md` (Step 4), the durable
 record of findings and their status.
 
-`/complete` and `/autopilot` invoke this skill automatically only for work that
+`/complete` and `/autopilot` invoke this skill automatically in two cases, both
+defined in `/complete`'s Quality gates: a full `/audit current` when the work
 touches a security boundary - authentication, authorization, payments, secrets,
-personal data, migrations, or destructive operations. `/implement` calls it for
-one narrower reason: to re-review a repair it marked `fixed`, since a repair
-never closes itself. An explicit `/audit` or `$audit` request always runs it,
-whatever the work touches.
+personal or user data, migrations, destructive operations, or external side
+effects - and `/audit current accessibility` when the work added or changed
+markup, styles, or design tokens, since that lens is where contrast and
+semantics get measured. `/implement` calls it for one narrower reason: to
+re-review a repair it marked `fixed`, since a repair never closes itself. An
+explicit `/audit` or `$audit` request always runs it, whatever the work touches.
 
 ## Input
 
@@ -141,9 +144,10 @@ expectations. Apply only the selected lens or lenses:
   restates it. Generic elements carrying behaviour a native element provides,
   interactive controls that are not keyboard operable, focus that is removed
   without replacement or lost after a state change, missing or wrong accessible
-  names, state conveyed by colour or icon alone, ARIA that contradicts or
-  duplicates native semantics, text and non-text contrast below the standard's
-  minimums, and animation that ignores `prefers-reduced-motion`. Where token
+  names, state conveyed by colour or icon alone, Accessible Rich Internet
+  Applications (ARIA) attributes that contradict or duplicate native semantics,
+  text and non-text contrast below the standard's minimums, and animation that
+  ignores `prefers-reduced-motion`. Where token
   values are readable, compute contrast rather than estimating it; where a
   judgement needs the running app, say so and hand it to `/check` rather than
   guessing.

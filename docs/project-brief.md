@@ -40,7 +40,7 @@ These are the only sections you need to fill in before starting. Everything else
 **Key goals:**
 > What does success look like? For example:
 > 
-> *"Fast load times, accessible to WCAG 2.1 AA, easy to update without a developer."*
+> *"Fast load times, accessible to Web Content Accessibility Guidelines (WCAG) 2.1 AA, easy to update without a developer."*
 
 **Known constraints:**
 > Anything that limits what can be built or how. This includes technical constraints, business rules, and environmental requirements. For example:
@@ -210,7 +210,7 @@ in the Stack section above does not apply to these.
 Notes for specific combinations that require extra setup steps or have known
 conflicts. Check here whenever two or more selections interact.
 
-- **Vanilla + Vite + Jest** — Jest requires additional config to handle ESM modules in a Vite project. Prefer Vitest for Vite-based stacks to avoid this complexity
+- **Vanilla + Vite + Jest** — Jest requires additional config to handle ECMAScript modules (ESM) in a Vite project. Prefer Vitest for Vite-based stacks to avoid this complexity
 - **Tailwind** — Tailwind 4 is CSS-first. Install `tailwindcss` plus the adapter for the build tool (`@tailwindcss/vite` for Vite, or `@tailwindcss/postcss` and `postcss` for a PostCSS pipeline), then `@import "tailwindcss";` at the top of the main stylesheet. There is no `tailwind.config.js`, and `autoprefixer` is not needed
 - **Tailwind + Astro** — run `npx astro add tailwind`, which on Astro 5.2 and later installs the `@tailwindcss/vite` plugin and writes the config. Do not reach for the `@astrojs/tailwind` integration: it is legacy, kept only to keep Tailwind 3 projects working
 - **CSS Modules** — supported natively by Vite, Next.js, and SvelteKit. No additional config needed for those stacks. For Vanilla without Vite, additional build config is required
@@ -291,7 +291,7 @@ the relevant entry below before generating any test config file.
 
 **Eleventy + Sass**
 - Eleventy does not process Sass natively. A separate watch script or build step is required
-  (e.g. the `sass` CLI with `--watch`, or a Gulp task). Add the compiled CSS output directory
+  (e.g. the `sass` command-line tool with `--watch`, or a Gulp task). Add the compiled CSS output directory
   to `.gitignore` and to Eleventy's passthrough copy config
 
 ---
@@ -341,7 +341,8 @@ This applies to:
 
 - Colour contrast (text and interactive elements)
 - Keyboard navigation and focus management
-- Screen reader support (semantic HTML, ARIA roles, labels, and live regions)
+- Screen reader support — semantic HTML, plus Accessible Rich Internet
+  Applications (ARIA) roles, labels, and live regions
 - Text alternatives (every `<img>` carries an `alt`; decorative images use `alt=""`)
 - Motion (respect `prefers-reduced-motion` where animations are used)
 
@@ -419,7 +420,7 @@ language. Agents must follow them when generating any file.
 - **Style files** — match the component they belong to: `Button.css`
 - **Test files** — match the file under test with a `.test` suffix: `Button.test.js`
 - **Asset files** — kebab-case: `icon-sun.svg`, `hero-image.webp`
-- **CSS class names** — BEM: `.btn`, `.btn--primary`, `.btn__label`
+- **CSS class names** — Block-Element-Modifier (BEM): `.btn`, `.btn--primary`, `.btn__label`
 - **CSS custom properties** — kebab-case with semantic prefix: `--color-primary`, `--space-md`
 - **JavaScript variables and functions** — camelCase
 - **TypeScript types and interfaces** — PascalCase
@@ -446,7 +447,7 @@ language. Agents must follow them when generating any file.
 ### Secure coding
 
 - Never use `eval()`, `new Function()`, or pass a string as the first argument to `setTimeout` or `setInterval` — these execute arbitrary code and are flagged by the linter
-- Never use `innerHTML` with any value that originates from user input or an external source — use `textContent` or DOM methods instead
+- Never use `innerHTML` with any value that originates from user input or an external source — use `textContent` or Document Object Model (DOM) methods instead
 - Never hardcode API keys, tokens, or credentials in source files — use environment variables, and never commit `.env` files containing real values
 - Never store sensitive data (tokens, passwords, personally identifiable information) in `localStorage` or `sessionStorage`
 - If a component or feature needs to load a resource from an external origin, declare it in the component's Dependencies table and update the CSP exceptions table in `docs/security.md` before marking the component `Complete`
@@ -636,7 +637,7 @@ WORKFLOW.md                                               # ← the ten-step hum
 
 ### Assets
 
-- **SVG icons** — place in `src/assets/icons/` and inline them directly in the component. Do not reference via `<img>`
+- **Scalable Vector Graphics (SVG) icons** — place in `src/assets/icons/` and inline them directly in the component. Do not reference via `<img>`
 - **Raster images** — place in `src/assets/images/` and reference via `<img>` with appropriate `alt` text
 - Do not place assets directly in `src/assets/` root — always use the subdirectories above
 

@@ -58,7 +58,8 @@ Cover the areas that matter to this project, not a fixed questionnaire:
 
 - problem, desired outcome, and why the project should exist
 - target users, their context, and their primary workflows
-- MVP capabilities, explicit non-goals, and later possibilities
+- Minimum viable product (MVP) capabilities, explicit non-goals, and later
+  possibilities
 - business rules, data, integrations, permissions, and important edge cases
 - stack choices, constraints, dependencies, and technical unknowns
 - UI/UX direction, accessibility needs, and useful references

@@ -38,7 +38,7 @@ the acceptance criteria that must be met for it to be considered complete.
 
 - [ ] **AC-01** — Previously visited pages are served from cache when the network is unavailable
 - [ ] **AC-02** — A fallback offline page is served when the user is offline and the requested page has not been cached
-- [ ] **AC-03** — Offline images are replaced with a branded inline SVG placeholder rather than showing a broken image
+- [ ] **AC-03** — Offline images are replaced with a branded inline Scalable Vector Graphics (SVG) placeholder rather than showing a broken image
 - [ ] **AC-04** — The service worker is registered in the root layout or main entry file before any other scripts
 - [ ] **AC-05** — If service worker installation fails, a message is posted to open clients so the UI can surface it to the user
 
@@ -502,7 +502,7 @@ helps the agent avoid building more than is required.
 
 - Push notifications
 - Background sync
-- Full PWA (installable app, manifest, splash screens)
+- Full Progressive Web App (PWA) — installable app, manifest, splash screens
 - Server-side caching
 - Caching of authenticated or user-specific content
 - Caching of API responses unless explicitly specified

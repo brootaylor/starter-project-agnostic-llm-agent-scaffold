@@ -93,8 +93,9 @@ at the concrete next step: run `/feature` on the first UI feature - it detects
 porting `theme.css` into `docs/design-tokens.md` **and** the project's stylesheet
 its first build step. Both halves matter: `/complete` deletes `prototypes/` once
 the look is built, so a port that skipped `docs/design-tokens.md` loses the theme
-from the one document every later agent is told to read. When the theme feels right the tokens carry across; the HTML
-mockups are reference and get discarded at that feature's `/complete`.
+from the one document every later agent is told to read. When the theme feels
+right the tokens carry across; the HTML mockups are reference and get discarded
+at that feature's `/complete`.
 
 **Commit `prototypes/`, do not ignore it.** `theme.css` is the durable output and
 until it is ported it lives nowhere else, and the mockups are the build reference

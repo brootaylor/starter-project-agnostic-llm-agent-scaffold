@@ -48,7 +48,8 @@ Use the diff as evidence and preserve it.
 
 Run the smallest existing command or interaction that can reproduce the symptom.
 
-- Prefer one focused test, request, CLI command, or input over the entire suite.
+- Prefer one focused test, request, command-line command, or input over the
+  entire suite.
 - Capture the exact exit code, error, stack trace, output, response, console
   error, or failed request.
 - Reuse an already-running local app when available. If reproduction requires a

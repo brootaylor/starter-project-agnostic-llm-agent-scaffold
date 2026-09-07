@@ -28,7 +28,8 @@ optional; this skill commits it. Don't require the steps to be pre-committed.
 Run these before logging or committing:
 
 - **Check** - run `/check` when any "done when" needs observed runtime behaviour:
-  a click, request, CLI command, download, background job, or multi-screen flow.
+  a click, request, command-line command, download, background job, or
+  multi-screen flow.
   Also run it whenever the work rendered or changed user interface, whatever the
   "done when" criteria happen to say. Keyboard operability, focus and accessible
   names are observable behaviour that no build step and no static diff proves,

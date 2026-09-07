@@ -132,7 +132,7 @@ The accessibility requirements this component must meet. The agent must not
 consider the component complete until all of these are satisfied.
 
 - Keyboard navigation requirements
-- Required ARIA roles, labels, and live regions
+- Required Accessible Rich Internet Applications (ARIA) roles, labels, and live regions
 - Text alternatives for any images or icons the component renders
 - Focus management after actions
 - Contrast and motion requirements
@@ -154,7 +154,7 @@ Token categories and CSS patterns specific to this component.
 The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — list the token categories this component draws from (e.g. colour, spacing, typography)
-- **CSS patterns** — note any conventions specific to this component (e.g. BEM modifier names, custom properties)
+- **CSS patterns** — note any conventions specific to this component (e.g. Block-Element-Modifier (BEM) class names, custom properties)
 - **Dark mode** — note any theme-specific overrides if applicable
 
 ---

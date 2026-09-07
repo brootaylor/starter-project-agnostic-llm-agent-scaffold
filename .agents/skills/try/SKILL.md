@@ -20,8 +20,9 @@ merge, push, or run destructive commands.
 
 `/try` runs automatically only when `/complete` or `/autopilot` judges that the
 change affects something a person uses directly: UI, navigation, copy, a public
-API or CLI, or output. An explicit `/try` or `$try` request always runs. A
-generated guide never counts as evidence that the user performed the walkthrough.
+API or command-line interface (CLI), or output. An explicit `/try` or `$try`
+request always runs. A generated guide never counts as evidence that the user
+performed the walkthrough.
 
 ## Input
 
@@ -123,5 +124,5 @@ such as an API response, CLI output, log line, or unit test command.
 ## Formatting
 
 Format the output to match the project's conventions in `AGENTS.md`: concise,
-scannable markdown, with numbered
-steps for the manual path and short bullets for warnings.
+scannable markdown, with numbered steps for the manual path and short bullets
+for warnings.

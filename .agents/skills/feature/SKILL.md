@@ -151,10 +151,11 @@ reviewable diffs it takes to satisfy it is a build decision.
 
 For the one spec being built now, write a work order to
 `context/current-feature.md` (create `context/` if needed), following
-`reference/feature-spec-template.md`. Fill every section: goal, in/out of scope,
-the build loop, small build steps as a checklist (`- [ ]`, each with an observable
-"done when" - `/implement` ticks them off and resumes from the first unchecked
-one), files/areas, data/contracts, testing, and notes for the "Ai".
+`reference/feature-spec-template.md`. Fill every section: goal, design reference
+(when the feature has a visual target), in/out of scope, the build loop, small
+build steps as a checklist (`- [ ]`, each with an observable "done when" -
+`/implement` ticks them off and resumes from the first unchecked one),
+files/areas, data/contracts, testing, and notes for the "Ai".
 
 **Record the source spec at the top of the work order**, as a `Spec:` line with
 its path. `/implement` reads it as the contract, `/check` proves the work against
@@ -175,15 +176,18 @@ against the contract instead of against your paraphrase of it.
 rebuilding a Canva/Figma artifact - prose underspecifies the target and the build
 will approximate it wrong. Ask the user for a screenshot or image if one isn't
 already provided, save it under `docs/reference/` (create the folder if
-needed), and link it from the spec's Design reference section. Don't write a
-visual spec from words alone when an image could exist.
+needed), and link it from the **work order's** Design reference section. That
+section is in the work order, not in the spec - this skill never edits a spec
+file, and `/implement` reads the work order to find the visual target. Don't
+write a visual spec from words alone when an image could exist.
 
 **If `prototypes/` exists, that is your design reference.** When `/prototype` has
 run, the repo holds `prototypes/theme.css` (the locked design tokens) and
 `prototypes/*.html` (the visual mockups). For a UI-facing feature, link the
-relevant mockups from the spec's Design reference section instead of asking for a
-screenshot - they beat a flat image, since they carry the exact tokens. Treat
-`theme.css` as the source of truth for colors, type, and spacing, and make the
+relevant mockups from the work order's Design reference section instead of
+asking for a screenshot - they beat a flat image, since they carry the exact
+tokens. Treat `theme.css` as the source of truth for colors, type, and spacing,
+and make the
 feature's **first build step** port those tokens into **both** places before
 building components against the mockups:
 
@@ -210,9 +214,9 @@ code exists. Run the draft against these questions:
   the error / loading / empty states, the first-run case, failure of anything
   external it calls.
 - **Visual fidelity.** If this is a look-alike or replication feature, is a
-  reference image linked in the spec - or are we about to build a design blind
-  from prose? If `prototypes/` exists, are the relevant mockups linked as the
-  Design reference, and does the first build step port `theme.css` into *both*
+  reference image linked in the work order's Design reference - or are we about
+  to build a design blind from prose? If `prototypes/` exists, are the relevant
+  mockups linked there, and does the first build step port `theme.css` into *both*
   `docs/design-tokens.md` and the app's global stylesheet?
   If a real design exists and nothing is captured, get it before building, not
   after the approximation lands.

@@ -67,7 +67,8 @@ type:
   it for browser driving, screenshots, console errors, and failed request checks.
   If it is not installed, do not add it from `/check`; use another real-browser
   evidence path and report what you used.
-- **CLI** - run the actual command(s) with representative inputs.
+- **Command-line interface (CLI)** - run the actual command(s) with
+  representative inputs.
 - **Server/API** - start it and hit the endpoints.
 - **Library** - exercise the public API through an example or the test command.
 

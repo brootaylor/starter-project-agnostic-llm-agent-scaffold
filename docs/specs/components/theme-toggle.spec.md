@@ -65,7 +65,7 @@ response to user interaction.
 ### Default / initial state
 
 On first render, the component checks `localStorage` for a stored `color-scheme`
-preference. If found, it applies that. If not, it checks the OS preference via
+preference. If found, it applies that. If not, it checks the operating system preference via
 `prefers-color-scheme`. If neither is set, it falls back to `initialTheme`.
 The current scheme is reflected visually in the toggle.
 
@@ -93,7 +93,7 @@ consider the component complete until all of these are satisfied.
 - Must use a native `<button>` element
 - Must have an `aria-label` that reflects the current state, e.g. `"Switch to dark mode"` or `"Switch to light mode"`
 - Must be keyboard operable — activatable with `Enter` and `Space`
-- Focus ring must meet WCAG 2.1 AA contrast requirements
+- Focus ring must meet Web Content Accessibility Guidelines (WCAG) 2.1 AA contrast requirements
 - Icon or visual indicator must not be the only means of conveying the current state
 
 ---
@@ -113,7 +113,7 @@ Token categories and CSS patterns specific to this component.
 The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — colour, spacing
-- **CSS patterns** — BEM: `.theme-toggle` (block); state communicated via `aria-label` and icon swap, not CSS class modifiers
+- **CSS patterns** — Block-Element-Modifier (BEM): `.theme-toggle` (block); state communicated via `aria-label` and icon swap, not CSS class modifiers
 - **Dark mode** — all colours must reference CSS custom properties scoped to `[data-theme="light"]` and `[data-theme="dark"]`; this component toggles the attribute but does not define the colour values
 
 ---
