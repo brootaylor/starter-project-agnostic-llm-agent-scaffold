@@ -40,7 +40,7 @@ These are the only sections you need to fill in before starting. Everything else
 **Key goals:**
 > What does success look like? For example:
 > 
-> *"Fast load times, accessible to Web Content Accessibility Guidelines (WCAG) 2.1 AA, easy to update without a developer."*
+> *"Fast load times, accessible to Web Content Accessibility Guidelines (WCAG) 2.2 AA, easy to update without a developer."*
 
 **Known constraints:**
 > Anything that limits what can be built or how. This includes technical constraints, business rules, and environmental requirements. For example:
@@ -332,10 +332,10 @@ fallbacks.
 
 ## Accessibility standard
 
-> *Review the standard below and update it if your project has different requirements. The default is WCAG 2.1 AA.*
+> *Review the standard below and update it if your project has different requirements. The default is WCAG 2.2 AA.*
 
 All components, pages, and layouts produced for this project must meet
-**WCAG 2.1 Level AA** as a minimum.
+**WCAG 2.2 Level AA** as a minimum.
 
 This applies to:
 
@@ -345,6 +345,16 @@ This applies to:
   Applications (ARIA) roles, labels, and live regions
 - Text alternatives (every `<img>` carries an `alt`; decorative images use `alt=""`)
 - Motion (respect `prefers-reduced-motion` where animations are used)
+- Target size — every control operated by pointer is at least 24 by 24 CSS
+  pixels, or spaced so that a 24-pixel circle centred on it does not overlap
+  another target. Links inside a sentence are exempt
+- Focus visibility — a control that takes keyboard focus is never *entirely*
+  hidden behind a sticky header, footer, or other content the page puts over it
+
+WCAG 2.2 adds two further Level AA criteria that apply only where the project
+has the interaction in question: any drag movement needs a single-pointer
+alternative (2.5.7), and any login must not depend on a cognitive test such as
+remembering or transcribing a value (3.3.8).
 
 Individual specs may define accessibility requirements beyond this baseline.
 Agents must not consider a component complete until its spec's accessibility

@@ -161,7 +161,7 @@ table above is filled in.
 
 > **Checking contrast:** before marking any component spec `Complete`, verify that
 > text/background token pairs in both themes meet the Web Content Accessibility
-> Guidelines (WCAG) 2.1 AA minimums —
+> Guidelines (WCAG) 2.2 AA minimums —
 > **4.5:1** for body text, **3:1** for large text and UI components.
 > [Colour Contrast Checker](https://webaim.org/resources/contrastchecker/) is a
 > quick way to do this.
@@ -261,7 +261,7 @@ directly into the accessibility requirements in component specs.
 | `--focus-ring-color` | `var(--color-border-focus)` | Alias `--color-border-focus` |
 
 > The focus ring must meet a minimum **3:1 contrast ratio** against adjacent colours
-> (WCAG 2.1 AA). Verify both light and dark theme values before marking any
+> (WCAG 2.2 AA). Verify both light and dark theme values before marking any
 > interactive component spec as `Complete`.
 
 ---

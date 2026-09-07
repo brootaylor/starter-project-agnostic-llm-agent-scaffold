@@ -97,7 +97,8 @@ consider the component complete until all of these are satisfied.
 - Must use a native `<button>` element — never a `<div>` or `<span>`
 - `disabled`: set both the HTML attribute AND `aria-disabled="true"`
 - `loading`: set `aria-busy="true"`
-- Focus ring: minimum 3:1 contrast — Web Content Accessibility Guidelines (WCAG) 2.1 AA
+- Focus ring: minimum 3:1 contrast — Web Content Accessibility Guidelines (WCAG) 2.2 AA
+- Target size: at least 24 by 24 CSS pixels, including the `sm` size
 - Spinner: `aria-hidden="true"`
 
 ---

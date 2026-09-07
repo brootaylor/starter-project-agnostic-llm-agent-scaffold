@@ -93,7 +93,8 @@ consider the component complete until all of these are satisfied.
 - Must use a native `<button>` element
 - Must have an `aria-label` that reflects the current state, e.g. `"Switch to dark mode"` or `"Switch to light mode"`
 - Must be keyboard operable — activatable with `Enter` and `Space`
-- Focus ring must meet Web Content Accessibility Guidelines (WCAG) 2.1 AA contrast requirements
+- Focus ring must meet Web Content Accessibility Guidelines (WCAG) 2.2 AA contrast requirements
+- Target size: at least 24 by 24 CSS pixels — an icon-only control is the easiest one to draw too small
 - Icon or visual indicator must not be the only means of conveying the current state
 
 ---

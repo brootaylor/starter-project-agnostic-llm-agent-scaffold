@@ -136,6 +136,8 @@ consider the component complete until all of these are satisfied.
 - Text alternatives for any images or icons the component renders
 - Focus management after actions
 - Contrast and motion requirements
+- Minimum target size for anything operated by pointer, and whether a focused
+  control can be obscured by sticky content
 
 ---
 

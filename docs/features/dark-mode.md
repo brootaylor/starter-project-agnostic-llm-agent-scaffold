@@ -95,7 +95,7 @@ Additional context, constraints, and implementation guidance that the agent shou
 
 - Colour scheme is applied via a `data-theme` attribute on the root `<html>` element, toggled between `"light"` and `"dark"`
 - All colour values must reference CSS custom properties — no hardcoded colours anywhere in the codebase
-- The toggle must be keyboard accessible and meet Web Content Accessibility Guidelines (WCAG) 2.1 AA contrast requirements
+- The toggle must be keyboard accessible and meet Web Content Accessibility Guidelines (WCAG) 2.2 AA contrast requirements
 - The `color-scheme` localStorage key is defined here and is the single source of truth — component specs must reference this file rather than redefine the key
 
 ---
