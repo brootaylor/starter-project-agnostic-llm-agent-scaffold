@@ -110,7 +110,7 @@ The core framework for this project. Pick one.
 | Jest | |
 | None | `[active]` |
 
-### E2E testing
+### End-to-end (E2E) testing
 
 Optional. Defaults to `None`. **Unlike every other category here, nothing in the
 scaffold wires this one up** - `/tests` sets up unit testing only, and there is
@@ -169,7 +169,7 @@ catch both code quality issues and common security vulnerabilities. See
 ### Security
 
 Optional. Defaults to `None`. See `docs/security.md` for header definitions,
-CSP configuration, and framework-specific setup guidance.
+Content Security Policy (CSP) configuration, and framework-specific setup guidance.
 
 | Option | Active |
 |--------|--------|
@@ -211,13 +211,13 @@ Notes for specific combinations that require extra setup steps or have known
 conflicts. Check here whenever two or more selections interact.
 
 - **Vanilla + Vite + Jest** — Jest requires additional config to handle ESM modules in a Vite project. Prefer Vitest for Vite-based stacks to avoid this complexity
-- **Tailwind** — requires PostCSS config. Install `tailwindcss`, `postcss`, and `autoprefixer` as dev dependencies and generate `tailwind.config.js`
-- **Tailwind + Astro** — use the official `@astrojs/tailwind` integration (`npx astro add tailwind`) rather than configuring PostCSS manually; the integration handles the config automatically
+- **Tailwind** — Tailwind 4 is CSS-first. Install `tailwindcss` plus the adapter for the build tool (`@tailwindcss/vite` for Vite, or `@tailwindcss/postcss` and `postcss` for a PostCSS pipeline), then `@import "tailwindcss";` at the top of the main stylesheet. There is no `tailwind.config.js`, and `autoprefixer` is not needed
+- **Tailwind + Astro** — run `npx astro add tailwind`, which on Astro 5.2 and later installs the `@tailwindcss/vite` plugin and writes the config. Do not reach for the `@astrojs/tailwind` integration: it is legacy, kept only to keep Tailwind 3 projects working
 - **CSS Modules** — supported natively by Vite, Next.js, and SvelteKit. No additional config needed for those stacks. For Vanilla without Vite, additional build config is required
 - **CSS Modules + Eleventy** — Eleventy has no native CSS Modules support. A separate bundler is required, which significantly complicates the setup. Consider plain CSS unless there is a strong reason to use modules
 - **ESLint + TypeScript** — add `@typescript-eslint/parser` and `@typescript-eslint/eslint-plugin` as dev dependencies alongside ESLint
 - **ESLint + Svelte** — add `eslint-plugin-svelte` as a dev dependency
-- **ESLint + Astro** — add `eslint-plugin-astro` and `astro-eslint-parser` as dev dependencies. The `.eslintrc` must set `astro-eslint-parser` as the parser for `.astro` files
+- **ESLint + Astro** — add `eslint-plugin-astro` as a dev dependency and spread `...eslintPluginAstro.configs.recommended` into `eslint.config.mjs`. Its shared config wires `astro-eslint-parser` up for `.astro` files; do not set the parser by hand
 
 ---
 
@@ -367,14 +367,14 @@ need to be in place.
 **If using an "Ai" agent:**
 
 1. Check for the latest stable version of the active framework and use that version when populating `package.json`
-2. Check the active framework's Node.js requirements and use the recommended LTS version of Node
+2. Check the active framework's Node.js requirements and use the recommended Long Term Support (LTS) version of Node
 3. Populate `package.json` with the correct scripts and dependencies for the active stack
 4. Generate any required config files based on the active selections
 5. Populate `.nvmrc` with the correct Node.js version for the active framework
 6. Update the stack-specific section of `.gitignore` with any entries required by the active stack
 7. If a service worker option is active, implement it following `docs/service-worker.md`
 8. If Storybook is active, set it up following `docs/storybook.md`
-9. If ESLint is active, install ESLint and the plugins listed in `docs/security.md` and generate `.eslintrc`
+9. If ESLint is active, install ESLint and the plugins listed in `docs/security.md` and generate `eslint.config.mjs` — flat config, never `.eslintrc`, which ESLint v10 does not read at all
 10. If a security option is active, apply the configuration following `docs/security.md`
 11. Do not install any dependencies not directly required by the active stack selections
 
@@ -597,7 +597,7 @@ src/
       <LayoutName>.{css|scss}                             # ← styles
       <LayoutName>.spec.md                                # ← co-located spec
   scripts/
-    main.js                                               # ← default starting file (Vanilla + Vite only)
+    main.js                                               # ← default starting file (Vanilla + Vite, React, Svelte)
   styles/
     tokens.{css|scss}                                     # ← design token values (extension matches active Styles selection)
     main.{css|scss}                                       # ← global styles, imports tokens
