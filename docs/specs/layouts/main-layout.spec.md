@@ -112,7 +112,7 @@ The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — colour (header/footer backgrounds), spacing (padding, gaps), typography (base font settings)
 - **CSS patterns** — Block-Element-Modifier (BEM): `.layout` (block), `.layout__header`, `.layout__main`, `.layout__footer`, `.layout__skip-link` (elements)
-- **Dark mode** — background and text colours for header and footer must reference CSS custom properties scoped to `[data-theme]`; no hardcoded values
+- **Dark mode** — background and text colours for header and footer must reference the semantic colour tokens in `docs/design-tokens.md`, which resolve per theme on their own; no hardcoded values, and no assumption here about which selector defines them
 
 ---
 

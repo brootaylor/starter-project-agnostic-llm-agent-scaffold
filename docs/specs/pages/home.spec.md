@@ -90,7 +90,7 @@ The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — spacing (section gaps and padding), colour (page background)
 - **CSS patterns** — page-level styles scoped to `.page-home`; component-level styles are owned by each component
-- **Dark mode** — page background must reference CSS custom properties scoped to `[data-theme]`; no hardcoded values
+- **Dark mode** — page background must reference the semantic colour tokens in `docs/design-tokens.md`, which resolve per theme on their own; no hardcoded values, and no assumption here about which selector defines them
 
 ---
 

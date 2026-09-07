@@ -18,9 +18,10 @@ This project uses a **two-layer token system**:
 
 1. **Primitive tokens** — raw, named values. Never referenced directly in components.
    Define the full palette here.
-2. **Semantic tokens** — purposeful aliases that components reference. Scoped to
-   `[data-theme="light"]` and `[data-theme="dark"]` on the root `<html>` element
-   so that switching themes only requires toggling that attribute.
+2. **Semantic tokens** — purposeful aliases that components reference. Defined on
+   `:root` as the light theme, then overridden under `[data-theme="dark"]` on the
+   root `<html>` element, so switching themes only requires toggling that
+   attribute.
 
 ```css
 /* ✗ Don't do this in a component — the value is opaque and won't adapt to the theme */
@@ -32,6 +33,45 @@ color: var(--color-text-body);
 
 No hardcoded colour values anywhere in stylesheets. Always reference a semantic token.
 See `docs/features/dark-mode.md` for theming implementation details.
+
+> [!IMPORTANT]
+> **Define the light theme on bare `:root`, never on `[data-theme="light"]`.** If
+> every semantic token lives inside an attribute selector, then a page with no
+> `data-theme` attribute matches neither block and *no colour token resolves at
+> all* — text falls back to the browser's default, backgrounds go transparent.
+> That is the state of every page before the theme script runs, and the permanent
+> state of every page where it never runs: JavaScript disabled or still loading, a
+> script error, a crawler, a view-source reader. Nothing errors and nothing warns;
+> the page simply renders unstyled. `:root` is what guarantees a defined value
+> before any attribute exists, which is why the dark block is an override rather
+> than a twin.
+
+The shape that follows from that:
+
+```css
+:root {
+  /* primitives, then the light theme's semantic aliases */
+}
+
+[data-theme="dark"] {
+  /* only the semantic aliases whose primitive changes */
+}
+```
+
+To follow the operating system when the user has expressed no preference, add a
+`prefers-color-scheme` block guarded so an explicit light choice still wins:
+
+```css
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    /* the same overrides as the [data-theme="dark"] block */
+  }
+}
+```
+
+The guard matters: without `:not([data-theme="light"])`, a user on a dark
+operating system who deliberately picks light mode gets dark anyway, and the
+toggle appears broken.
 
 ---
 
@@ -97,8 +137,10 @@ values appear. Never reference primitives directly in component styles.
 
 ### Semantic tokens — Light theme
 
-Scoped to `[data-theme="light"]` in `tokens.css`. Replace the example primitives
-with your actual palette tokens once the primitive table above is filled in.
+Defined on bare `:root` in the token file, so these values apply before any
+`data-theme` attribute exists — see Token architecture above for why this one is
+not attribute-scoped. Replace the example primitives with your actual palette
+tokens once the primitive table above is filled in.
 
 | Token | Maps to (example) | Usage |
 |-------|-------------------|-------|
@@ -127,7 +169,8 @@ with your actual palette tokens once the primitive table above is filled in.
 
 ### Semantic tokens — Dark theme
 
-Scoped to `[data-theme="dark"]` in `tokens.css`. Usage is identical to the light
+Scoped to `[data-theme="dark"]` in the token file, as an override of the `:root`
+values above rather than a second complete set. Usage is identical to the light
 theme — only the primitive each token points to changes. The mappings below show
 the pattern: backgrounds invert toward the dark end of the scale, text toward the
 light end, and brand colours shift to a lighter tint to maintain contrast against
@@ -295,7 +338,7 @@ rather than raw values, so motion can be tuned globally.
 
 > All animated components must respect `prefers-reduced-motion`. Override the
 > duration tokens inside a single `@media (prefers-reduced-motion: reduce)` block in
-> `tokens.css` rather than scattering the media query across component files.
+> the token file rather than scattering the media query across component files.
 
 > [!IMPORTANT]
 > **Set the reduced-motion durations to `0.01ms`, not `0ms`.** Per the Mozilla

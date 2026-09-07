@@ -119,7 +119,7 @@ The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — colour, spacing, typography
 - **CSS patterns** — Block-Element-Modifier (BEM): `.btn` (block), `.btn--primary` / `.btn--secondary` / `.btn--danger` / `.btn--ghost` (variant modifiers), `.btn--sm` / `.btn--lg` (size modifiers), `.btn--loading` (state modifier)
-- **Dark mode** — button colours must reference CSS custom properties scoped to `[data-theme]` — no hardcoded values
+- **Dark mode** — button colours must reference the semantic colour tokens in `docs/design-tokens.md`, which resolve per theme on their own; no hardcoded values, and no assumption here about which selector defines them
 
 ---
 

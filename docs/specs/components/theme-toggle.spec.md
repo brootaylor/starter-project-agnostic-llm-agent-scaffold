@@ -115,7 +115,7 @@ The agent must read `docs/design-tokens.md` before writing any styles.
 
 - **Tokens used** — colour, spacing
 - **CSS patterns** — Block-Element-Modifier (BEM): `.theme-toggle` (block); state communicated via `aria-label` and icon swap, not CSS class modifiers
-- **Dark mode** — all colours must reference CSS custom properties scoped to `[data-theme="light"]` and `[data-theme="dark"]`; this component toggles the attribute but does not define the colour values
+- **Dark mode** — all colours must reference the semantic custom properties defined in `docs/design-tokens.md`: the light theme on `:root`, the dark theme as a `[data-theme="dark"]` override. This component sets the attribute and does not define any colour values. It still writes both values from the feature spec's Implementation notes table — `data-theme="light"` is what tells the operating-system media query to stand down when the user has explicitly chosen light, so omitting it because "light is the default" breaks light mode on a dark-themed machine
 
 ---
 
