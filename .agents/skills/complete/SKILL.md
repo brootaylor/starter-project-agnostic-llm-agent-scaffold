@@ -70,6 +70,11 @@ Before logging or committing, run a short safety pass and report blockers only:
 - if workflow files changed, they were edited in the tracked `.agents/` tree
   rather than inside a gitignored pointer directory such as `.claude/`, where
   git would never see them
+- the index holds no unmerged entries. Check with `git ls-files -u`; a
+  conflicted path also shows as `UU` in `git status --short`. This is a hard
+  stop, not a note. Step 2 stages everything, so an unresolved conflict from a
+  rollback's reverse patch would be committed as product code with its
+  `<<<<<<<` markers intact
 - no P0 or P1 finding in `context/findings.md` is `open` or `fixed`.
   `fixed` still blocks on purpose: the repair exists but no review has looked at
   it - run `/audit` to close it. The only waivers are `accepted` (the user's

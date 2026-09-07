@@ -66,8 +66,8 @@ whole files into the response.
 4. **Source layout** - entry points, directory structure, routing convention,
    where components live, how styles are authored (plain CSS, modules, a
    preprocessor, CSS-in-JS, utility classes in markup).
-5. **Runtime version** - `.nvmrc`, an `engines` field, a container image, a CI
-   workflow's setup step.
+5. **Runtime version** - `.nvmrc`, an `engines` field, a container image, a
+   continuous integration workflow's setup step.
 6. **Tests** - whether any exist at all, what runner, and roughly what they
    cover. Presence or absence, not quality; quality is `/audit`.
 7. **Existing prose** - `README.md`, and an `AGENTS.md`, `CLAUDE.md` or
@@ -116,7 +116,8 @@ often carries evidence that looks like an answer and is not one:
   commercial question code cannot answer.
 - **Accessibility standard** - an accessibility linter in devDependencies shows
   an intent. It does not name a standard or a level, and passing some automated
-  checks is not the same as being held to WCAG 2.2 AA.
+  checks is not the same as being held to the Web Content Accessibility
+  Guidelines (WCAG) 2.2 at conformance level AA.
 
 So report what was found, then ask for the requirement, and keep the two apart:
 

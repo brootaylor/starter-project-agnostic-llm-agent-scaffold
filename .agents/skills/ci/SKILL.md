@@ -26,8 +26,9 @@ pushes, publishes, deploys, or adds local git hooks.
 ## Input
 
 No argument is required. A named provider or workflow preference is a request to
-review, not permission to replace existing CI. This skill's default provider is
-GitHub Actions because it creates GitHub pull-request checks.
+review, not permission to replace the project's existing continuous integration
+(CI). This skill's default provider is GitHub Actions because it creates GitHub
+pull-request checks.
 
 ## Step 1 - inspect without changing files
 
@@ -37,7 +38,7 @@ Read enough to identify the real project setup:
 - package or language manifests and task-runner files
 - lockfiles and the package manager they imply — confirm the lockfile is
   tracked by git, not merely present on disk. A lockfile-safe install fails
-  in continuous integration when the lockfile was never committed.
+  in CI when the lockfile was never committed.
 - existing typecheck, test, build, lint, and other quality commands
 - test configuration and actual test files
 - runtime version files such as `.nvmrc`, `.node-version`, `.python-version`,

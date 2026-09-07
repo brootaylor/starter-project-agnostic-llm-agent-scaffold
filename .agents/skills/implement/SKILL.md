@@ -119,11 +119,25 @@ Before the first rollback build step:
 6. Show both `git diff --cached` and `git status`. Confirm no protected path is
    staged or modified before presenting the step for review.
 
-If the reverse patch conflicts, stop and report the exact paths and later commit
-that appears involved. Do not auto-resolve, discard, stash, reset, or switch to a
-broad checkout. Ask whether to resolve only the conflict allowed by the approved
-work order or abandon the attempt. A cascade into another completed feature needs a
-new rollback plan.
+> [!IMPORTANT]
+> A conflicting reverse apply does not leave the tree untouched. `--3way` writes
+> conflict markers into the working tree files and leaves the index at unmerged
+> stages, and git reports it as `Applied patch to '<file>' with conflicts.` -
+> the word *Applied*, on a command that exited non-zero. Leaving it for a later
+> skill to notice is not a plan: `/complete` stages everything for the work
+> commit, so anything still conflicted here is committed as product code with
+> its markers intact. Its safety pass rejects an unmerged index for exactly this
+> reason, but that is a backstop, not the fix - resolve it or report it here.
+
+If the reverse patch conflicts, say so explicitly and report three things: the
+exact paths, the later commit that appears involved, and the fact that the
+working tree now holds conflict markers. Confirm the damage with `git status`
+(conflicted paths show as `UU`) and `git ls-files -u`. Do not auto-resolve,
+discard, stash, reset, or switch to a broad checkout - those are the user's call
+precisely because the tree is already dirty. Ask whether to resolve only the
+conflict allowed by the approved work order or abandon the attempt, and if the
+answer is to abandon, ask before running the cleanup rather than choosing one. A
+cascade into another completed feature needs a new rollback plan.
 
 ## Step 2 - build one step, review, iterate, checkpoint
 

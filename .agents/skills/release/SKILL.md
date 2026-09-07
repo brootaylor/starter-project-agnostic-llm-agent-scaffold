@@ -44,7 +44,8 @@ Read:
 
 - `AGENTS.md`
 - `docs/project-brief.md`
-- `docs/security.md` - required headers and CSP for the deployed app
+- `docs/security.md` - required headers and the Content Security Policy (CSP)
+  for the deployed app
 - `docs/features/` - any spec not yet marked `Complete`
 - package or build files such as `package.json`, lockfiles, framework config,
   Dockerfile, `render.yaml`, `vercel.json`, `.env.example`, and README files

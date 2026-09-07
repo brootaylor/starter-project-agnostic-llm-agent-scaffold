@@ -55,8 +55,9 @@ stack-native unit test runner:
 
 If the stack is unclear, stop and ask what runner to use instead of guessing.
 
-Keep the setup minimal. Do not add coverage, browser testing, CI, snapshots,
-mock-service layers, or a large test architecture unless the user explicitly asks.
+Keep the setup minimal. Do not add coverage, browser testing, continuous
+integration (CI), snapshots, mock-service layers, or a large test architecture
+unless the user explicitly asks.
 
 ## Step 3 - make the setup changes
 
@@ -111,8 +112,8 @@ Show the diff summary. Do not commit, merge, push, or start product feature work
 
 ## Rules
 
-- Unit testing only. Do not set up Playwright, Cypress, browser E2E, CI, or
-  coverage unless the user explicitly asks.
+- Unit testing only. Do not set up Playwright, Cypress, browser end-to-end
+  (E2E) testing, CI, or coverage unless the user explicitly asks.
 - Reuse existing project conventions before adding new tools.
 - Preserve existing CI. This skill may update an existing verification command,
   but it never creates a GitHub workflow on its own.

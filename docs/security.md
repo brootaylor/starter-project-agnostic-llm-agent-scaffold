@@ -216,7 +216,7 @@ source of truth — do not redefine them here.
 
 When the ESLint option is active in `docs/project-brief.md`, the following
 plugins must be installed and configured. They enforce the secure coding rules
-automatically on every file save and in CI.
+automatically on every file save and in continuous integration.
 
 | Plugin | Catches |
 |--------|---------|
