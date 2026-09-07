@@ -75,9 +75,11 @@ whole files into the response.
    never as evidence. A README describing a stack the code abandoned two
    refactors ago is a common and entirely silent failure.
 
-   In a project the scaffold was just added to, the originals have been replaced
-   and copies set aside outside the repository - see
-   `docs/adopting-an-existing-project.md`, A2. Read them if the user names the
+   In a project the scaffold was just added to, its own `AGENTS.md` and
+   `CLAUDE.md` have been replaced, and copies of those - plus whatever other
+   instruction files it carried - set aside outside the repository; see
+   `docs/adopting-an-existing-project.md`, A2. Any other tool's instructions,
+   `.cursor/rules` among them, are still in place. Read them if the user names the
    path, and treat a disagreement between them and the code as a finding *about
    the documentation*, worth reporting to the user, not a defect in the code.
 

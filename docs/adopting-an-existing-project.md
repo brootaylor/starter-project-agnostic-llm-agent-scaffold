@@ -88,15 +88,23 @@ Whether to do this on a branch is your call — no part of the loop creates, swi
 
 ### A2 — Preserve the project's existing agent instructions
 
-A project built with an "Ai" assistant usually carries instructions of its own, and A4 and A6 below will overwrite or replace every one of them:
+A project built with an "Ai" assistant usually carries instructions of its own, and two of them do not survive this step. A4 copies the scaffold's `AGENTS.md` over the project's, and A6 deletes its `CLAUDE.md` to make room for the pointer. Those two must be copied before you go any further.
+
+Nothing here touches any other tool's instructions — `.cursor/rules`, `.github/copilot-instructions.md`, `.windsurfrules`, `.clinerules` — and A5 says explicitly not to untrack them. Copy them anyway, so Steps B and F have one folder holding everything the project said about itself.
+
+Run this from inside the project, replacing `my-project` with your project's name in all three places:
 
 ```bash
-mkdir -p /tmp/original-agent-instructions
+mkdir -p ~/adopted-agent-instructions/my-project
 for f in CLAUDE.md AGENTS.md .cursor/rules .github/copilot-instructions.md .windsurfrules .clinerules; do
-  [ -e "$f" ] && cp -R "$f" /tmp/original-agent-instructions/
+  [ -e "$f" ] && cp -R "$f" ~/adopted-agent-instructions/my-project/
 done
-ls -R /tmp/original-agent-instructions
+ls -aR ~/adopted-agent-instructions/my-project
 ```
+
+Missing files are skipped, so run it whatever the project has. `cp -R` because `.cursor/rules` is a directory in current Cursor, not a file; `ls -aR` because `.windsurfrules` and `.clinerules` are dotfiles a plain `ls -R` would hide.
+
+**Your home directory, not `/tmp`.** Step B reads these copies and Step F reads them again, which on a real engagement is weeks later. macOS deletes anything in `/tmp` left untouched for three days, nightly and without reporting it (`man 8 tmp_cleaner`); Linux distributions clear it on schedules of their own. Naming the folder after the project also keeps two adoptions from mixing one client's instructions into another's.
 
 These files are worth more than they look. Claude Code's `/init` writes `CLAUDE.md` by analysing the codebase, so it frequently records the real run commands, the architecture, and the traps someone hit — facts that exist in no other file and that the code itself only implies.
 
@@ -186,7 +194,7 @@ ls .claude/skills               # proves the skills link resolves
 
 Those last two lines are the check, and each must print something: `head` should show the first lines of the scaffold's config, and `ls` should list the skill directories — `audit`, `feature`, `implement`, and the rest. Silence or an error from either means that link is broken. Verify this way rather than with `ls -l`, which displays a symlink pointing at a path that does not exist exactly as it displays a working one.
 
-The project's own `AGENTS.md` has been replaced by the scaffold's at A4, and its `CLAUDE.md` by the pointer just created. Both survive in `/tmp/original-agent-instructions/` from A2, which is where Step B picks them up.
+The project's own `AGENTS.md` has been replaced by the scaffold's at A4, and its `CLAUDE.md` by the pointer just created. Both survive in `~/adopted-agent-instructions/my-project/` from A2, which is where Step B picks them up.
 
 ### A7 — Commit the adoption on its own
 
@@ -211,13 +219,13 @@ This is the step to resist skipping, and the one most likely to be skipped. It i
 
 ### Draft it with `/survey`
 
-One message. Everything after the command is its argument, and here it names the instructions you preserved at A2 — they are no longer in the project, so `/survey` cannot find them on its own:
+One message. Everything after the command is its argument, and here it names the instructions you preserved at A2 — the project's own `AGENTS.md` and `CLAUDE.md` are no longer there, so `/survey` cannot reach those on its own:
 
 ```
-/survey  Also read /tmp/original-agent-instructions/ as claims to verify against the code.
+/survey  Also read ~/adopted-agent-instructions/my-project/ as claims to verify against the code.
 ```
 
-Say it in a sentence like that rather than passing the path alone. `/survey <path>` means *survey only this part of the project*, so a bare `/survey /tmp/original-agent-instructions/` would survey the copies instead of the codebase.
+Say it in a sentence like that rather than passing the path alone: `/survey <path>` means *survey only this part of the project*, so passing the directory on its own would survey the copies instead of the codebase.
 
 `/survey` reads the manifests, the lockfile, the configs, the source layout, and the declared scripts, then proposes the brief with every statement marked by how well the code supports it — proven by a file, inferred from a pattern, or not determined at all. It writes nothing until you approve it, and it never runs the project's scripts to find out what they do.
 
@@ -310,7 +318,7 @@ When you do write one, follow `WORKFLOW.md` Steps 4 to 6 as written: a feature s
 
 ### Where the intent comes from
 
-A vibe-coded project often has no specification anywhere, but it usually has *something* — a `CLAUDE.md`, an instructions file, a long README section, a prompt someone kept. You preserved these at A2. They are the closest thing to a statement of intent the project has, and they are the right place to start a spec from.
+A vibe-coded project often has no specification anywhere, but it usually has *something* — a `CLAUDE.md`, an instructions file, a long README section, a prompt someone kept. A2 set the instruction files aside for exactly this. They are the closest thing to a statement of intent the project has, and they are the right place to start a spec from.
 
 Treat them the way `/survey` treats them, though: as claims, not as the contract. Three things are commonly true of such a file, and each changes what you write:
 

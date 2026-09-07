@@ -325,7 +325,7 @@ Once everything checks out, update the spec status to `Complete` — or run `/co
 
 ## Step 9 — Run it locally or deploy
 
-**Most frameworks** (Vanilla + Vite, React, Svelte, Astro):
+**Most frameworks** (Vanilla + Vite, React, React + Next.js, Svelte, Svelte + SvelteKit, Astro):
 
 ```bash
 npm install
