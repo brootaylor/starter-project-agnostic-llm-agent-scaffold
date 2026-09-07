@@ -759,19 +759,37 @@ The template relies on the following being available in Eleventy's data cascade:
 | `collections.post` | Eleventy collections | Pages tagged `post` |
 | `collections.page` | Eleventy collections | Pages tagged `page` |
 
-A minimal `src/_data/pkg.js` to expose `package.json` values:
+> [!IMPORTANT]
+> **These data files must match the module format your `package.json` declares.**
+> A `.js` file is an ECMAScript module (ESM) when `package.json` sets
+> `"type": "module"` and CommonJS when it does not, and the two syntaxes are not
+> interchangeable: `module.exports` in an ESM project throws
+> `ReferenceError: module is not defined in ES module scope`, and `export default`
+> in a CommonJS project throws `Unexpected token 'export'`. Either way the build
+> fails outright rather than degrading, and the error names the data file rather
+> than the mismatch that caused it. The examples below are ESM, matching the
+> `"type": "module"` the rest of this scaffold's tooling assumes. For a project
+> without that field, use the CommonJS form shown after them. To be explicit and
+> stop depending on the field at all, name the files `.mjs` or `.cjs` — Eleventy
+> loads both.
+
+A minimal `src/_data/pkg.js` to expose `package.json` values. A data file may
+export a function, which avoids depending on JavaScript Object Notation (JSON)
+import attributes:
 
 ```js
 // src/_data/pkg.js
-const pkg = require('../../package.json');
-module.exports = pkg;
+import { readFile } from 'node:fs/promises';
+
+export default async () =>
+  JSON.parse(await readFile(new URL('../../package.json', import.meta.url), 'utf8'));
 ```
 
 A minimal `src/_data/site.js` to expose the deploy timestamp:
 
 ```js
 // src/_data/site.js
-module.exports = {
+export default {
   timeCurrent: Date.now(),
   start_url: '/'
 };
@@ -781,7 +799,7 @@ Navigation data depends on your site's structure. A minimal example:
 
 ```js
 // src/_data/navigation.js
-module.exports = {
+export default {
   mainnav: [
     { url: '/about',             label: 'About' },
     { url: '/writing',           label: 'Writing' },
@@ -792,6 +810,19 @@ module.exports = {
     { url: '/resume.pdf',   label: 'Résumé', document: true }
   ]
 };
+```
+
+**The CommonJS equivalents**, for a project whose `package.json` does not set
+`"type": "module"`:
+
+```js
+// src/_data/pkg.js
+module.exports = require('../../package.json');
+
+// src/_data/site.js
+module.exports = { timeCurrent: Date.now(), start_url: '/' };
+
+// src/_data/navigation.js — same object as above, assigned to module.exports
 ```
 
 Navigation items with `external: true` or `document: true` are excluded from the
@@ -848,6 +879,6 @@ options as shown in the Vanilla + Vite section above. Only the plugin wiring dif
 - Register the service worker in the root layout or main entry file, wrapped in a `'serviceWorker' in navigator` guard; also add the `message` event listener to handle `INSTALL_FAILED` messages
 - Always create `offline.html` and always include the inline SVG image fallback in the fetch handler — both are required, not optional
 - Do not cache API responses, authenticated routes, or user-specific content unless explicitly specified in this file
-- For **Eleventy**: generate the service worker from `src/sw.njk` using the template approach documented above — do not create a static `sw.js` with a hardcoded page list. Ensure `src/_data/pkg.js` and `src/_data/site.js` exist and provide `pkg.name`, `pkg.version`, and `site.timeCurrent` before writing the template
+- For **Eleventy**: generate the service worker from `src/sw.njk` using the template approach documented above — do not create a static `sw.js` with a hardcoded page list. Ensure `src/_data/pkg.js` and `src/_data/site.js` exist and provide `pkg.name`, `pkg.version`, and `site.timeCurrent` before writing the template. Check what `package.json` sets for `"type"` first and write those data files in the matching module format — a mismatch fails the build outright
 - For **`vite-plugin-pwa`** setups: configure `runtimeCaching` with separate named caches for pages and images using `expiration.maxEntries` and `networkTimeoutSeconds` as shown in the Vanilla + Vite section — do not leave these unconfigured
 - Add the service worker build output to `.gitignore` if the plugin generates it at a known path (e.g. `public/sw.js` for some plugin configurations) — confirm with the plugin's documentation. Do not add `src/sw.js` or `src/sw.njk` to `.gitignore`

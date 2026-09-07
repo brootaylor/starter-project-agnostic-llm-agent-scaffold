@@ -131,11 +131,19 @@ reference those values and never restate them.
 Two edits are the only exceptions in the whole workflow:
 
 - `/complete` sets a finished spec's `**Status:**` and `**Last updated:**` lines,
-  and nothing else.
+  and nothing else. That is `Complete` for a feature or a fix, and `Complete`
+  back to `Ready` for a rollback.
 - `/feature` may draft a brand-new spec, on explicit approval, and only as
-  `**Status:** Draft`. **Promoting a spec to `Ready` is a human act** - that is
-  the signal the contract is settled, and an agent that grants itself that signal
-  has removed the gate the project is built around.
+  `**Status:** Draft`. **Moving a spec from `Draft` to `Ready` is a human act** -
+  that is the signal the contract is settled, and an agent that grants itself
+  that signal has removed the gate the project is built around.
+
+**Promotion and restoration are different moves.** `Draft` -> `Ready` is a
+promotion: a contract nobody has agreed to yet becomes one the loop may build,
+and only a human makes that call. `Complete` -> `Ready` on a rollback is a
+restoration: the human settled that contract once already, the spec still
+describes what the project wants, and only the implementation is being withdrawn.
+`/complete` makes the second move and never the first.
 
 ### The work order's own status
 
@@ -389,15 +397,40 @@ GitHub Copilot, OpenCode, and any other tool with no dedicated syntax for these,
 name the skill and ask the agent to follow its `SKILL.md` - the gates are in the
 file, so a skill followed manually behaves the same as one invoked.
 
-**Two rules hold however a skill is invoked.** No skill promotes a spec to
-`Ready` - that is the human's signal that the contract is settled. And no skill
-creates, switches, merges, or deletes a branch; the loop commits to whatever
-branch is checked out, matching the "commit your work" checkpoints in
-`WORKFLOW.md`.
+**Two rules hold however a skill is invoked.** No skill moves a spec from
+`Draft` to `Ready` - that is the human's signal that the contract is settled, and
+a rollback's `Complete` -> `Ready` is a restoration rather than that move (see
+"Specs are contracts" above). And no skill creates, switches, merges, or deletes
+a branch; the loop commits to whatever branch is checked out, matching the
+"commit your work" checkpoints in `WORKFLOW.md`.
 
 Deployment is also explicit. `/release` can prepare local Render or Vercel config
 and run readiness checks, but it must stop before deploy, remote service changes,
 push, or publish unless the user gives a separate yes in the current chat.
+
+## Output conventions
+
+How a skill reports back. Every `SKILL.md` ends by pointing here, so this is the
+one place to change the house style for all of them at once.
+
+- **Concise and scannable, not a wall of text.** Lead with the answer or the
+  state, then the reasoning, and only as far as it is needed.
+- **Lists for enumerations, tables for matrices.** A set of things is a list. A
+  set of things each carrying the same few attributes is a table. Dense
+  paragraphs are neither.
+- **Name files by path** - `docs/specs/components/button.spec.md`, not "the
+  button spec" - so the reader can open what is being discussed.
+- **Separate what is proven from what is assumed**, and never report the second
+  as the first. "Not checked" is a legitimate thing to say.
+- **Expand every acronym and initialism on first use** in a report, then use the
+  short form freely. The documentation set does this throughout - Web Content
+  Accessibility Guidelines (WCAG), Content Security Policy (CSP) - and skill
+  output is read by the same people.
+- **End with the next action** where the skill has one, phrased as the command to
+  run.
+
+A skill's own file may add to this. Where the two differ, the skill's file wins
+for that skill.
 
 ## Automatic verification
 

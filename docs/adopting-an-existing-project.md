@@ -328,7 +328,7 @@ Treat them the way `/survey` treats them, though: as claims, not as the contract
 
 Read the code alongside the file. Where they agree, you have a specification of the existing behaviour and can decide whether to keep it. Where they disagree, you have a question worth asking before any code is written.
 
-The rule holds here exactly as it does on a new project: **no skill promotes a spec to `Ready`.** On a client engagement that promotion is also the moment scope is agreed, which makes it a good place to have the conversation.
+The rule holds here exactly as it does on a new project: **no skill moves a spec from `Draft` to `Ready`.** On a client engagement that promotion is also the moment scope is agreed, which makes it a good place to have the conversation.
 
 Specs written now cover only what you rebuild. There is no requirement — and no value — in retrospectively specifying code you are leaving alone.
 

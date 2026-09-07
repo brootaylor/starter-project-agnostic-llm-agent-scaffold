@@ -149,6 +149,25 @@ Both links are gitignored, so your choice of agent never travels with the reposi
 
 See `AGENTS.md` for the pointer table and the notes on adding an agent that expects a config file of its own.
 
+### Create the two state files
+
+**This part applies to every agent, including the ones that needed no setup above.**
+
+The build loop keeps its long-term memory in two files under `context/`. Both are gitignored — they accumulate a record of *your* work on *your* project, so they are yours and never travel with the repository, which is also why a fresh clone does not have them and the scaffold cannot create them for you. Make them now:
+
+```bash
+printf '# Where things stand\n\n_Nothing recorded yet. Rewrite this block in full at the end of each session._\n' > context/sessions.md
+printf '# Decisions\n\n_Newest first. One entry per decision, not per session._\n' > context/decisions.md
+```
+
+| File | Holds | How it is written |
+|------|-------|-------------------|
+| `context/sessions.md` | Where things stand right now: the queue, the branch, what is open, the next action | Rewritten **in full** at the end of a session of substance, never appended to. Twenty lines is the budget |
+| `context/decisions.md` | Why a choice was made, and what was rejected and why | Append-only, newest first. One entry per decision, not per session — most sessions add nothing |
+
+> [!IMPORTANT]
+> **These two files are the only things that survive a cleared context.** A `/compact` or `/clear` discards the conversation, and nothing warns you — there is no error, just a later session that has to rediscover what was known, and a decision you already settled being reopened because no record of it exists. Nothing writes these files for you: ask your agent to update both whenever you finish a session of substance, and to read both before acting when it starts cold. `AGENTS.md` → "Keep the state file current" has the full convention.
+
 ---
 
 ## Step 2 — Fill in `project-brief.md`
@@ -350,6 +369,8 @@ For deployment, [Netlify](https://www.netlify.com), [Vercel](https://vercel.com)
 Once a spec is marked `Complete` and committed, return to Step 4 and repeat the cycle for the next feature — feature spec first, then component specs, then build and review.
 
 Run `/status` at any point — after a break, or after clearing your agent's context — to see the spec queue, what's in progress, and the exact next action. Everything it reports comes from files on disk, so a fresh session knows exactly as much as the last one did.
+
+What `/status` cannot rebuild from disk is *why*: which approaches you already rejected, and what you were part-way through deciding. That is what `context/sessions.md` and `context/decisions.md` hold (Step 1). Ask your agent to update both at the end of any session that settled something.
 
 Found a bug that has no spec? `/fix "<description>"` writes a short fix spec and runs it through the same build loop, logged separately under `context/history/fixes/`.
 

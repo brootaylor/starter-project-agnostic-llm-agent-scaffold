@@ -145,7 +145,7 @@ If you're building with an agent, the workflow is a set of shared skills in `.ag
 Others sit outside the loop — `/discovery`, `/survey`, `/fix`, `/rollback`, `/debug`, `/prototype`, `/tests`, `/ci`, and `/release` — plus `/autopilot`, which carries a settled spec the whole way instead of stopping at each gate.
 
 > [!IMPORTANT]
-> Two rules hold however a skill is invoked: **no skill promotes a spec to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.
+> Two rules hold however a skill is invoked: **no skill moves a spec from `Draft` to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.
 
 ---
 
