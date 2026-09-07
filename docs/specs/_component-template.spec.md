@@ -133,6 +133,7 @@ consider the component complete until all of these are satisfied.
 
 - Keyboard navigation requirements
 - Required ARIA roles, labels, and live regions
+- Text alternatives for any images or icons the component renders
 - Focus management after actions
 - Contrast and motion requirements
 

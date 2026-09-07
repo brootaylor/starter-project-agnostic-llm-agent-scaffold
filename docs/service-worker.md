@@ -168,7 +168,7 @@ rather than a broken image. This prevents layout breakage and communicates the o
 state clearly without requiring any additional cached assets.
 
 ```js
-if (request.url.match(/\.(jpe?g|webp|png|gif|svg)/)) {
+if (request.destination === 'image') {
   return new Response(
     '<svg role="img" aria-labelledby="offline-title" viewBox="0 0 400 300" ' +
     'xmlns="http://www.w3.org/2000/svg">' +
@@ -267,7 +267,9 @@ function cacheClients() {
     })
     .then(() => {
       return caches.open(pagesCacheName).then(cache => cache.addAll(pages));
-    });
+    })
+    // Non-mandatory: one unreachable open page must not fail the whole installation
+    .catch(error => console.warn('Could not cache open pages:', error));
 }
 ```
 
@@ -309,6 +311,8 @@ to its maximum size. Use this for all runtime cache writes in the fetch handler.
 
 ```js
 function addToCache(cacheName, request, response) {
+  // Never store 404s, 5xx or opaque responses — a cached error page outlives the outage
+  if (!response.ok) return;
   caches.open(cacheName).then(cache => {
     cache.put(request, response);
     trimCache(cacheName, cacheName === imagesCacheName ? maxImages : maxPages);
@@ -453,7 +457,7 @@ self.addEventListener('fetch', event => {
     caches.match(request).then(cached => {
       return cached || fetch(request)
         .then(response => {
-          if (request.url.match(/\.(jpe?g|webp|png|gif|svg)/)) {
+          if (request.destination === 'image') {
             try { addToCache(imagesCacheName, request, response.clone()); } catch (e) { console.error(e); }
           }
           return response;
@@ -461,7 +465,7 @@ self.addEventListener('fetch', event => {
         .catch(error => {
           console.error(error);
           // Offline image fallback
-          if (request.url.match(/\.(jpe?g|webp|png|gif|svg)/)) {
+          if (request.destination === 'image') {
             return new Response(
               '<svg role="img" aria-labelledby="offline-title" viewBox="0 0 400 300" ' +
               'xmlns="http://www.w3.org/2000/svg">' +
@@ -474,6 +478,9 @@ self.addEventListener('fetch', event => {
               { headers: { 'Content-Type': 'image/svg+xml', 'Cache-Control': 'no-store' } }
             );
           }
+          // Anything else: hand back a real network error rather than `undefined`,
+          // which would make respondWith() throw a TypeError that masks the cause
+          return Response.error();
         });
     })
   );
@@ -533,7 +540,6 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['**/*.{js,css,html,svg,png,ico,woff2}'],
       workbox: {
-        navigationFallback: '/offline.html',
         runtimeCaching: [
           {
             urlPattern: ({ request }) => request.mode === 'navigate',
@@ -542,10 +548,11 @@ export default defineConfig({
               cacheName: 'pages-cache',
               networkTimeoutSeconds: 3,
               expiration: { maxEntries: 50 },
+              precacheFallback: { fallbackURL: '/offline.html' },
             },
           },
           {
-            urlPattern: /\.(jpe?g|webp|png|gif|svg)$/i,
+            urlPattern: ({ request }) => request.destination === 'image',
             handler: 'CacheFirst',
             options: {
               cacheName: 'images-cache',
@@ -562,6 +569,23 @@ export default defineConfig({
 The `networkTimeoutSeconds` and `expiration.maxEntries` values correspond to the
 timeout and cache size limits described in this file. Workbox handles precaching,
 versioning, and cache invalidation automatically — no manual cache naming is needed.
+
+> [!IMPORTANT]
+> **Use `precacheFallback`, not `navigateFallback`, for the offline page here.**
+> Two traps. First, [`workbox-build` validates its options](https://developer.chrome.com/docs/workbox/modules/workbox-build)
+> and throws on any key it does not recognise, so a near-miss like `navigationFallback`
+> fails the **build**, not the runtime. Second, `navigateFallback` is the wrong tool
+> even spelled correctly: it registers a `NavigationRoute` that serves the fallback for
+> *every* navigation to a URL that is not precached — online as well as offline — and
+> the generated service worker registers it **before** the `runtimeCaching` routes, so
+> the `NetworkFirst` page strategy above would never run. `precacheFallback` attaches to
+> that strategy instead, and only fires once both network and cache have failed.
+
+Note that `vite-plugin-pwa` precaches the HTML that Vite builds, and the precache route
+is matched before any `runtimeCaching` route. Navigations to precached pages are
+therefore served from the precache and refreshed when the service worker updates; the
+`NetworkFirst` strategy above applies to navigations that are *not* in the precache
+manifest. This is the plugin's intended design — do not try to invert it.
 
 **Register in `src/scripts/main.js`:**
 
@@ -620,8 +644,8 @@ const maxImages = 100;
 const timeout   = 3000;
 
 // Assets
-const offlinePage        = '/offline';
-const staticMandatory    = [...build, ...files, offlinePage];
+const offlinePage        = '/offline.html'; // static/offline.html is served at /offline.html
+const staticMandatory    = [...build, ...files]; // `files` already includes offlinePage
 const staticNonMandatory = []; // add paths to any non-critical supplementary assets
 const offlinePages       = []; // SvelteKit: open pages are handled by cacheClients()
 ```
@@ -675,8 +699,8 @@ const maxPages  = 50;
 const maxImages = 100;
 const timeout   = 3000;
 
-// Offline page URL
-const offlinePage = '/offline';
+// Offline page URL — passthrough-copied from src/offline.html, so it keeps its extension
+const offlinePage = '/offline.html';
 
 // Pages to pre-cache — built at compile time from site collections and navigation.
 // The last 5 posts, all main and footer nav pages, and all pages tagged `page`
@@ -684,7 +708,7 @@ const offlinePage = '/offline';
 const offlinePages = [
   {%- set recentPosts = collections.post | reverse %}
   {%- for item in recentPosts.slice(0, 5) %}
-  '{{ item.url | pretty }}',
+  '{{ item.url | url }}',
   {%- endfor %}
   {%- for item in navigation.mainnav %}
   {%- if (item.document !== true) and (item.external !== true) %}
@@ -697,7 +721,7 @@ const offlinePages = [
   {%- endif %}
   {%- endfor %}
   {%- for item in collections.page | reverse %}
-  '{{ item.url | pretty }}',
+  '{{ item.url | url }}',
   {%- endfor %}
   '{{ site.start_url }}'
 ];

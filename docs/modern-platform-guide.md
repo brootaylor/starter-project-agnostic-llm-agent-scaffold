@@ -21,10 +21,11 @@ silently polyfilling or falling back.**
 |------|-----|------------|
 | Modal / dialog | `<dialog>` with `.showModal()` and `.close()` | `<div role="dialog">` with a custom focus trap and backdrop |
 | Disclosure / accordion | `<details>` + `<summary>` | `<div>` with a click handler toggling `display` or `height` |
-| Lazy-load images | `<img loading="lazy">` | Intersection Observer scroll hack, JS lazy-load libraries |
+| Lazy-load images | `<img loading="lazy">` on **offscreen** images only, always with `width` and `height` | `loading="lazy"` on anything in the initial viewport; Intersection Observer scroll hacks; JS lazy-load libraries |
+| Image alternative text | `alt` on every `<img>` — empty for decorative, descriptive otherwise, full stop at the end — see below | Omitting `alt`; `alt="image"` or the filename; describing an image the surrounding text already describes |
 | Form validation | Constraint Validation API (`required`, `pattern`, `min`, `max`, `setCustomValidity`) | Manual JS validation re-implementing what the browser already provides |
 | Popovers / tooltips | `popover` attribute + `popovertarget` — Baseline 2025, see below | Custom JS-positioned `<div>` overlays with manual show/hide logic |
-| Inline SVG icons | Inline `<svg>` directly in the component | `<img src="icon.svg">` or CSS `background-image` for icons |
+| Inline SVG icons | Inline `<svg>`, with `aria-hidden="true"` when decorative or `role="img"` plus a `<title>` when it carries meaning | `<img src="icon.svg">` or CSS `background-image` for icons; an unlabelled `<svg>` as the only content of a control |
 | Progress indicators | `<progress value="" max="">` | `<div>` with a `width` style or animation |
 | Meter / gauge values | `<meter value="" min="" max="">` | Custom `<div>` bars with inline width calculations |
 | Native date / time input | `<input type="date">`, `<input type="time">` | Third-party date picker libraries for standard date entry |
@@ -33,7 +34,36 @@ silently polyfilling or falling back.**
 | Image with fallback | `<picture>` + `<source>` | JS-based format detection or `onerror` swapping |
 | Responsive images | `srcset` and `sizes` attributes | JS that swaps `src` on resize |
 
-**Two caveats on this table.** `popover` is [Baseline 2025 - newly available](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API), a lower support tier than everything else here, so check it against the project's browser targets rather than treating it as settled. Popovers are always non-modal; anything needing modal behaviour is `<dialog>`. And `<dialog>` only becomes modal - inert background, focus constrained, `aria-modal="true"` - when opened with `.showModal()`. A dialog opened with `.show()` constrains nothing.
+**Alternative text.** Every `<img>` needs an `alt` attribute — the attribute itself,
+present always, which is not the same as having a value. A missing `alt` and an empty
+`alt=""` mean opposite things: `alt=""` tells a screen reader the image carries no
+information and should be skipped, while a missing attribute leaves it guessing, and
+most readers fall back to announcing the file name. So decorative images take `alt=""`,
+and every other image takes a description of what it *conveys in this context* — not a
+label for what it depicts. An image the adjacent prose already explains is decorative.
+
+**End every non-empty `alt` with a full stop.** Screen readers derive prosody from
+punctuation, and a sentence-final stop produces a pause before the next thing is
+announced. Without it the alternative text runs into the following content in a single
+breath, and the listener cannot tell where the image ended and the page resumed. This
+is a house rule rather than a Web Content Accessibility Guidelines (WCAG) requirement,
+and it is mildly contested: a trailing stop on a two-word fragment can read as an
+over-long pause, and anyone running maximum punctuation verbosity will hear "period"
+spoken aloud. The trade is deliberate — a slightly long pause is a smaller harm than
+two sentences colliding.
+
+**Lazy-loading.** Worth spelling out because the failure is a slower page, not a
+broken one. The hero image is usually the Largest Contentful Paint (LCP) element, and
+lazy-loading it defers the very thing that metric measures — the browser can no longer
+start the fetch while parsing markup, and waits until layout has placed the image.
+[web.dev is explicit](https://web.dev/articles/browser-level-image-lazy-loading):
+"Don't lazy-load images that are likely to be in-viewport when the page loads,
+especially LCP images." Leave above-the-fold images at the default eager loading,
+and mark the LCP image `fetchpriority="high"` instead. `width` and `height` matter more on
+lazy images than eager ones: an unloaded image is 0x0, so one that never intersects
+the viewport never loads at all.
+
+**Popover support, and what "modal" means.** `popover` is [Baseline 2025 - newly available](https://developer.mozilla.org/en-US/docs/Web/API/Popover_API), a lower support tier than everything else here, so check it against the project's browser targets rather than treating it as settled. Popovers are always non-modal; anything needing modal behaviour is `<dialog>`. And `<dialog>` only becomes modal - inert background, focus constrained, `aria-modal="true"` - when opened with `.showModal()`. A dialog opened with `.show()` constrains nothing.
 
 ---
 
@@ -54,7 +84,7 @@ silently polyfilling or falling back.**
 | Parent state selectors | `:has()` | JS that walks the DOM to add a class to a parent element |
 | CSS nesting | Native CSS nesting — see the callout below before migrating from Sass | Sass or PostCSS nesting plugins used solely to work around lack of native support |
 | Logical / directional properties | `margin-inline`, `padding-block`, `inset-inline-start`, etc. | Physical properties (`margin-left`, `padding-top`) for layouts that need to support RTL |
-| Smooth scrolling | `scroll-behavior: smooth` | JS animation loop incrementing `scrollTop` |
+| Smooth scrolling | `scroll-behavior: smooth`, guarded by `prefers-reduced-motion` — see below | Unguarded smooth scrolling; JS animation loop incrementing `scrollTop` |
 | Text truncation (single line) | `text-overflow: ellipsis` with `overflow: hidden; white-space: nowrap` | JS that measures text and truncates the string |
 | Custom focus ring | `outline` styled via CSS (never `outline: none` without a replacement) | Removing the outline and relying on a `:hover` state as a substitute |
 | Colour functions | `oklch()` or `color-mix()` where targets support it | JS colour manipulation libraries for static colour derivations |
@@ -69,6 +99,27 @@ silently polyfilling or falling back.**
 > `.block__child`, it is invalid. Convert BEM selectors by hand, and verify the
 > computed cascade rather than assuming a visual match.
 
+> [!IMPORTANT]
+> **Nothing disables smooth scrolling for users who asked for less motion — you
+> have to.** Neither
+> [`scroll-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior)
+> nor
+> [`scrollIntoView()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView)
+> consults `prefers-reduced-motion`; the animation simply plays, with nothing in the
+> console and nothing visibly broken to anyone not affected by it. Declare the
+> smoothness once in CSS and turn it off under the query:
+>
+> ```css
+> html { scroll-behavior: smooth; }
+> @media (prefers-reduced-motion: reduce) {
+>   html { scroll-behavior: auto; }
+> }
+> ```
+>
+> Then call `scrollIntoView()` with no `behavior` argument. It defaults to `auto`,
+> which defers to the computed CSS value — so the guard above covers the JavaScript
+> path too. Passing `behavior: 'smooth'` explicitly opts back out of it.
+
 ---
 
 ## JavaScript
@@ -79,7 +130,7 @@ silently polyfilling or falling back.**
 | Element resize detection | `ResizeObserver` | `resize` window event listener querying element dimensions |
 | DOM mutation detection | `MutationObserver` | `setInterval` polling the DOM for changes |
 | Cancellable fetch | `AbortController` with a `signal` passed to `fetch` | Ignoring the resolved response after a race condition |
-| Deep object clone | `structuredClone()` | `JSON.parse(JSON.stringify(...))` — loses `undefined`, `Date`, `Map`, `Set`, functions |
+| Deep object clone | `structuredClone()` — throws `DataCloneError` on functions and DOM nodes, and clones class instances as plain objects | `JSON.parse(JSON.stringify(...))` — silently loses `undefined`, `Date`, `Map` and `Set` |
 | Last array element | `array.at(-1)` | `array[array.length - 1]` |
 | Safe own property check | `Object.hasOwn(obj, key)` | `obj.hasOwnProperty(key)` — fails on objects with no prototype |
 | Optional chaining | `a?.b?.c` | `a && a.b && a.b.c` |
@@ -88,10 +139,10 @@ silently polyfilling or falling back.**
 | Concurrent async (all must succeed) | `Promise.all()` | Sequential `await` when operations are independent |
 | URL construction | `URL` and `URLSearchParams` APIs | String concatenation or manual encoding for query parameters |
 | Clipboard write | `navigator.clipboard.writeText()` — secure context only | `document.execCommand('copy')` — deprecated and unreliable |
-| Smooth scroll to element | `element.scrollIntoView({ behavior: 'smooth' })` | JS animation loop incrementing `scrollTop` |
+| Smooth scroll to element | `element.scrollIntoView()` — leave `behavior` unset so it inherits the guarded CSS value | `scrollIntoView({ behavior: 'smooth' })`, which overrides the guard; JS animation loop incrementing `scrollTop` |
 | Unique IDs | `crypto.randomUUID()` — secure context only | `Math.random()` string constructions for IDs that need to be unique |
 | Type checking at runtime | `instanceof`, `typeof`, or `Array.isArray()` | String comparisons against `Object.prototype.toString` unless targeting older runtimes |
-| Object immutability | `Object.freeze()` | Naming conventions or comments to signal "do not mutate" |
+| Object immutability | `Object.freeze()` — shallow; nested objects stay mutable and need freezing themselves | Naming conventions or comments to signal "do not mutate" |
 | Event delegation | Single listener on a parent with `event.target.closest()` | Attaching individual listeners to every child element in a list |
 | Scheduling non-urgent work | `requestIdleCallback()` with a `setTimeout` fallback — see below | `setTimeout(fn, 0)` as the default path for deferring low-priority work |
 | Animation frame sync | `requestAnimationFrame()` | `setInterval` or `setTimeout` for visual updates |
@@ -143,7 +194,9 @@ Common areas where agents drift toward unnecessary custom code:
   min/max ranges, and custom messages via `setCustomValidity`; do not re-validate
   fields the browser already validates
 - **Smooth scroll** — `scroll-behavior: smooth` and `scrollIntoView` cover the
-  standard cases; JS animation loops are not needed
+  standard cases; JS animation loops are not needed. Guard the CSS declaration with
+  `prefers-reduced-motion` and leave `scrollIntoView()`'s `behavior` unset, so the
+  preference is honoured in one place
 
 ### No layout with JavaScript
 

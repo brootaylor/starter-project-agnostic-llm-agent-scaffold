@@ -342,6 +342,7 @@ This applies to:
 - Colour contrast (text and interactive elements)
 - Keyboard navigation and focus management
 - Screen reader support (semantic HTML, ARIA roles, labels, and live regions)
+- Text alternatives (every `<img>` carries an `alt`; decorative images use `alt=""`)
 - Motion (respect `prefers-reduced-motion` where animations are used)
 
 Individual specs may define accessibility requirements beyond this baseline.

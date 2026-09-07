@@ -99,7 +99,7 @@ Everything from `/feature` down is the build loop — see
 |------|-------|
 | A terminal | macOS and Linux have one built in. On Windows, [Git Bash](https://gitforwindows.org) or [Windows Terminal](https://aka.ms/terminal) are good options |
 | [Git](https://git-scm.com) | Required to clone this scaffold. Recommended for version control throughout development |
-| [Node.js](https://nodejs.org) | Required by most tooling — install the LTS version |
+| [Node.js](https://nodejs.org) | Required by most tooling — install the Long Term Support (LTS) version |
 | [npm](https://www.npmjs.com) | Comes with Node.js |
 | A code editor | [VS Code](https://code.visualstudio.com) is a good option |
 
@@ -128,7 +128,7 @@ Make sure your agent has what it needs:
 | Agent | Prerequisites | Setup |
 |-------|--------------|-------|
 | Codex, Cursor, GitHub Copilot, Gemini CLI, Jules, Aider, Zed, Windsurf, Devin, OpenCode | Whatever the tool itself needs to run | **None.** They read `AGENTS.md` from the project root, which points them at the workflow skills — you invoke those by name (Step 7) |
-| Claude Code | Node.js, plus either a [Claude](https://claude.ai) Pro or Max subscription to sign in with, or an [Anthropic API key](https://console.anthropic.com) | The two links below |
+| Claude Code | A [Claude](https://claude.ai) Pro, Max, Team or Enterprise plan to sign in with, or an [Anthropic Console account](https://console.anthropic.com) billed by usage — the free plan does not include Claude Code. The installer ships a self-contained binary, so Claude Code itself needs no Node.js | The two links below |
 
 `AGENTS.md` is an open convention that most coding agents now read directly from the project root, so for them there is nothing to set up at all. Claude Code is the exception: [it reads `CLAUDE.md`, not `AGENTS.md`](https://code.claude.com/docs/en/memory), and gives you no way to change that filename. The scaffold's `CLAUDE.md` imports `AGENTS.md`, which is the approach Anthropic's own documentation recommends, so Claude Code ends up reading the same instructions as everything else — it just needs a pointer to reach them.
 
@@ -163,7 +163,7 @@ Open `docs/project-brief.md` and complete two things before anything else:
 - Language
 - Styles
 - Unit testing
-- E2E testing
+- End-to-end (E2E) testing *(optional)*
 - Build
 - Service worker *(optional)*
 - Storybook *(optional)*
@@ -196,7 +196,7 @@ Read `docs/project-brief.md` and complete the initial project setup.
 
 The agent will populate `package.json`, generate any required config files, and update `.nvmrc` and `.gitignore`. It covers setup only — specs and design tokens come in later steps.
 
-**Starting files:** `src/index.html` and `src/scripts/main.js` are included for Vanilla, React, and Svelte stacks. For React and Svelte, `main.js` needs to be updated to mount the app. For Astro and Eleventy, remove both files — those frameworks manage their own pages and templating.
+**Starting files:** `src/index.html` and `src/scripts/main.js` are included for the Vanilla, React, and Svelte stacks. For React and Svelte, `main.js` needs to be updated to mount the app. Remove both files for Astro, Eleventy, React + Next.js, and Svelte + SvelteKit — those four manage their own pages and routing.
 
 > **Testing and automatic checks are opt-in.** `/tests` adds a unit test runner for your active stack and turns the testing gate on; `/ci` defines one `Verify` command and the matching GitHub Actions workflow. Run either now or later — the loop works without them.
 
