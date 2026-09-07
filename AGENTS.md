@@ -272,10 +272,24 @@ none of the steps below. For one that insists on a config file of its own:
    `.agents/claude/CLAUDE.md` for a working example
 4. Add any agent-specific config below that instruction
 5. Create the pointer at the location the agent expects, per the table above
-6. Add that pointer path to `.gitignore`
+6. Add that pointer path to `.gitignore`, **anchored with a leading slash** -
+   `/<CONFIG>.md`, not `<CONFIG>.md`
 
 All project conventions are already in `docs/project-brief.md`, so there is
 nothing else to duplicate.
+
+> [!IMPORTANT]
+> **A `.gitignore` pattern containing no slash matches at every depth, not just
+> the root.** Unanchored, the pointer's filename ignores the pointer *and* the
+> real config at `.agents/<agent-name>/` - the only tracked copy. This project's
+> own `.gitignore` carried an unanchored `CLAUDE.md` until it was fixed; nothing
+> was lost only because that file was already tracked, and an ignore rule cannot
+> untrack. A config you add now has no such protection. Nothing reports it:
+> `git add -A` skips the file in silence, `git status` cannot list what it never
+> staged, and the pointer resolves perfectly for whoever created it. The failure
+> surfaces only in someone else's clone, as a dangling link. Anchor the pattern,
+> then prove it with `git check-ignore -v .agents/<agent-name>/<file>` - it
+> should print nothing.
 
 ### Removing an agent
 

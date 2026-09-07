@@ -22,8 +22,13 @@ node_modules/
 # its pointer goes here too (see AGENTS.md, "Adding a new agent"). Config your
 # editor writes for you alone belongs in your global gitignore
 # (`git config --global core.excludesFile`), not in a template everyone clones.
+#
+# Anchor every pointer with a leading slash. A pattern with no slash in it
+# matches at any depth, so a bare `CLAUDE.md` would also ignore the real config
+# at `.agents/claude/CLAUDE.md` — and git reports nothing when `git add -A`
+# skips it.
 .claude/
-CLAUDE.md
+/CLAUDE.md
 
 # ── Personal context ─────────────────────────────────────────────
 # Your own state file and decision log. They accumulate a record of your work on

@@ -206,6 +206,7 @@ With your stack selected, `package.json` needs to be populated with the correct 
 - Set up `package.json` and any required config files (e.g. `vite.config.js`, `jest.config.js`) based on your active stack selections
 - Update `.nvmrc` with the Node.js version your framework recommends
 - Update the stack-specific section of `.gitignore` (e.g. `dist/` for Vite, `_site/` for Eleventy, `.astro/` for Astro)
+- Fill in the **Commands** section at the bottom of `AGENTS.md` with the real commands your `package.json` now has, and delete any row that does not apply
 
 **With an agent:**
 
@@ -213,7 +214,10 @@ With your stack selected, `package.json` needs to be populated with the correct 
 Read `docs/project-brief.md` and complete the initial project setup.
 ```
 
-The agent will populate `package.json`, generate any required config files, and update `.nvmrc` and `.gitignore`. It covers setup only — specs and design tokens come in later steps.
+The agent will populate `package.json`, generate any required config files, update `.nvmrc` and `.gitignore`, and fill in the Commands section of `AGENTS.md`. It covers setup only — specs and design tokens come in later steps.
+
+> [!IMPORTANT]
+> **The Commands section of `AGENTS.md` is read by the loop, not just written by you.** `/check` and `/try` use it to start the app, `/debug` to reproduce a failure, and `/implement` and `/complete` to run the build before anything is committed. Left as the shipped `<command>` placeholders it produces no error — each skill simply reports the command as a gap and carries on with less evidence than it should have. Leave `Test` and `Verify` alone for now — `/tests` and `/ci` write those two rows. The two behave differently when absent: a real `Test` command is the single switch that turns the testing gate on, so no row means no gate, while a missing `Verify` just means those skills fall back to the build and test commands you filled in above.
 
 **Starting files:** `src/index.html` and `src/scripts/main.js` are included for the Vanilla, React, and Svelte stacks. For React and Svelte, `main.js` needs to be updated to mount the app. Remove both files for Astro, Eleventy, React + Next.js, and Svelte + SvelteKit — those four manage their own pages and routing.
 

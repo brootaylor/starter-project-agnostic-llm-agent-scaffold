@@ -141,8 +141,12 @@ part of this skill.
   creates CI by itself.
 - `/implement`, `/complete`, and `/autopilot` run Verify when it is documented,
   with their existing fallback behavior when it is absent.
-- `/status` reports drift between what `AGENTS.md` documents and what the
-  project actually has. Missing CI remains informational.
+- `/status` does not report missing or stale CI. Its inputs are the spec queue,
+  the work order, the findings ledger, git, `context/sessions.md` and progress
+  drift between those; it sends setup gaps to `WORKFLOW.md` Steps 1-3 instead.
+  So nothing watches for drift between the `Verify` command documented in
+  `AGENTS.md` and the workflow on disk - rerun `/ci` when the project's checks
+  change.
 
 ## Rules
 

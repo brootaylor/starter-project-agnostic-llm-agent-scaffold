@@ -383,11 +383,12 @@ need to be in place.
 4. Generate any required config files based on the active selections
 5. Populate `.nvmrc` with the correct Node.js version for the active framework
 6. Update the stack-specific section of `.gitignore` with any entries required by the active stack
-7. If a service worker option is active, implement it following `docs/service-worker.md`
-8. If Storybook is active, set it up following `docs/storybook.md`
-9. If ESLint is active, install ESLint and the plugins listed in `docs/security.md` and generate `eslint.config.mjs` — flat config, never `.eslintrc`, which ESLint v10 does not read at all
-10. If a security option is active, apply the configuration following `docs/security.md`
-11. Do not install any dependencies not directly required by the active stack selections
+7. Fill in the Commands section of `AGENTS.md` with the real dev-server, build, production-server and lint commands just written into `package.json`, deleting any row that does not apply. Leave the `Test` and `Verify` rows absent — `/tests` and `/ci` own those. A missing `Test` row is what keeps the testing gate off; a missing `Verify` row simply means the skills that would run it fall back to the build and test commands
+8. If a service worker option is active, implement it following `docs/service-worker.md`
+9. If Storybook is active, set it up following `docs/storybook.md`
+10. If ESLint is active, install ESLint and the plugins listed in `docs/security.md` and generate `eslint.config.mjs` — flat config, never `.eslintrc`, which ESLint v10 does not read at all
+11. If a security option is active, apply the configuration following `docs/security.md`
+12. Do not install any dependencies not directly required by the active stack selections
 
 ---
 

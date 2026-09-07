@@ -156,13 +156,16 @@ cat >> .gitignore <<'EOF'
 
 # ── "Ai" tool config ──────────────────────────────────
 .claude/
-CLAUDE.md
+/CLAUDE.md
 
 # ── Personal context ──────────────────────────────────
 context/sessions.md
 context/decisions.md
 EOF
 ```
+
+> [!IMPORTANT]
+> **The leading slash on `/CLAUDE.md` is load-bearing, and dropping it fails silently.** A pattern with no slash in it matches at every depth, so a bare `CLAUDE.md` also ignores `.agents/claude/CLAUDE.md` — the config A4 has just copied in, and the only real copy of it. A7's `git add -A` then skips that file without a word, `git status` cannot list what it never staged, and A6's two checks still pass because they read the working tree rather than the index. The adoption commits without the Claude config, works perfectly for you, and reaches the next person as a dangling symlink. Prove the anchor took with `git check-ignore -v .agents/claude/CLAUDE.md`, which should print nothing.
 
 An ignore rule does not untrack a file that is already tracked. If the project already commits a `CLAUDE.md` or a `.claude/` directory, git keeps carrying it and your new rule has no effect. Check, and untrack anything it finds:
 
@@ -201,8 +204,12 @@ The project's own `AGENTS.md` has been replaced by the scaffold's at A4, and its
 One commit containing nothing but the scaffold, so the diff of every later commit is only project code:
 
 ```bash
-git add -A && git status      # read it before committing
+git add -A
+git diff --cached --name-only | grep '^\.agents/'   # must list the skills AND .agents/claude/
+git status                                          # read it before committing
 ```
+
+That `grep` is the one check `git status` cannot do for you. A file an ignore rule swallowed never reaches the index, so it appears in no status output and no diff — the only way to notice is to ask what *did* get staged. Expect `.agents/claude/CLAUDE.md` and the whole `.agents/skills/` tree. If the config line is missing, A5's ignore block lost its leading slash.
 
 Then open your agent in the project and run `/status`. It should report the spec queue and find nothing in flight. If it does not recognise the command, the `.claude/skills` link from A6 is wrong.
 
