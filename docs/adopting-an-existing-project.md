@@ -145,7 +145,7 @@ mkdir -p docs && cp -R /tmp/scaffold/docs/. docs/
 Copy `.editorconfig` and `.markdownlint.json` too if the project has none.
 
 > [!IMPORTANT]
-> **Never copy the scaffold's `package.json`, `src/`, `README.md`, `LICENSE` or `.nvmrc`.** *The scaffold ships a placeholder `package.json` naming no dependencies and a two-file `src/` (`index.html`, `scripts/main.js`) that exists to give a new project somewhere to start. Copying either over a real project destroys the dependency list or the application entry point, and a broad `cp -R /tmp/scaffold/. .` does exactly that in one stroke — which is why the commands above name each path. The other three are the scaffold's own identity and belong to it, not to the project.*
+> **Never copy the scaffold's `package.json`, `src/`, `README.md`, `LICENSE` or `.nvmrc`.** *The scaffold ships a placeholder `package.json` naming no dependencies and a three-file `src/` (`index.html`, `scripts/main.js`, `assets/icons/spinner.svg`) that exists to give a new project somewhere to start. Copying either over a real project destroys the dependency list or the application entry point, and a broad `cp -R /tmp/scaffold/. .` does exactly that in one stroke — which is why the commands above name each path. The other three are the scaffold's own identity and belong to it, not to the project.*
 
 ### A5 — Merge `.gitignore` rather than replacing it
 

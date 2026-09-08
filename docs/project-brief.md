@@ -677,6 +677,7 @@ WORKFLOW.md                                               # ← the ten-step hum
 - **Svelte + SvelteKit** — pages and routing are managed by SvelteKit. Remove `src/index.html` and `src/scripts/main.js` if switching to SvelteKit
 - **Astro** — pages and templating are managed by Astro's own file-based routing. Remove `src/index.html` and `src/scripts/main.js` if switching to Astro
 - **Eleventy** — pages and templating are managed by Eleventy's own templating system. Remove `src/index.html` and `src/scripts/main.js` if switching to Eleventy
+- **Every stack** — `src/assets/icons/spinner.svg` is framework-neutral and stays in place whichever stack is active. `docs/specs/components/button.spec.md` lists it as a dependency and requires it inlined, so removing it breaks the one spec that ships `Ready`
 
 ---
 

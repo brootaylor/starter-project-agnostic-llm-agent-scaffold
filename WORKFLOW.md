@@ -109,7 +109,7 @@ Everything from `/feature` down is the build loop — see
 
 ## Before you start
 
-The scaffold comes with a full set of starter files: root config (`README.md`, `package.json`, `.gitignore`, `.nvmrc`), docs (`project-brief.md`, `design-tokens.md`, feature and spec examples), default source files (`src/index.html`, `src/scripts/main.js`), agent configs under `.agents/`, and the build loop's empty working state under `context/`.
+The scaffold comes with a full set of starter files: root config (`README.md`, `package.json`, `.gitignore`, `.nvmrc`), docs (`project-brief.md`, `design-tokens.md`, feature and spec examples), default source files (`src/index.html`, `src/scripts/main.js`, `src/assets/icons/spinner.svg`), agent configs under `.agents/`, and the build loop's empty working state under `context/`.
 
 The spec and feature files are illustrative examples — replace or modify them to suit your project.
 
@@ -219,7 +219,7 @@ The agent will populate `package.json`, generate any required config files, upda
 > [!IMPORTANT]
 > **The Commands section of `AGENTS.md` is read by the loop, not just written by you.** *`/check` and `/try` use it to start the app, `/debug` to reproduce a failure, and `/implement` and `/complete` to run the build before anything is committed. Left as the shipped `<command>` placeholders it produces no error — each skill simply reports the command as a gap and carries on with less evidence than it should have. Leave `Test` and `Verify` alone for now — `/tests` and `/ci` write those two rows. The two behave differently when absent: a real `Test` command is the single switch that turns the testing gate on, so no row means no gate, while a missing `Verify` just means those skills fall back to the build and test commands you filled in above.*
 
-**Starting files:** `src/index.html` and `src/scripts/main.js` are included for the Vanilla, React, and Svelte stacks. For React and Svelte, `main.js` needs to be updated to mount the app. Remove both files for Astro, Eleventy, React + Next.js, and Svelte + SvelteKit — those four manage their own pages and routing.
+**Starting files:** `src/index.html` and `src/scripts/main.js` are included for the Vanilla, React, and Svelte stacks. For React and Svelte, `main.js` needs to be updated to mount the app. Remove both files for Astro, Eleventy, React + Next.js, and Svelte + SvelteKit — those four manage their own pages and routing. `src/assets/icons/spinner.svg` ships alongside them and stays whichever stack is active: an icon file is framework-neutral, and `docs/specs/components/button.spec.md` lists it as a dependency and requires it inlined.
 
 > **Testing and automatic checks are opt-in.** `/tests` adds a unit test runner for your active stack and turns the testing gate on; `/ci` defines one `Verify` command and the matching GitHub Actions workflow. Run either now or later — the loop works without them.
 
