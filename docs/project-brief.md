@@ -15,10 +15,12 @@ Agent-specific configs live in `.agents/`.
 
 These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any "Ai" agent working on the project.
 
-- [ ] **What this project is** — describe the project, who it's for, its goals, and any known constraints
-- [ ] **Stack** — mark one option per category as `[active]`, replacing the defaults the scaffold ships with
-- [ ] **Browser support** — update the targets table if the defaults don't match your project
-- [ ] **Accessibility standard** — review the default and update it if your project has different requirements
+- [ ] [**What this project is**](#what-this-project-is) — describe the project, who it's for, its goals, and any known constraints
+- [ ] [**Stack**](#stack) — mark one option per category as `[active]`, replacing the defaults the scaffold ships with. Much the longest of the four — ten categories, but only five need a decision:
+  - **Decide these:** [Framework](#framework), [Language](#language), [Styles](#styles), [Unit testing](#unit-testing), [Build](#build) *(Vanilla only — every other framework brings its own)*
+  - **Optional, fine left as `None`:** [End-to-end testing](#end-to-end-e2e-testing), [Service worker](#service-worker), [Storybook](#storybook), [Linting](#linting), [Security](#security)
+- [ ] [**Browser support**](#browser-support) — update the targets table if the defaults don't match your project
+- [ ] [**Accessibility standard**](#accessibility-standard) — review the default and update it if your project has different requirements
 
 ---
 
@@ -308,6 +310,11 @@ the relevant entry below before generating any test config file.
 
 ## Browser support
 
+> *Update this table to reflect the actual support requirements for your project.
+> For example, if legacy browser support is required, note the specific versions here
+> and add any polyfill or transpilation requirements to the **Known constraints** field
+> in "What this project is" above.*
+
 The following defines the minimum browser targets for this project. These targets
 determine which JavaScript and CSS features are safe to use without polyfills or
 fallbacks.
@@ -318,11 +325,6 @@ fallbacks.
 | Firefox | Latest 2 versions |
 | Safari | Latest 2 versions |
 | Edge | Latest 2 versions |
-
-> *Update this table to reflect the actual support requirements for your project.
-> For example, if legacy browser support is required, note the specific versions here
-> and add any polyfill or transpilation requirements to the **Known constraints** field
-> in "What this project is" above.*
 
 - No Internet Explorer support unless explicitly listed above
 - Agents must not use browser APIs or CSS features that fall outside these targets
