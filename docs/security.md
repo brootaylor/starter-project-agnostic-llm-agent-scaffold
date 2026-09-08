@@ -285,7 +285,7 @@ and helps the agent avoid building more than is required.
 - Server-side input validation and sanitisation
 - CORS configuration (defined separately where a backend exists)
 - Dependency vulnerability scanning (use `npm audit` or a dedicated tool)
-- `Strict-Transport-Security` — automatic on Netlify and Vercel, but **not on Cloudflare**; see the note under Notes for "Ai" agents before deciding whether to set it
+- `Strict-Transport-Security` — automatic on Netlify and Vercel, but **not on Cloudflare, and not documented either way on Render**; see the note under Notes for "Ai" agents before deciding whether to set it
 - Rate limiting and DDoS protection — handled at the infrastructure layer
 
 ---
@@ -299,7 +299,8 @@ target:
   Works for any framework producing static output. No code change required.
 - **Framework middleware / server hooks** — headers are set programmatically
   in server-side code. Required for frameworks with a server component (e.g.
-  SvelteKit in server-side rendering (SSR) mode, Astro SSR).
+  SvelteKit in server-side rendering (SSR) mode, Astro SSR, Next.js in any
+  mode other than static export).
 
 For purely static projects the deployment platform approach is preferred — it
 keeps security config out of application code and applies to all responses
@@ -366,6 +367,51 @@ in the build output root. The content is identical to the Netlify example above.
 
 ---
 
+### Render (all frameworks — static output)
+
+A Render static site takes headers from a `headers` list on the service. It can
+be set in the dashboard, but the version worth committing lives in `render.yaml`
+at the project root — the same file `/release` writes. Each entry is a `path`,
+a `name` and a `value`; `/*` matches every request path.
+
+```yaml
+services:
+  - name: my-site
+    type: web
+    runtime: static
+    buildCommand: npm run build
+    staticPublishPath: ./dist
+    headers:
+      - path: /*
+        name: Content-Security-Policy
+        value: "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+      - path: /*
+        name: X-Frame-Options
+        value: DENY
+      - path: /*
+        name: X-Content-Type-Options
+        value: nosniff
+      - path: /*
+        name: Referrer-Policy
+        value: strict-origin-when-cross-origin
+      - path: /*
+        name: Permissions-Policy
+        value: camera=(), microphone=(), geolocation=(), payment=()
+```
+
+> `staticPublishPath` must match the build output directory your framework
+> writes to. And note that
+> [Render preserves dashboard header rules the blueprint does not mention](https://render.com/docs/blueprint-spec)
+> — a rule added by hand earlier survives a deploy and can shadow what you think
+> you are setting, so check the dashboard list against `render.yaml` after the
+> first deploy.
+>
+> This covers Render **static sites**. A Render web service running a Node
+> process has no `headers` list; it sets headers in application code, so use the
+> framework section below that matches your stack.
+
+---
+
 ### SvelteKit
 
 For SvelteKit projects, headers can be set in a server hook so they apply
@@ -397,8 +443,8 @@ export function handle({ event, resolve }) {
 ```
 
 > If deploying SvelteKit as a static site via `@sveltejs/adapter-static`, the
-> deployment platform approach (Netlify, Vercel, or Cloudflare Pages above) is
-> simpler and equally effective. The server hook approach is most useful when
+> deployment platform approach (Netlify, Vercel, Cloudflare Pages, or Render
+> above) is simpler and equally effective. The server hook approach is most useful when
 > deploying with a Node or edge adapter.
 
 ---
@@ -441,10 +487,55 @@ export const onRequest = defineMiddleware(({ locals }, next) => {
 
 ---
 
+### Next.js
+
+Next.js sets headers with a `headers()` function in `next.config.js`. It applies
+on every deployment target — Vercel, Render, or a self-hosted Node server — which
+makes it the portable choice, and the right one for a Next.js project even when
+the host could set the same headers at the edge.
+
+**Create or update `next.config.js`:**
+
+```js
+const securityHeaders = [
+  {
+    key: 'Content-Security-Policy',
+    value:
+      "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'",
+  },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+  {
+    key: 'Permissions-Policy',
+    value: 'camera=(), microphone=(), geolocation=(), payment=()',
+  },
+];
+
+module.exports = {
+  headers() {
+    return [{ source: '/:path*', headers: securityHeaders }];
+  },
+};
+```
+
+> `source: '/:path*'` is what matches every route. Reach for `'/(.*)'` instead
+> and a project with `i18n` configured will silently lose coverage: Next.js
+> rewrites that pattern to `/(en|fr|de)/(.*)`, which then misses the top-level
+> `/` route.
+>
+> **Static export is the exception.** Next.js lists
+> [Headers among the features `output: 'export'` does not support](https://nextjs.org/docs/app/guides/static-exports)
+> — the export is plain files, with no server left to run `headers()`. An
+> exported Next.js app takes its headers from the deployment platform section
+> above instead.
+
+---
+
 ### Eleventy
 
 Eleventy produces static output only. Use the deployment platform approach
-(Netlify, Vercel, or Cloudflare Pages above).
+(Netlify, Vercel, Cloudflare Pages, or Render above).
 
 If you are running a local Express or similar server in front of your Eleventy
 output (e.g. for testing), set headers in that server's middleware instead —
@@ -469,7 +560,10 @@ do not add a `_headers` file and expect it to work with a custom server.
   under SSL/TLS → Edge Certificates. A Cloudflare Pages site following a blanket
   "never set it" rule ships with no HSTS at all, and nothing reports that. Enable
   it in the dashboard there rather than in `_headers`, so the header is not sent
-  twice. Adding `includeSubDomains` or `preload` on a custom domain needs
-  configuration on every platform
-- For static output frameworks (Vanilla, React, Eleventy, Astro static mode), prefer the deployment platform approach over a meta tag — response headers cannot be overridden by the page, whereas a `<meta http-equiv>` CSP tag can be stripped by an injected script
+  twice. **Render documents neither behaviour** — it redirects HTTP to HTTPS but
+  says nothing about sending HSTS — so do not assume either way: check a deployed
+  response with `curl -I` and, if the header is absent, add it to the `headers`
+  list in `render.yaml` alongside the others. Adding `includeSubDomains` or
+  `preload` on a custom domain needs configuration on every platform
+- For static output frameworks (Vanilla, React, Eleventy, Astro static mode, Next.js `output: 'export'`), prefer the deployment platform approach over a meta tag — response headers cannot be overridden by the page, whereas a `<meta http-equiv>` CSP tag can be stripped by an injected script
 - If using a `<meta http-equiv="Content-Security-Policy">` tag as a fallback (e.g. no deployment platform config is possible), note that `frame-ancestors` is not supported in meta tags — it must be set as a response header to be effective

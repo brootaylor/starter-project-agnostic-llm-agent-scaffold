@@ -118,11 +118,15 @@ Many Vercel projects need no config file. Include:
 
 - build command only when it differs from defaults
 - output directory only when needed
-- rewrites or headers only when the app requires them
+- rewrites, or headers other than the security set, only when the app requires them
 - install command only when the package manager cannot be inferred
 
 For both providers:
 
+- when the Security selection in `docs/project-brief.md` is active, carry the
+  headers from `docs/security.md` into the provider config - a `headers` list on
+  the service in `render.yaml`, a `headers` block in `vercel.json`. That file is
+  the source of truth for the values; do not invent or vary them here
 - update `.env.example` with required names when useful
 - add a short deployment note to README only if the project already has a
   deployment section or the user asks
