@@ -360,6 +360,13 @@ rather than raw values, so motion can be tuned globally.
 }
 ```
 
+> **Duration overrides cover transitions, not loops.** A looping animation
+> (`animation: … infinite`) does not stop when its duration drops to `0.01ms` —
+> it cycles faster than the display can draw, so it reads as jitter rather than
+> stillness. Stop those with `animation: none` in the component's own
+> `@media (prefers-reduced-motion: reduce)` rule. That is the one sanctioned
+> exception to keeping the media query out of component files.
+
 ---
 
 ## Z-index

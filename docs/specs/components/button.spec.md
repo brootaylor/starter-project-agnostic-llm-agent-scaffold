@@ -1,6 +1,6 @@
 # Component Spec: Button
 
-**Status:** Ready
+**Status:** Draft
 **Last updated:** <!-- e.g. 2025-01-15 -->
 
 > See `docs/project-brief.md` → Spec conventions for the full status key and agent behaviour rules.
@@ -83,7 +83,7 @@ Fully interactive.
 
 ### Interaction rules
 
-- When `loading` is true → spinner shown; label remains visible but muted
+- When `loading` is true → spinner shown; the label stays visible and unchanged. Do not mute, dim, or reduce the opacity of the label — on the filled variants the only inverse text token is `--color-text-inverse`, and lowering its contrast against a brand background is the failure mode the palette already has. The spinner and `aria-busy="true"` carry the state
 - When `disabled` OR `loading` → click event must never fire
 - `type="submit"` inside a `<form>` → form submits normally via the browser
 
@@ -117,9 +117,10 @@ How the component should behave when something goes wrong.
 Token categories and CSS patterns specific to this component.
 The agent must read `docs/design-tokens.md` before writing any styles.
 
-- **Tokens used** — colour, spacing, typography
+- **Tokens used** — colour, spacing, typography, motion
 - **CSS patterns** — Block-Element-Modifier (BEM): `.btn` (block), `.btn--primary` / `.btn--secondary` / `.btn--danger` / `.btn--ghost` (variant modifiers), `.btn--sm` / `.btn--lg` (size modifiers), `.btn--loading` (state modifier)
 - **Dark mode** — button colours must reference the semantic colour tokens in `docs/design-tokens.md`, which resolve per theme on their own; no hardcoded values, and no assumption here about which selector defines them
+- **Motion** — transitions use the `--duration-*` and `--easing-*` tokens; `docs/design-tokens.md` owns the `prefers-reduced-motion` response for them and this spec does not restate it. The spinner's rotation is the exception, because a duration override cannot stop a loop: under `@media (prefers-reduced-motion: reduce)` the rotation stops and the spinner stays rendered but static. `aria-busy="true"` conveys the loading state, not the movement
 
 ---
 
@@ -207,7 +208,7 @@ should be aware of before writing any code.
 - **CSS** — import from `./Button.css` or `./Button.scss` depending on active styles selection in `docs/project-brief.md`
 - **Assets** — `src/assets/icons/spinner.svg` must be imported and inlined; do not use `<img>`
 - **Related specs** — none. A purely visual component can be specified on its own, with no feature spec above it; see `docs/project-brief.md` → Features and components
-- **Gotchas** — no animation libraries; CSS only for all transitions and spinner animation
+- **Gotchas** — no animation libraries; CSS only for all transitions and the spinner animation. Every transition duration must come from the `--duration-*` tokens in `docs/design-tokens.md` — that file owns the reduced-motion response and overrides those tokens centrally, so a hardcoded duration escapes it silently. The spinner's rotation is a loop, not a transition, and the central override does not reach it; see Styling notes
 
 ---
 
