@@ -201,12 +201,12 @@ Open `docs/project-brief.md` and complete two things before anything else:
 
 With your stack selected, `package.json` needs to be populated with the correct dependencies.
 
-The procedure itself lives in `docs/project-brief.md` → **Setup instructions**, in two versions: a list to work through by hand, and the numbered version an agent executes. Follow whichever suits you there. It is kept in that one file rather than repeated here so the two copies can't drift apart — and the agent reads it from there anyway.
+The procedure itself lives in `docs/setup.md` → **Setup instructions**, in two versions: a list to work through by hand, and the numbered version an agent executes. Follow whichever suits you there. It is kept in that one file rather than repeated here so the two copies can't drift apart — and the agent reads it from there anyway. The same file's **Stack compatibility notes** cover the combinations that need extra wiring; check yours before generating any config.
 
 **With an agent, that is the whole prompt:**
 
 ```
-Read `docs/project-brief.md` and complete the initial project setup.
+Read `docs/project-brief.md`, then follow `docs/setup.md` to complete the initial project setup.
 ```
 
 It covers setup only — specs and design tokens come in later steps.

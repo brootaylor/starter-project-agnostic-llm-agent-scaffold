@@ -65,12 +65,15 @@ Both paths follow the same workflow and use the same specs.
 
 ## Key files
 
+In the order you meet them:
+
 | File | Purpose |
 |------|---------|
+| [`WORKFLOW.md`](./WORKFLOW.md) | Step-by-step guide from setup through to deployment — start here |
 | [`docs/project-brief.md`](./docs/project-brief.md) | Single source of truth — stack selector, conventions, agent rules |
+| [`docs/setup.md`](./docs/setup.md) | One-time setup — the procedure, and compatibility notes per stack combination |
 | [`docs/modern-platform-guide.md`](./docs/modern-platform-guide.md) | Which web platform APIs and features to use |
 | [`docs/design-tokens.md`](./docs/design-tokens.md) | Colour, spacing, and typography definitions |
-| [`WORKFLOW.md`](./WORKFLOW.md) | Step-by-step guide from setup through to deployment |
 | [`AGENTS.md`](./AGENTS.md) | How "Ai" agents are configured in this project |
 
 Optional configuration docs:

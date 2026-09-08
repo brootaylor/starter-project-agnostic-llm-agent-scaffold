@@ -97,6 +97,9 @@ The project's own documentation set is authoritative for everything else:
 - `docs/security.md` - read before generating HTML or deployment config
 - `docs/service-worker.md` and `docs/storybook.md` - optional features, only when
   marked active in `docs/project-brief.md`
+- `docs/setup.md` - read once, before any implementation code exists: the
+  initial setup procedure, and the compatibility notes for stack combinations
+  that need extra wiring. Nothing in the build loop reads it afterwards
 - `WORKFLOW.md` - the ten-step human guide from setup through to deployment
 - `docs/adopting-an-existing-project.md` - the setup half of that guide for a
   project that already has code; it rejoins `WORKFLOW.md` at Step 4
