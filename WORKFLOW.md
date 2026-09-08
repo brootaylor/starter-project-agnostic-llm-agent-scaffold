@@ -201,20 +201,15 @@ Open `docs/project-brief.md` and complete two things before anything else:
 
 With your stack selected, `package.json` needs to be populated with the correct dependencies.
 
-**By hand:**
+The procedure itself lives in `docs/project-brief.md` → **Setup instructions**, in two versions: a list to work through by hand, and the numbered version an agent executes. Follow whichever suits you there. It is kept in that one file rather than repeated here so the two copies can't drift apart — and the agent reads it from there anyway.
 
-- Set up `package.json` and any required config files (e.g. `vite.config.js`, `jest.config.js`) based on your active stack selections
-- Update `.nvmrc` with the Node.js version your framework recommends
-- Update the stack-specific section of `.gitignore` (e.g. `dist/` for Vite, `_site/` for Eleventy, `.astro/` for Astro)
-- Fill in the **Commands** section at the bottom of `AGENTS.md` with the real commands your `package.json` now has, and delete any row that does not apply
-
-**With an agent:**
+**With an agent, that is the whole prompt:**
 
 ```
 Read `docs/project-brief.md` and complete the initial project setup.
 ```
 
-The agent will populate `package.json`, generate any required config files, update `.nvmrc` and `.gitignore`, and fill in the Commands section of `AGENTS.md`. It covers setup only — specs and design tokens come in later steps.
+It covers setup only — specs and design tokens come in later steps.
 
 > [!IMPORTANT]
 > **The Commands section of `AGENTS.md` is read by the loop, not just written by you.** *`/check` and `/try` use it to start the app, `/debug` to reproduce a failure, and `/implement` and `/complete` to run the build before anything is committed. Left as the shipped `<command>` placeholders it produces no error — each skill simply reports the command as a gap and carries on with less evidence than it should have. Leave `Test` and `Verify` alone for now — `/tests` and `/ci` write those two rows. The two behave differently when absent: a real `Test` command is the single switch that turns the testing gate on, so no row means no gate, while a missing `Verify` just means those skills fall back to the build and test commands you filled in above.*

@@ -289,8 +289,8 @@ Then tell the user `/complete` makes the one work-level commit and logs the work
 - Iterate until each step works; never commit code the user hasn't approved.
 - Follow the conventions in `docs/project-brief.md`, the platform guidance in
   `docs/modern-platform-guide.md`, and the tokens in `docs/design-tokens.md`.
-- Build only what the spec says. If the spec is wrong or thin, stop and fix the
-  spec first, do not improvise.
+- Build only what the spec says. If the spec is wrong or thin, stop and ask the
+  human to change it — do not improvise, and do not edit the spec yourself.
 - Never create, switch, merge, or delete a branch. Per-step commits are optional
   checkpoints; the work-level commit is `/complete`'s job, and any push needs the
   user's explicit yes.

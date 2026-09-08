@@ -85,7 +85,8 @@ These are authoritative decisions that component specs and implementation code m
 | Theme attribute | `data-theme` on the root `<html>` element |
 | Attribute values | `"light"` and `"dark"` |
 | localStorage key | `color-scheme` |
-| Priority order | Stored preference → OS preference → default (`light`) |
+| Priority order | Stored preference → OS preference → default |
+| Default theme | `light` — a component may make this tier configurable, as `theme-toggle.spec.md` does with its `initialTheme` prop; the order above is not negotiable |
 
 ---
 
@@ -96,7 +97,7 @@ Additional context, constraints, and implementation guidance that the agent shou
 - Colour scheme is applied via a `data-theme` attribute on the root `<html>` element, toggled between `"light"` and `"dark"`
 - All colour values must reference CSS custom properties — no hardcoded colours anywhere in the codebase
 - The toggle must be keyboard accessible and meet Web Content Accessibility Guidelines (WCAG) 2.2 AA contrast requirements
-- The `color-scheme` localStorage key is defined here and is the single source of truth — component specs must reference this file rather than redefine the key
+- The `color-scheme` localStorage key and the Priority order are defined here and are the single source of truth — component specs must reference this file rather than restate either
 
 ---
 

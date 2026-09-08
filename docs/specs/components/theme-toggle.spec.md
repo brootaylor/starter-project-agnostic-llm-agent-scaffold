@@ -43,7 +43,7 @@ The agent will derive the implementation interface directly from this section.
 
 | Name | Type | Required | Default | Description |
 |------|------|:--------:|---------|-------------|
-| `initialTheme` | `light` / `dark` | | `light` | The theme to apply on first render if no stored preference exists |
+| `initialTheme` | `light` / `dark` | | `light` | Sets the final tier of the Priority order in `docs/features/dark-mode.md` — the theme applied when neither a stored nor an operating system preference is available |
 
 ### Events / Callbacks
 
@@ -64,10 +64,11 @@ response to user interaction.
 
 ### Default / initial state
 
-On first render, the component checks `localStorage` for a stored `color-scheme`
-preference. If found, it applies that. If not, it checks the operating system preference via
-`prefers-color-scheme`. If neither is set, it falls back to `initialTheme`.
-The current scheme is reflected visually in the toggle.
+On first render the component resolves the theme by the Priority order in
+`docs/features/dark-mode.md` — that file owns the order and this spec does not
+restate it. `initialTheme` supplies its final tier, the default used when neither
+a stored preference nor an operating system preference is available. The resolved
+scheme is reflected visually in the toggle.
 
 ### States
 

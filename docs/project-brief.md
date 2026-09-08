@@ -389,6 +389,12 @@ need to be in place.
   (e.g. `vite.config.js`, `jest.config.js`) based on your active stack selections
 - Check your chosen framework's documentation for the recommended Node.js version
   and update `.nvmrc` accordingly
+- Update the stack-specific section of `.gitignore` with any entries your stack
+  needs (`dist/` for Vite, `_site/` for Eleventy, `.astro/` for Astro)
+- Fill in the Commands section of `AGENTS.md` with the real dev-server, build,
+  production-server and lint commands you just wrote into `package.json`,
+  deleting any row that does not apply. Leave `Test` and `Verify` absent —
+  `/tests` and `/ci` own those two rows
 - Refer to your chosen framework's documentation for the exact setup
 
 **If using an "Ai" agent:**
