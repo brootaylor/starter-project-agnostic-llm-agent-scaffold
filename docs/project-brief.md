@@ -15,12 +15,12 @@ Agent-specific configs live in `.agents/`.
 
 These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any "Ai" agent working on the project.
 
-- [ ] [**What this project is**](#what-this-project-is) — describe the project, who it's for, its goals, and any known constraints
-- [ ] [**Stack**](#stack) — mark one option per category as `[active]`, replacing the defaults the scaffold ships with. Much the longest of the four — ten categories, but only five need a decision:
-  - **Decide these:** [Framework](#framework), [Language](#language), [Styles](#styles), [Unit testing](#unit-testing), [Build](#build) *(Vanilla only — every other framework brings its own)*
-  - **Optional, fine left as `None`:** [End-to-end testing](#end-to-end-e2e-testing), [Service worker](#service-worker), [Storybook](#storybook), [Linting](#linting), [Security](#security)
-- [ ] [**Browser support**](#browser-support) — update the targets table if the defaults don't match your project
-- [ ] [**Accessibility standard**](#accessibility-standard) — review the default and update it if your project has different requirements
+1. [ ] [**What this project is**](#what-this-project-is) — describe the project, who it's for, its goals, and any known constraints
+2. [ ] [**Stack**](#stack) — the longest of the four. Mark one option per category as `[active]`, replacing the defaults the scaffold ships with. Ten categories in all, five of which need a decision:
+   - **Decide these:** [Framework](#framework), [Language](#language), [Styles](#styles), [Unit testing](#unit-testing), [Build](#build) *(Vanilla only — every other framework brings its own)*
+   - **Optional, fine left as `None`:** [End-to-end testing](#end-to-end-e2e-testing), [Service worker](#service-worker), [Storybook](#storybook), [Linting](#linting), [Security](#security)
+3. [ ] [**Browser support**](#browser-support) — update the targets table if the defaults don't match your project
+4. [ ] [**Accessibility standard**](#accessibility-standard) — review the default and update it if your project has different requirements
 
 ---
 
