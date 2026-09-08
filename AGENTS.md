@@ -1,9 +1,10 @@
 # AGENTS.md
 
-Instructions for "Ai" coding agents working in this project. `AGENTS.md` is a
-cross-tool convention that most coding agents read directly, so this is the
-entry point for any of them. Claude Code reads `CLAUDE.md`, which imports this
-file, so there is a single source of truth either way.
+Instructions for "Ai" coding agents working in this project.
+
+`AGENTS.md` is a cross-tool convention that most coding agents read directly, so
+this is the entry point for any of them. Claude Code reads `CLAUDE.md`, which
+imports this file, so there is a single source of truth either way.
 
 Most agents read this file natively - Codex, Cursor, GitHub Copilot, Gemini CLI,
 Jules, Aider, Zed, Windsurf, Devin and OpenCode among them - and need no config of
@@ -13,8 +14,8 @@ other agent that expects a config file of its own, see "Adding a new agent" belo
 
 ## What this is
 
-A description of your project and the problem it solves. Replace this paragraph;
-`docs/project-brief.md` is where the full version lives.
+This project's own description - what it is, who it's for, its goals and
+constraints - lives in `docs/project-brief.md`.
 
 This project is spec-first: a spec defines interface, behaviour, states,
 accessibility, and test cases before any implementation exists, so the spec is
@@ -28,16 +29,13 @@ framework's config files written from the Stack selections in
 `docs/project-brief.md`.
 
 > [!IMPORTANT]
-> Do not run a framework scaffolder (`create-next-app`, `npm create vite`,
-> `npm create astro`, and so on) inside the clone. Those tools expect an empty
-> directory, and this one already holds `package.json`, `README.md` and
-> `.gitignore` - every one a name they write. `create-next-app` also writes
-> `AGENTS.md` and `CLAUDE.md` by default, and `CLAUDE.md` here is a pointer, so
-> that write follows the link and replaces the tracked `.agents/claude/CLAUDE.md`
-> rather than the pointer. Nor does a scaffolder reliably refuse: `create-vite`
-> prompts, and one of the three choices it offers is "Remove existing files and
-> continue". Step 3 writes that configuration directly instead, which is why it
-> is a step rather than a command.
+> Do not run a framework scaffolder (`create-next-app`, `npm create vite`, and
+> so on) inside the clone. They expect an empty directory and overwrite the
+> files this one already has - and because `CLAUDE.md` here is a symlink, that
+> write follows the link and destroys the tracked `.agents/claude/CLAUDE.md`.
+> Nor do they reliably refuse: `create-vite` offers "Remove existing files and
+> continue" as one of three choices. Step 3 writes the framework config directly
+> instead.
 
 For a codebase that already exists, the order is reversed - the code is there
 first and the scaffold merges in on top - and the early steps differ: see
