@@ -8,7 +8,7 @@ description: Wrap up a finished feature, fix, or rollback. Runs a final safety p
 Where this sits in the workflow:
 
     /feature, /fix, or /rollback  ->  /implement  ->  [complete]  ->  next
-    (the spec)                         (build it)      (commit + log)
+    (the work order)                   (build it)      (commit + log)
 
 `/implement` built the feature, fix, or rollback, with optional per-step commit
 checkpoints. This skill closes it out: it writes the spec's status back, logs the

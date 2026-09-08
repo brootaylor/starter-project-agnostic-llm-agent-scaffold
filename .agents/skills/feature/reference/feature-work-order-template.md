@@ -8,7 +8,7 @@
 > proves the work against its acceptance criteria, and `/complete` writes
 > `**Status:** Complete` back to it. A `Type: Fix` work order has no source spec
 > and omits this line entirely, rather than setting it to `none` - see
-> `../../fix/reference/fix-spec-template.md`.
+> `../../fix/reference/fix-work-order-template.md`.
 >
 > `Base commit:` is the commit this work started from. `/implement` records it
 > before the first product edit; `/audit` uses it to find what this work changed.

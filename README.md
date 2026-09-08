@@ -170,16 +170,17 @@ my-project/
 │   │   ├── layouts/
 │   │   └── hooks/                          ← reusable-logic specs, only if you need them
 │   └── reference/                          ← reference images a spec points at
-├── src/
+├── src/                                    ← three files ship; the subdirectories below are yours to create
+│   ├── index.html                          ← ships; some stacks manage their own — see WORKFLOW.md Step 3
+│   ├── scripts/main.js                     ← ships; the application entry point
+│   ├── assets/icons/spinner.svg            ← ships; a spec depends on it — keep it whatever your stack
 │   ├── components/
 │   ├── pages/
 │   ├── layouts/
 │   ├── styles/
-│   ├── assets/
-│   ├── scripts/
 │   ├── lib/                                ← shared utilities
 │   └── types/                              ← global types (TypeScript only)
-├── prototypes/                             ← throwaway mockups from /prototype, deleted by /complete
+├── prototypes/                             ← not shipped; /prototype creates it, /complete deletes it
 ├── context/                                ← the build loop's working state
 │   ├── sessions.md                         ← where things stand, rewritten each session (gitignored)
 │   ├── decisions.md                        ← why choices were made, append-only (gitignored)

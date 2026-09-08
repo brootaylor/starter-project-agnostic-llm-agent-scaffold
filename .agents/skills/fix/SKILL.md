@@ -1,6 +1,6 @@
 ---
 name: fix
-description: Document an ad-hoc bug fix or small change (one with no spec of its own) into context/current-feature.md so it runs through the same build loop. Writes a short fix spec and stops; then /implement builds it and /complete logs it to context/history/fixes/ and commits it. Use when the user runs /fix, reports a bug, or asks to fix or change something that has no spec of its own.
+description: Document an ad-hoc bug fix or small change (one with no spec of its own) into context/current-feature.md so it runs through the same build loop. Writes a short fix work order and stops; then /implement builds it and /complete logs it to context/history/fixes/ and commits it. Use when the user runs /fix, reports a bug, or asks to fix or change something that has no spec of its own.
 ---
 
 # fix - document an ad-hoc fix, then build it like anything else
@@ -8,7 +8,7 @@ description: Document an ad-hoc bug fix or small change (one with no spec of its
 Where this sits in the workflow:
 
     /fix  ->  /implement  ->  /complete  ->  back to your features
-    (spec     (build it,      (log to context/history/fixes/
+    (document (build it,      (log to context/history/fixes/
      the fix)  reviewed)       + commit)
 
 A fix is a bug or small change with no spec of its own. It runs through the same
@@ -26,12 +26,12 @@ that ledger entry. Use this form only between work items, when
 `current-feature.md` is the reset stub: this skill overwrites that file, so
 while a spec is active, repair its findings through `/implement` instead.
 
-## Step 1 - write the fix spec
+## Step 1 - write the fix work order
 
 Pull context from `docs/project-brief.md` and `AGENTS.md`, then write a short
-spec to `context/current-feature.md` (this file holds whatever is being built
-now, feature or fix), following `reference/fix-spec-template.md`. Keep it
-lighter than a feature spec: the problem, the fix, build steps, files, and how
+work order to `context/current-feature.md` (this file holds whatever is being built
+now, feature or fix), following `reference/fix-work-order-template.md`. Keep it
+lighter than a feature work order: the problem, the fix, build steps, files, and how
 to verify.
 
 Four fields in that header are load-bearing, and each fails quietly if you get
@@ -52,7 +52,7 @@ it wrong:
   `/complete` refuses to finish for a defect that was already fixed. Delete the
   line entirely for a fix that came from a bug report rather than the ledger.
 
-Then stop. Tell the user to review the fix spec, then run `/implement` to build it.
+Then stop. Tell the user to review the fix work order, then run `/implement` to build it.
 
 ## Rules
 

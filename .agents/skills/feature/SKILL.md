@@ -151,7 +151,7 @@ reviewable diffs it takes to satisfy it is a build decision.
 
 For the one spec being built now, write a work order to
 `context/current-feature.md` (create `context/` if needed), following
-`reference/feature-spec-template.md`. Fill every section: goal, design reference
+`reference/feature-work-order-template.md`. Fill every section: goal, design reference
 (when the feature has a visual target), in/out of scope, the build loop, small
 build steps as a checklist (`- [ ]`, each with an observable "done when" -
 `/implement` ticks them off and resumes from the first unchecked one),
@@ -237,7 +237,7 @@ code exists. Run the draft against these questions:
   accessibility requirements one by one. Is each one satisfied by some step? A
   state the spec names and no step delivers is the most common miss.
 
-Apply the fixes to `current-feature.md`. Then stop and present the spec, leading
+Apply the fixes to `current-feature.md`. Then stop and present the work order, leading
 with a short **"what the critique changed"** note - the splits, gaps, or scope
 cuts you made (or "nothing - the draft held up"). That note is the point: it shows
 the gate working before a line of code is written.

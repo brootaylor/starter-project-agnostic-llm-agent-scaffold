@@ -115,7 +115,7 @@ remediation or explicitly plan the dependent rollbacks.
 
 ## Step 4 - write the rollback work order
 
-Write `context/current-feature.md` using `reference/rollback-spec-template.md`.
+Write `context/current-feature.md` using `reference/rollback-work-order-template.md`.
 Fill in:
 
 - target feature and archive
