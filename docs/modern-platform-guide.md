@@ -91,23 +91,23 @@ the viewport never loads at all.
 
 > [!IMPORTANT]
 > **Native CSS nesting is not a drop-in replacement for Sass nesting, and both
-> differences fail quietly.** A browser without
+> differences fail quietly.** *A browser without
 > [`CSSNestedDeclarations`](https://developer.mozilla.org/en-US/docs/Web/API/CSSNestedDeclarations)
-> parses nested rules *in the wrong order* rather than failing to parse them, so
+> parses nested rules **in the wrong order** rather than failing to parse them, so
 > the stylesheet loads and the cascade is silently wrong. And native nesting does
 > no string concatenation: Sass's `&__child` Block-Element-Modifier (BEM) idiom
 > does not produce `.block__child`, it is invalid. Convert BEM selectors by hand, and verify the
-> computed cascade rather than assuming a visual match.
+> computed cascade rather than assuming a visual match.*
 
 > [!IMPORTANT]
 > **Nothing disables smooth scrolling for users who asked for less motion — you
-> have to.** Neither
+> have to.** *Neither
 > [`scroll-behavior`](https://developer.mozilla.org/en-US/docs/Web/CSS/scroll-behavior)
 > nor
 > [`scrollIntoView()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView)
 > consults `prefers-reduced-motion`; the animation simply plays, with nothing in the
 > console and nothing visibly broken to anyone not affected by it. Declare the
-> smoothness once in CSS and turn it off under the query:
+> smoothness once in CSS and turn it off under the query:*
 >
 > ```css
 > html { scroll-behavior: smooth; }
@@ -116,9 +116,9 @@ the viewport never loads at all.
 > }
 > ```
 >
-> Then call `scrollIntoView()` with no `behavior` argument. It defaults to `auto`,
+> *Then call `scrollIntoView()` with no `behavior` argument. It defaults to `auto`,
 > which defers to the computed CSS value — so the guard above covers the JavaScript
-> path too. Passing `behavior: 'smooth'` explicitly opts back out of it.
+> path too. Passing `behavior: 'smooth'` explicitly opts back out of it.*
 
 ---
 
@@ -150,17 +150,17 @@ the viewport never loads at all.
 > [!IMPORTANT]
 > **Three rows above fail silently rather than throwing where you would see it.**
 >
-> - [`requestIdleCallback()` is not Baseline](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback).
->   Safari has it disabled by default (13.1 through 26.6; Technology Preview
+> - *[`requestIdleCallback()` is not Baseline](https://developer.mozilla.org/en-US/docs/Web/API/Window/requestIdleCallback).
+> Safari has it disabled by default (13.1 through 26.6; Technology Preview
 >   only), so on Safari the callback simply never runs and the deferred work is
 >   dropped with no error. Always pass the `timeout` option, and keep a
->   `setTimeout` fallback for work that must eventually happen.
-> - [`navigator.clipboard.writeText()`](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText)
->   and [`crypto.randomUUID()`](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID)
+>   `setTimeout` fallback for work that must eventually happen.*
+> - *[`navigator.clipboard.writeText()`](https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText)
+> and [`crypto.randomUUID()`](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID)
 >   are **secure-context only**. Over plain HTTP, `navigator.clipboard` and
 >   `crypto.randomUUID` are `undefined`, so the call throws a `TypeError` at the
 >   point of use rather than at load. `localhost` counts as secure; a LAN address
->   used for device testing does not.
+>   used for device testing does not.*
 
 ---
 

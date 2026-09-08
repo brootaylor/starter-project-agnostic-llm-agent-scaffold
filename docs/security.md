@@ -251,16 +251,16 @@ export default [
 
 > [!IMPORTANT]
 > **This must be flat config, and the file must not be named `.eslintrc`.**
-> [ESLint v10 removed eslintrc support outright](https://eslint.org/docs/latest/use/migrate-to-10.0.0) —
+> *[ESLint v10 removed eslintrc support outright](https://eslint.org/docs/latest/use/migrate-to-10.0.0) —
 > "the old configuration format is no longer supported", and `ESLINT_USE_FLAT_CONFIG`
 > is no longer honoured. `npm install --save-dev eslint` installs v10, so an
 > `.eslintrc` file is simply not read: ESLint reports no config rather than
 > failing loudly, and the security rules never run. The eslintrc config name also
 > changed — `plugin:security/recommended` is now
-> `plugin:security/recommended-legacy` — so an old config that *is* read still
+> `plugin:security/recommended-legacy` — so an old config that **is** read still
 > errors on the extend. The `.mjs` extension avoids depending on whether
 > `package.json` sets `"type": "module"`. ESLint v10 requires Node.js v20.19+;
-> pin Node in `.nvmrc` accordingly.
+> pin Node in `.nvmrc` accordingly.*
 
 > Add framework-specific configs (e.g. `eslint-plugin-svelte`,
 > `eslint-plugin-react`) as further array entries after the security config. The

@@ -15,6 +15,12 @@ Agent-specific configs live in `.agents/`.
 
 These are the only sections you need to fill in before starting. Everything else is reference material — for you to read if you need it, and for any "Ai" agent working on the project.
 
+> [!IMPORTANT]
+> *Adopting the scaffold into a codebase that already exists? Do not fill this in
+> by hand. `docs/adopting-an-existing-project.md` Step B has `/survey` draft the
+> whole file from the code for you to review, and the Stack section below then
+> records what the project already uses rather than what you would have chosen.*
+
 1. [ ] [**What this project is**](#what-this-project-is) — describe the project, who it's for, its goals, and any known constraints
 2. [ ] [**Stack**](#stack) — the longest of the four. Mark one option per category as `[active]`, replacing the defaults the scaffold ships with. Ten categories in all, five of which need a decision:
    - **Decide these:** [Framework](#framework), [Language](#language), [Styles](#styles), [Unit testing](#unit-testing), [Build](#build) *(Vanilla only — every other framework brings its own)*
@@ -62,13 +68,13 @@ Mark exactly one option per category as `[active]`. Leave all others blank.
 
 > [!IMPORTANT]
 > **The `[active]` marks below are the scaffold's shipped default, not a
-> recommendation.** They sit on Vanilla, JavaScript, plain CSS, and Vite because
+> recommendation.** *They sit on Vanilla, JavaScript, plain CSS, and Vite because
 > the example specs and the `src/` starting files are written against that
 > combination — nothing about it has been chosen for your project. Replace them
 > with your own selections (`WORKFLOW.md` Step 2) before any setup runs, clearing
 > the shipped mark rather than adding a second one beside it. Nothing errors if
 > you don't: an agent reads a shipped default exactly as it reads a settled
-> decision, and will install and scaffold against it.
+> decision, and will install and scaffold against it.*
 
 ### Framework
 
@@ -366,6 +372,14 @@ requirements are met and the project-wide standard is satisfied.
 
 ## Setup instructions
 
+> [!IMPORTANT]
+> **This section is for a project with no code yet.** *In a codebase the scaffold
+> was adopted into, the dependencies and config files already exist, and every
+> instruction below would overwrite working configuration — `package.json`,
+> `.nvmrc`, the framework config, `.gitignore`. Follow
+> `docs/adopting-an-existing-project.md` instead, which starts from what is
+> already there. Nothing here checks first.*
+
 Before writing any implementation code, the project dependencies and config files
 need to be in place.
 
@@ -533,10 +547,10 @@ is fixed once in the feature spec's Implementation notes table. Component specs
 reference it and must never restate it.
 
 > [!IMPORTANT]
-> A shared value copied into a component spec rather than referenced is a silent
+> *A shared value copied into a component spec rather than referenced is a silent
 > failure. Both files read as correct and nothing errors; they drift apart the
 > first time either is edited on its own, and the mismatch surfaces later as a
-> bug with no obvious cause.
+> bug with no obvious cause.*
 
 **Three things are called "feature" in this scaffold.** They are not
 interchangeable:

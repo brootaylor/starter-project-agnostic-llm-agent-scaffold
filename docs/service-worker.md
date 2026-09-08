@@ -406,14 +406,14 @@ fetched while offline.
 
 > [!IMPORTANT]
 > **Guard the `Accept` header before calling a string method on it.**
-> [`Headers.get()` returns `null`](https://developer.mozilla.org/en-US/docs/Web/API/Headers/get)
+> *[`Headers.get()` returns `null`](https://developer.mozilla.org/en-US/docs/Web/API/Headers/get)
 > when a header is absent, so the common `request.headers.get('Accept').includes(...)`
 > shorthand throws a `TypeError` on any request that carries no `Accept` header.
 > The throw happens before `respondWith()`, so the request silently falls through
 > to the network: caching stops working for that request with nothing but a console
 > error to show for it. The `?? ''` below is the guard. If you only care about page
 > navigations, `request.mode === 'navigate'` is a more direct test than sniffing
-> `Accept` at all.
+> `Accept` at all.*
 
 ```js
 const timeout = 3000; // ms before falling back to cache for slow HTML requests
@@ -572,14 +572,14 @@ versioning, and cache invalidation automatically — no manual cache naming is n
 
 > [!IMPORTANT]
 > **Use `precacheFallback`, not `navigateFallback`, for the offline page here.**
-> Two traps. First, [`workbox-build` validates its options](https://developer.chrome.com/docs/workbox/modules/workbox-build)
+> *Two traps. First, [`workbox-build` validates its options](https://developer.chrome.com/docs/workbox/modules/workbox-build)
 > and throws on any key it does not recognise, so a near-miss like `navigationFallback`
 > fails the **build**, not the runtime. Second, `navigateFallback` is the wrong tool
 > even spelled correctly: it registers a `NavigationRoute` that serves the fallback for
-> *every* navigation to a URL that is not precached — online as well as offline — and
+> **every** navigation to a URL that is not precached — online as well as offline — and
 > the generated service worker registers it **before** the `runtimeCaching` routes, so
 > the `NetworkFirst` page strategy above would never run. `precacheFallback` attaches to
-> that strategy instead, and only fires once both network and cache have failed.
+> that strategy instead, and only fires once both network and cache have failed.*
 
 Note that `vite-plugin-pwa` precaches the HTML that Vite builds, and the precache route
 is matched before any `runtimeCaching` route. Navigations to precached pages are
@@ -761,7 +761,7 @@ The template relies on the following being available in Eleventy's data cascade:
 
 > [!IMPORTANT]
 > **These data files must match the module format your `package.json` declares.**
-> A `.js` file is an ECMAScript module (ESM) when `package.json` sets
+> *A `.js` file is an ECMAScript module (ESM) when `package.json` sets
 > `"type": "module"` and CommonJS when it does not, and the two syntaxes are not
 > interchangeable: `module.exports` in an ESM project throws
 > `ReferenceError: module is not defined in ES module scope`, and `export default`
@@ -771,7 +771,7 @@ The template relies on the following being available in Eleventy's data cascade:
 > `"type": "module"` the rest of this scaffold's tooling assumes. For a project
 > without that field, use the CommonJS form shown after them. To be explicit and
 > stop depending on the field at all, name the files `.mjs` or `.cjs` — Eleventy
-> loads both.
+> loads both.*
 
 A minimal `src/_data/pkg.js` to expose `package.json` values. A data file may
 export a function, which avoids depending on JavaScript Object Notation (JSON)

@@ -170,14 +170,14 @@ files that always need attention are `main.js` and `preview.js`. The setup comma
 generates both — the notes below cover what to add to each after setup.
 
 > [!IMPORTANT]
-> `npm create storybook@latest` installs **Storybook 10**, which changes two things
+> *`npm create storybook@latest` installs **Storybook 10**, which changes two things
 > that will not announce themselves. `.storybook/main.js` and any preset
 > [must be valid ECMAScript modules (ESM)](https://storybook.js.org/docs/releases/migration-guide) —
 > a `module.exports` in either, copied from an older guide or generated from
 > training data, fails at start-up rather than at install. And Storybook 10
 > requires **Node 20.19+ or 22.12+**; check `.nvmrc` before running setup. The
 > older `npx storybook@latest init` form is documented as the pre-8.3 approach —
-> `npm create` is current.
+> `npm create` is current.*
 
 ### `main.js`
 

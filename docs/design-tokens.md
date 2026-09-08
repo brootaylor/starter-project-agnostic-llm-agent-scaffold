@@ -35,16 +35,16 @@ No hardcoded colour values anywhere in stylesheets. Always reference a semantic 
 See `docs/features/dark-mode.md` for theming implementation details.
 
 > [!IMPORTANT]
-> **Define the light theme on bare `:root`, never on `[data-theme="light"]`.** If
+> **Define the light theme on bare `:root`, never on `[data-theme="light"]`.** *If
 > every semantic token lives inside an attribute selector, then a page with no
-> `data-theme` attribute matches neither block and *no colour token resolves at
-> all* — text falls back to the browser's default, backgrounds go transparent.
+> `data-theme` attribute matches neither block and **no colour token resolves at
+> all** — text falls back to the browser's default, backgrounds go transparent.
 > That is the state of every page before the theme script runs, and the permanent
 > state of every page where it never runs: JavaScript disabled or still loading, a
 > script error, a crawler, a view-source reader. Nothing errors and nothing warns;
 > the page simply renders unstyled. `:root` is what guarantees a defined value
 > before any attribute exists, which is why the dark block is an override rather
-> than a twin.
+> than a twin.*
 
 The shape that follows from that:
 
@@ -341,14 +341,14 @@ rather than raw values, so motion can be tuned globally.
 > the token file rather than scattering the media query across component files.
 
 > [!IMPORTANT]
-> **Set the reduced-motion durations to `0.01ms`, not `0ms`.** Per the Mozilla
+> **Set the reduced-motion durations to `0.01ms`, not `0ms`.** *Per the Mozilla
 > Developer Network (MDN), if transition duration and delay are both zero
 > [there is no transition and none of the transition events fire](https://developer.mozilla.org/en-US/docs/Web/API/Element/transitionend_event) —
 > not `transitionrun`, `transitionstart`, `transitionend` or `transitioncancel`.
 > Any component that removes an element, restores focus, or advances state in a
 > `transitionend` handler therefore stalls forever, and only for users who asked
 > for reduced motion, who are the least likely to be in anyone's test matrix.
-> `0.01ms` is imperceptible and still fires the events.
+> `0.01ms` is imperceptible and still fires the events.*
 
 ```css
 @media (prefers-reduced-motion: reduce) {

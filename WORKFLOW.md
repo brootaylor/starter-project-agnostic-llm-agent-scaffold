@@ -140,10 +140,10 @@ mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 ```
 
 > [!IMPORTANT]
-> Two ways this step goes wrong:
+> *Two ways this step goes wrong:*
 >
-> - `.claude/` is gitignored, so it does not exist in a fresh clone. Without the `mkdir -p`, that second command fails with `No such file or directory` and none of the workflow skills are available to you.
-> - **Do not run Claude Code's built-in `/init`.** It generates a `CLAUDE.md` by analysing the codebase, but here that filename is a symlink into `.agents/`. Running it either writes straight through the link and overwrites the tracked original, or replaces your pointer with a regular file that shadows it and drifts from it silently. If you have already run it: delete the root `CLAUDE.md`, then run `git status`. If it reports `.agents/claude/CLAUDE.md` as modified, the original was overwritten — restore it with `git restore .agents/claude/CLAUDE.md`. Then recreate the link. Deleting the root file alone does not undo the overwrite: the link will resolve happily to the generated content, so check `git status` before assuming you have recovered.
+> - *`.claude/` is gitignored, so it does not exist in a fresh clone. Without the `mkdir -p`, that second command fails with `No such file or directory` and none of the workflow skills are available to you.*
+> - **Do not run Claude Code's built-in `/init`.** *It generates a `CLAUDE.md` by analysing the codebase, but here that filename is a symlink into `.agents/`. Running it either writes straight through the link and overwrites the tracked original, or replaces your pointer with a regular file that shadows it and drifts from it silently. If you have already run it: delete the root `CLAUDE.md`, then run `git status`. If it reports `.agents/claude/CLAUDE.md` as modified, the original was overwritten — restore it with `git restore .agents/claude/CLAUDE.md`. Then recreate the link. Deleting the root file alone does not undo the overwrite: the link will resolve happily to the generated content, so check `git status` before assuming you have recovered.*
 
 Both links are gitignored, so your choice of agent never travels with the repository. On Windows, where `ln -s` needs Developer Mode or an elevated terminal, copy the files instead and keep them in sync by hand.
 
@@ -166,7 +166,7 @@ printf '# Decisions\n\n_Newest first. One entry per decision, not per session._\
 | `context/decisions.md` | Why a choice was made, and what was rejected and why | Append-only, newest first. One entry per decision, not per session — most sessions add nothing |
 
 > [!IMPORTANT]
-> **These two files are the only things that survive a cleared context.** A `/compact` or `/clear` discards the conversation, and nothing warns you — there is no error, just a later session that has to rediscover what was known, and a decision you already settled being reopened because no record of it exists. Nothing writes these files for you: ask your agent to update both whenever you finish a session of substance, and to read both before acting when it starts cold. `AGENTS.md` → "Keep the state file current" has the full convention.
+> **These two files are the only things that survive a cleared context.** *A `/compact` or `/clear` discards the conversation, and nothing warns you — there is no error, just a later session that has to rediscover what was known, and a decision you already settled being reopened because no record of it exists. Nothing writes these files for you: ask your agent to update both whenever you finish a session of substance, and to read both before acting when it starts cold. `AGENTS.md` → "Keep the state file current" has the full convention.*
 
 ---
 
@@ -217,7 +217,7 @@ Read `docs/project-brief.md` and complete the initial project setup.
 The agent will populate `package.json`, generate any required config files, update `.nvmrc` and `.gitignore`, and fill in the Commands section of `AGENTS.md`. It covers setup only — specs and design tokens come in later steps.
 
 > [!IMPORTANT]
-> **The Commands section of `AGENTS.md` is read by the loop, not just written by you.** `/check` and `/try` use it to start the app, `/debug` to reproduce a failure, and `/implement` and `/complete` to run the build before anything is committed. Left as the shipped `<command>` placeholders it produces no error — each skill simply reports the command as a gap and carries on with less evidence than it should have. Leave `Test` and `Verify` alone for now — `/tests` and `/ci` write those two rows. The two behave differently when absent: a real `Test` command is the single switch that turns the testing gate on, so no row means no gate, while a missing `Verify` just means those skills fall back to the build and test commands you filled in above.
+> **The Commands section of `AGENTS.md` is read by the loop, not just written by you.** *`/check` and `/try` use it to start the app, `/debug` to reproduce a failure, and `/implement` and `/complete` to run the build before anything is committed. Left as the shipped `<command>` placeholders it produces no error — each skill simply reports the command as a gap and carries on with less evidence than it should have. Leave `Test` and `Verify` alone for now — `/tests` and `/ci` write those two rows. The two behave differently when absent: a real `Test` command is the single switch that turns the testing gate on, so no row means no gate, while a missing `Verify` just means those skills fall back to the build and test commands you filled in above.*
 
 **Starting files:** `src/index.html` and `src/scripts/main.js` are included for the Vanilla, React, and Svelte stacks. For React and Svelte, `main.js` needs to be updated to mount the app. Remove both files for Astro, Eleventy, React + Next.js, and Svelte + SvelteKit — those four manage their own pages and routing.
 
@@ -252,7 +252,7 @@ Look at the "Components required" section of your feature spec. For each item li
 See `docs/specs/components/button.spec.md` for a complete worked example.
 
 > [!IMPORTANT]
-> Set the status to `Draft` while writing, and change it to `Ready` only when every section is complete. An agent will not proceed with a `Draft` spec, and it will never promote one for you — that decision is yours alone, and it is how you say the contract is settled.
+> *Set the status to `Draft` while writing, and change it to `Ready` only when every section is complete. An agent will not proceed with a `Draft` spec, and it will never promote one for you — that decision is yours alone, and it is how you say the contract is settled.*
 
 ---
 
@@ -338,7 +338,7 @@ Generated code appears in `src/` under the relevant directory (see the table in 
   ```
 
 > [!IMPORTANT]
-> Don't edit the implementation directly without also updating the spec. The spec is the source of truth — if the two drift apart, the agent's output becomes unpredictable.
+> *Don't edit the implementation directly without also updating the spec. The spec is the source of truth — if the two drift apart, the agent's output becomes unpredictable.*
 
 Once everything checks out, update the spec status to `Complete` — or run `/complete`, which writes that status back for you, archives the work order to `context/history/`, and makes one commit covering the code and the bookkeeping.
 

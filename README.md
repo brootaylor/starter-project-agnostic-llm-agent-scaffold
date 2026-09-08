@@ -3,7 +3,7 @@
 A starter template for building web projects — tech-agnostic, spec-first, and works whether you build by hand, use an "Ai" coding agent, or both.
 
 > [!IMPORTANT]
-> **Status:** This is an active, evolving experiment, not a finished product. It'll keep changing as the idea gets tested against real projects — issues and discussion are welcome.
+> **Status:** *This is an active, evolving experiment, not a finished product. It'll keep changing as the idea gets tested against real projects — issues and discussion are welcome.*
 
 ---
 
@@ -102,7 +102,7 @@ Each spec defines the interface, behaviour, states, accessibility requirements, 
 | `Complete` | Implemented and tested |
 
 > [!IMPORTANT]
-> **Promoting a spec from `Draft` to `Ready` is always a human act.** No agent or skill grants itself that signal — it's how you say the contract is settled before anything gets built.
+> **Promoting a spec from `Draft` to `Ready` is always a human act.** *No agent or skill grants itself that signal — it's how you say the contract is settled before anything gets built.*
 
 Specs come in two kinds, and which one you write depends on what you are describing:
 
@@ -145,7 +145,7 @@ If you're building with an agent, the workflow is a set of shared skills in `.ag
 Others sit outside the loop — `/discovery`, `/survey`, `/fix`, `/rollback`, `/debug`, `/prototype`, `/tests`, `/ci`, and `/release` — plus `/autopilot`, which carries a settled spec the whole way instead of stopping at each gate.
 
 > [!IMPORTANT]
-> Two rules hold however a skill is invoked: **no skill moves a spec from `Draft` to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.
+> *Two rules hold however a skill is invoked: **no skill moves a spec from `Draft` to `Ready`**, and **no skill creates, switches, merges, or deletes a branch** — the loop commits to whatever branch you're already on. See [AGENTS.md](./AGENTS.md) for the full reference.*
 
 ---
 
@@ -192,4 +192,4 @@ my-project/
 ```
 
 > [!IMPORTANT]
-> The example specs in `docs/features/` and `docs/specs/` are real, working examples that follow the same conventions you'd use in a production project. Use them as a reference or replace them with your own.
+> *The example specs in `docs/features/` and `docs/specs/` are real, working examples that follow the same conventions you'd use in a production project. Use them as a reference or replace them with your own.*

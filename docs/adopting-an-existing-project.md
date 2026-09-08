@@ -120,7 +120,7 @@ rm -rf /tmp/scaffold/.git
 ```
 
 > [!IMPORTANT]
-> **Do not copy from your own working copy of the scaffold.** It contains gitignored files that a fresh clone does not: `context/sessions.md` and `context/decisions.md` are your personal state and decision logs, and they describe whatever else you have been working on — frequently another client. `cp -R` ignores `.gitignore` entirely, so those files travel, land in the project, and are committed by the next `git add .` with nothing reporting it. A clone cannot carry them, which is the whole reason to take one.
+> **Do not copy from your own working copy of the scaffold.** *It contains gitignored files that a fresh clone does not: `context/sessions.md` and `context/decisions.md` are your personal state and decision logs, and they describe whatever else you have been working on — frequently another client. `cp -R` ignores `.gitignore` entirely, so those files travel, land in the project, and are committed by the next `git add .` with nothing reporting it. A clone cannot carry them, which is the whole reason to take one.*
 
 ### A4 — Check for name collisions, then copy
 
@@ -145,7 +145,7 @@ mkdir -p docs && cp -R /tmp/scaffold/docs/. docs/
 Copy `.editorconfig` and `.markdownlint.json` too if the project has none.
 
 > [!IMPORTANT]
-> **Never copy the scaffold's `package.json`, `src/`, `README.md`, `LICENSE` or `.nvmrc`.** The scaffold ships a placeholder `package.json` naming no dependencies and a two-file `src/` (`index.html`, `scripts/main.js`) that exists to give a new project somewhere to start. Copying either over a real project destroys the dependency list or the application entry point, and a broad `cp -R /tmp/scaffold/. .` does exactly that in one stroke — which is why the commands above name each path. The other three are the scaffold's own identity and belong to it, not to the project.
+> **Never copy the scaffold's `package.json`, `src/`, `README.md`, `LICENSE` or `.nvmrc`.** *The scaffold ships a placeholder `package.json` naming no dependencies and a two-file `src/` (`index.html`, `scripts/main.js`) that exists to give a new project somewhere to start. Copying either over a real project destroys the dependency list or the application entry point, and a broad `cp -R /tmp/scaffold/. .` does exactly that in one stroke — which is why the commands above name each path. The other three are the scaffold's own identity and belong to it, not to the project.*
 
 ### A5 — Merge `.gitignore` rather than replacing it
 
@@ -165,7 +165,7 @@ EOF
 ```
 
 > [!IMPORTANT]
-> **The leading slash on `/CLAUDE.md` is load-bearing, and dropping it fails silently.** A pattern with no slash in it matches at every depth, so a bare `CLAUDE.md` also ignores `.agents/claude/CLAUDE.md` — the config A4 has just copied in, and the only real copy of it. A7's `git add -A` then skips that file without a word, `git status` cannot list what it never staged, and A6's two checks still pass because they read the working tree rather than the index. The adoption commits without the Claude config, works perfectly for you, and reaches the next person as a dangling symlink. Prove the anchor took with `git check-ignore -v .agents/claude/CLAUDE.md`, which should print nothing.
+> **The leading slash on `/CLAUDE.md` is load-bearing, and dropping it fails silently.** *A pattern with no slash in it matches at every depth, so a bare `CLAUDE.md` also ignores `.agents/claude/CLAUDE.md` — the config A4 has just copied in, and the only real copy of it. A7's `git add -A` then skips that file without a word, `git status` cannot list what it never staged, and A6's two checks still pass because they read the working tree rather than the index. The adoption commits without the Claude config, works perfectly for you, and reaches the next person as a dangling symlink. Prove the anchor took with `git check-ignore -v .agents/claude/CLAUDE.md`, which should print nothing.*
 
 An ignore rule does not untrack a file that is already tracked. If the project already commits a `CLAUDE.md` or a `.claude/` directory, git keeps carrying it and your new rule has no effect. Check, and untrack anything it finds:
 
@@ -175,7 +175,7 @@ git rm --cached <each path listed>
 ```
 
 > [!IMPORTANT]
-> That grep names only the two paths the block above ignores. Do not widen it to `.cursor/`, `copilot-instructions` or any other tool's config: the scaffold takes no position on those, and a project that deliberately commits them for its team is entitled to keep doing so. `git rm --cached` on one of those untracks a file nobody asked you to remove.
+> *That grep names only the two paths the block above ignores. Do not widen it to `.cursor/`, `copilot-instructions` or any other tool's config: the scaffold takes no position on those, and a project that deliberately commits them for its team is entitled to keep doing so. `git rm --cached` on one of those untracks a file nobody asked you to remove.*
 
 ### A6 — Create the agent pointer
 
@@ -222,7 +222,7 @@ Then open your agent in the project and run `/status`. It should report the spec
 This is the step to resist skipping, and the one most likely to be skipped. It is `WORKFLOW.md` Step 2, with one change of posture: **the Stack section records what the project already uses, not what you would have chosen.** If you intend to change a choice later, that is a migration with its own spec, not a line edit here.
 
 > [!IMPORTANT]
-> **An empty brief produces an audit that finds almost nothing and says so confidently.** `/audit` measures the code against the conventions, browser targets, and accessibility standard recorded here. With the shipped placeholders still in place it falls back to generic review, reports few findings, and gives no sign that the yardstick was blank. On a client engagement that is worse than no audit: it is a clean bill of health you cannot support.
+> **An empty brief produces an audit that finds almost nothing and says so confidently.** *`/audit` measures the code against the conventions, browser targets, and accessibility standard recorded here. With the shipped placeholders still in place it falls back to generic review, reports few findings, and gives no sign that the yardstick was blank. On a client engagement that is worse than no audit: it is a clean bill of health you cannot support.*
 
 ### Draft it with `/survey`
 

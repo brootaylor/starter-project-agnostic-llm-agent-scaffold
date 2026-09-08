@@ -29,13 +29,13 @@ framework's config files written from the Stack selections in
 `docs/project-brief.md`.
 
 > [!IMPORTANT]
-> Do not run a framework scaffolder (`create-next-app`, `npm create vite`, and
+> *Do not run a framework scaffolder (`create-next-app`, `npm create vite`, and
 > so on) inside the clone. They expect an empty directory and overwrite the
 > files this one already has - and because `CLAUDE.md` here is a symlink, that
 > write follows the link and destroys the tracked `.agents/claude/CLAUDE.md`.
 > Nor do they reliably refuse: `create-vite` offers "Remove existing files and
 > continue" as one of three choices. Step 3 writes the framework config directly
-> instead.
+> instead.*
 
 For a codebase that already exists, the order is reversed - the code is there
 first and the scaffold merges in on top - and the early steps differ: see
@@ -159,10 +159,10 @@ only values:
 | `verification incomplete` | `/check` could not prove one either way | `/check` |
 
 > [!IMPORTANT]
-> Checked build steps are not proof. Every step can be ticked on a work order
+> *Checked build steps are not proof. Every step can be ticked on a work order
 > whose last `/check` failed, so this line is the only record of whether the work
 > was ever proven. `/status` reports it, and `/complete` runs its own final pass
-> regardless of what it says.
+> regardless of what it says.*
 
 ### Which file wins
 
@@ -230,13 +230,13 @@ mkdir -p .claude && ln -s ../.agents/skills .claude/skills
 ```
 
 > [!IMPORTANT]
-> The `.claude/skills` pointer needs both the `mkdir -p` and the leading `../`,
+> *The `.claude/skills` pointer needs both the `mkdir -p` and the leading `../`,
 > and each guards a different failure. `.claude/` is gitignored, so it does not
 > exist in a fresh clone and `ln -s` will not create it. And a symlink's target is
 > resolved relative to the link's own directory, so `.agents/…` without the `../`
 > creates a link pointing at `.claude/.agents/…` - which `ln` reports as success
 > and `ls -l` displays as if it were correct. `ls .claude/skills` is what proves
-> it resolves. Only the root-level `CLAUDE.md` line needs neither guard.
+> it resolves. Only the root-level `CLAUDE.md` line needs neither guard.*
 
 **Windows** - `ln -s` needs Developer Mode or an elevated terminal. If neither is
 available, copy instead, then keep the copies in sync by hand:
@@ -278,7 +278,7 @@ nothing else to duplicate.
 
 > [!IMPORTANT]
 > **A `.gitignore` pattern containing no slash matches at every depth, not just
-> the root.** Unanchored, the pointer's filename ignores the pointer *and* the
+> the root.** *Unanchored, the pointer's filename ignores the pointer **and** the
 > real config at `.agents/<agent-name>/` - the only tracked copy. This project's
 > own `.gitignore` carried an unanchored `CLAUDE.md` until it was fixed; nothing
 > was lost only because that file was already tracked, and an ignore rule cannot
@@ -287,7 +287,7 @@ nothing else to duplicate.
 > staged, and the pointer resolves perfectly for whoever created it. The failure
 > surfaces only in someone else's clone, as a dangling link. Anchor the pattern,
 > then prove it with `git check-ignore -v .agents/<agent-name>/<file>` - it
-> should print nothing.
+> should print nothing.*
 
 ### Removing an agent
 
@@ -334,11 +334,11 @@ any capable agent can read and follow. Where each tool finds them:
   `.agents/skills/<skill>/SKILL.md`, and you name the skill in your prompt
 
 > [!IMPORTANT]
-> Only Claude Code loads this tree by itself. For every other agent the path is
+> *Only Claude Code loads this tree by itself. For every other agent the path is
 > written down where the agent will read it, and **naming the skill is what runs
 > it** - there is no auto-discovery to rely on. A tool that has its own skills
 > convention will not find these at `.agents/skills/`. The review gates are in the
-> `SKILL.md`, so a skill followed this way behaves the same as one invoked.
+> `SKILL.md`, so a skill followed this way behaves the same as one invoked.*
 
 Unused pointers can be removed, but **`.agents/` is never one of them.** Those
 pointer paths are gitignored; `.agents/` holds the only real copies of
